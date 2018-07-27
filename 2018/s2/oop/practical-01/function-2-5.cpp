@@ -7,7 +7,9 @@ bool descending(int array[], int n)
 		int order = array[0];
 		bool pass = true;
 		for(int i = 0; i < n; i++){
-			if(order <= array[i]){
+			if(order >= array[i]){
+
+			} else {
 				pass = false;
 			}
 		}
