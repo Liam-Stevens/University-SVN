@@ -1,0 +1,18 @@
+// function to determine if the array is in accending order
+bool ascending(int array[], int n)
+{
+	if(n < 1){
+		return false;
+	} else {
+		int order = array[0];
+		bool pass = true;
+		for(int i = 0; i < n; i++){
+			if(order <= array[i]){
+
+			} else {
+				pass = false;
+			}
+		}
+		return pass;
+	}
+}
