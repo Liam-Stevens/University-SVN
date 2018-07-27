@@ -8,7 +8,7 @@ double average(int array[], int n)
 		for (int i = 0; i < n; i++){
 			sum = sum + array[i];
 		}
-		int average = sum/n;
+		double average = sum/n;
 		return average;
 	}
 }
