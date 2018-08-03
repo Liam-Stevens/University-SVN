@@ -6,6 +6,7 @@
 void print_as_binary(std::string decimal_number)
 {
 	int num = atoi(decimal_number.c_str());
+	bool first = true;
 
 	for (int i = 63; i > -1; i--)
 	{
@@ -13,10 +14,14 @@ void print_as_binary(std::string decimal_number)
 		{
 			num = num - pow(2,i);
 			std::cout << "1";
+			first = false;
 		}
 		else
 		{
-			std::cout << "0";
+			if (first == false) 
+			{
+				std::cout << "0";
+			}
 		}
 	}
 
