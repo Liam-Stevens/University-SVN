@@ -7,7 +7,7 @@ void printer(int array[10][10])
 	{
 		for (int j = 0; j < 10; j++)
 		{
-			std::cout << array[j][i];
+			std::cout << array[i][j];
 			if (j != 9)
 			{
 				std::cout << " ";
