@@ -113,4 +113,5 @@ int secondSmallestSum(int *numbers,int length)
 		}
 		test = 0;
 	}
+	return secondSmallest;
 }
