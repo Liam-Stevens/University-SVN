@@ -14,7 +14,7 @@ void printNumbers(int *numbers,int length)
 {
 	for(int i = 0; i < length; i++)
 	{
-		std::cout << *(numbers + i) << std::endl;
+		std::cout << i << " " << *(numbers + i) << std::endl;
 	}
 
 	for(int j = 0; j < length; j++)
