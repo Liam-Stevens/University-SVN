@@ -101,7 +101,7 @@ int secondSmallestSum(int *numbers,int length)
 
 	for (int i = 0; i < length; i++)
 	{
-		for (int j = 0; j < length; j ++)
+		for (int j = i; j < length; j ++)
 		{
 			test += *(numbers + j);
 			if (test <= smallest)
