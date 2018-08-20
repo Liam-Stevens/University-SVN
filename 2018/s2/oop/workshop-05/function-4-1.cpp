@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cmath>
 using namespace std;
 
 int *readNumbers() 
@@ -95,7 +96,7 @@ int secondSmallestSum(int *numbers,int length)
 	int test = 0;
 	for (int g = 0; g < length; g++)
 	{
-		smallest += *(numbers + g);
+		smallest += abs(*(numbers + g));
 	}
 
 	for (int i = 0; i < length; i++)
