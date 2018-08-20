@@ -1,3 +1,5 @@
+#include <iostream>
+
 extern int secondSmallestSum(int *numbers,int length) ;
 extern int *reverseArray(int *numbers1,int length) ;
 extern bool equalsArray(int *numbers1,int *numbers2,int length) ;
