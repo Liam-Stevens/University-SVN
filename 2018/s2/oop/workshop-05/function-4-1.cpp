@@ -98,6 +98,7 @@ int secondSmallestSum(int *numbers,int length)
 	{
 		smallest += abs(*(numbers + g));
 	}
+	smallest = 999999;
 
 	for (int i = 0; i < length; i++)
 	{
