@@ -17,25 +17,24 @@ void printNumbers(int * numbers, int length)
 	{
 		cout << i << " " << *(numbers + i) << endl;
 	}
-
-	for (int i = 0; i < length; i++)
-	{
-		*(numbers + i) = 0;
-	}
 }
 
-int *swapFirstLast(int *numbers1, int length)
+double meanSubArrays(int * numbers, int length)
 {
-	int *j = new int[length];
-	for (int i = 0; i < length; i++)
-	{
-		*(j + i) = *(numbers1 + (length - 1) - i);
-	}
+	int sum = 0;
+	int test = 0;
+	int count = 0;
 
 	for (int i = 0; i < length; i++)
 	{
-		*(numbers1 + i) = 0;
+		for (int j = i; j < length; j++)
+		{
+			test = test + *(numbers + j);
+			sum = sum + test;
+			count++;
+		}
+		test = 0;
 	}
-
-	return j;
+	double mean = double(sum/count);
+	cout << mean << endl;
 }
