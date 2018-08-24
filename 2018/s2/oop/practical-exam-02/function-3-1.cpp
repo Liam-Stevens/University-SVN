@@ -36,10 +36,11 @@ int *swapFirstLast(int *numbers1, int length)
 	//Creates dynamic array
 	int *j = new int[length];
 
-	//Sets the first number of new array to be last number of old array, iterating accross both ways
+	//Sets the first number of new array to be last number of old array
 	for (int i = 0; i < length; i++)
 	{
-		*(j + i) = *(numbers1 + (length - 1) - i);
+		*(j) = *(numbers1 + (length - 1) );
+		*(j + (length -1)) = *(numbers1);
 	}
 
 	//Deletes numbers in array
