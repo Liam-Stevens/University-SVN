@@ -17,5 +17,4 @@ void printNumbers(int * numbers, int length)
 	{
 		cout << i << " " << *(numbers + i) << endl;
 	}
-	delete[] numbers;
 }
