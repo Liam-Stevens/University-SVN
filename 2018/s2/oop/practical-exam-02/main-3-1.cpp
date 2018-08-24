@@ -5,12 +5,12 @@ extern void printNumbers(int *, int);
 int main()
 {
 	//Reads in an array of numbers
-	int *j = readNumbers(5);
+	int *j = readNumbers(10);
 
 	//Swaps number order
-	int *k = swapFirstLast(j,5);
+	int *k = swapFirstLast(j,10);
 
 	//Prints reversed numbers
-	printNumbers(k,5);
+	printNumbers(k,10);
 	return 0;
 }
