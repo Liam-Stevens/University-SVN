@@ -4,7 +4,7 @@ extern double meanSubArrays(int *, int);
 
 int main()
 {
-	int *j = readNumbers(5);
-	meanSubArrays(j,5);
+	int *j = readNumbers(3);
+	meanSubArrays(j,3);
 	return 0;
 }
