@@ -7,7 +7,6 @@ int * readNumbers(int n)
 	for (int i = 0; i < n; i++)
 	{
 		cin >> *(j + i);
-		cout << *(j + i) << endl;
 	}
 	return j;
 }
@@ -22,20 +21,20 @@ void printNumbers(int * numbers, int length)
 
 double meanSubArrays(int * numbers, int length)
 {
-	int sum = 0;
-	int test = 0;
-	int count = 0;
+	double sum = 0;
+	double test = 0;
+	double count = 0;
 
 	for (int i = 0; i < length; i++)
 	{
 		for (int j = i; j < length; j++)
 		{
-			test = test + *(numbers + j);
+			test = test + double(*(numbers + j));
 			sum = sum + test;
 			count++;
 		}
 		test = 0;
 	}
 	double mean = double(sum/count);
-	cout << mean << endl << endl;
+	cout << mean << endl;
 }
