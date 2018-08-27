@@ -52,7 +52,7 @@ double meanSubArrays(int * numbers, int length)
 			count++;
 		}
 		//Clears value of sub array when starting new position
-		
+		test = 0;
 	}
 
 	//Calculates and prints mean
