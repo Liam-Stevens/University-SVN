@@ -20,5 +20,7 @@ int main()
   cart1.addMeerkat(meer4);
   cart1.addMeerkat(meer5);
 
+  cart1.printMeerkats();
+
   return 0;
 }
