@@ -1,13 +1,9 @@
-// 'guards' to prevent redeclaration of Panda class
-#ifndef PANDA_H
-#define PANDA_H
+#ifndef MEERKAT_H
+#define MEERKAT_H
 
 #include <string>
 
-// no namespaces in include file!!!
-
-// Class definition for a Panda
-class Meerkat
+class meerkat
 {
   static int count;
   int id;
@@ -15,7 +11,7 @@ class Meerkat
   int age;
 
  public:
-  Meerkat();
+  meerkat();
 
   // getters
   std::string getName();
@@ -25,7 +21,7 @@ class Meerkat
   void setName(std::string meerName);
   void setAge(int meerAge);		
 
-  ~Meerkat();
+  ~meerkat();
 };
 
 #endif

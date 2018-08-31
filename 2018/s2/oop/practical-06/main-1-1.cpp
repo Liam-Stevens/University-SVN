@@ -1,15 +1,15 @@
 #include <iostream>
 #include "meerkat.h"
+#include <string>
 
 using namespace std;
 
-// main program
 int main()
 {
-  Meerkat meer1;
-  Meerkat meer2;
-  Meerkat meer3;
-  Meerkat meer4;
+  meerkat meer1;
+  meerkat meer2;
+  meerkat meer3;
+  meerkat meer4;
 
   meer1.getName();
   meer1.getAge();
