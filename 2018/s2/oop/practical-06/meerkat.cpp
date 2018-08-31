@@ -3,8 +3,10 @@
 
 using namespace std;
 
+// class integer - static shared by all Pandas
 int Meerkat::count = 0;
 
+// implementation of the default Panda constructor
 Meerkat::Meerkat()
 {
 	id = count;
@@ -13,27 +15,29 @@ Meerkat::Meerkat()
 	age = 0;
 }
 
-void Meerkat::setName(std::string meerName)
+string Meerkat::getName() 
 {
-	name = meerName;
+  return name;
 }
 
-string Meerkat::getName()
+int Meerkat::getAge() 
 {
-	return name;
+  return age;
 }
 
-void Meerkat::setAge(int meerAge)
+void Meerkat::setName(std::string meerName) 
 {
-	age = meerAge;
+  name = meerName;
 }
 
-int Meerkat::getAge()
+void Meerkat::setAge(int meerAge) 
 {
-	return age;
+  name = meerAge;
 }
 
+
+// implementation of the default Panda destructor
 Meerkat::~Meerkat()
 {
-
+  // delete any memory allocated by new
 }
