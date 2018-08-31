@@ -14,6 +14,14 @@ meerkat::meerkat()
 	age = 0;
 }
 
+meerkat::meerkat(std::string meerName, int meerName)
+{
+	id = count;
+	count++;
+	name = meerName;
+	age = meerName;
+}
+
 string meerkat::getName() 
 {
   return name;

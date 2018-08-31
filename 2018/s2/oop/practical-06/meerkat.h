@@ -13,6 +13,8 @@ class meerkat
  public:
   meerkat();
 
+  meerkat(std::string meerName, int meerAge);
+
   // getters
   std::string getName();
   int getAge();
