@@ -8,7 +8,7 @@ class cart
 {
   static int count2;
   int id2;
-  meerkat inCart[4];
+  meerkat inCart[5];
   int seat;
 
  public:
