@@ -10,8 +10,8 @@ meerkat::meerkat()
 {
 	id = count;
 	count++;
-	name = "Bob";
-	age = 42;
+	name = "?";
+	age = 0;
 }
 
 string meerkat::getName() 
@@ -31,7 +31,7 @@ void meerkat::setName(std::string meerName)
 
 void meerkat::setAge(int meerAge) 
 {
-  name = meerAge;
+  age = meerAge;
 }
 
 meerkat::~meerkat()
