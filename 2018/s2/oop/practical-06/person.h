@@ -8,10 +8,11 @@ class person
   static int count;
   int id;
   std::string name;
-  int salary;
+  int psalary;
 
  public:
   person();
+  person(std::string myName, int Salary);
 
   // getters
   std::string getName();

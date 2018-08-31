@@ -11,7 +11,15 @@ person::person()
 	id = count;
 	count++;
 	name = "?";
-	salary = 0;
+	psalary = 0;
+}
+
+person::person(std::string myName, int Salary)
+{
+	id = count;
+	count++;
+	name = myName;
+	psalary = Salary;
 }
 
 string person::getName() 
@@ -21,7 +29,7 @@ string person::getName()
 
 int person::getSalary() 
 {
-  return salary;
+  return psalary;
 }
 
 void person::setName(std::string myName) 
@@ -31,7 +39,7 @@ void person::setName(std::string myName)
 
 void person::setSalary(int mySalary) 
 {
-  salary = mySalary;
+  psalary = mySalary;
 }
 
 person::~person()
