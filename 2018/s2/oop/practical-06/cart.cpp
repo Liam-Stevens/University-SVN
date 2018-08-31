@@ -17,7 +17,7 @@ cart::cart()
 
 bool cart::addMeerkat(meerkat cat)
 {
-	if (seat >= 4)
+	if (seat >= 5)
 	{
 		cout << "Cart is full" << endl;
 		return 0;
