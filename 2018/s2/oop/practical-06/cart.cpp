@@ -29,7 +29,7 @@ bool cart::addMeerkat(meerkat cat)
 
 void cart::emptyCart()
 {
-
+	seat = 0;
 }
 
 void cart::printMeerkats()
