@@ -10,9 +10,6 @@ int hunter::count = 0;
 
 hunter::hunter(std::string aSpecies)
 {
-	count++;
-	id = count;
-	name = "?";
 	species = aSpecies;
 	kills = 0;
 }

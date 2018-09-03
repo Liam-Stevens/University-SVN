@@ -12,12 +12,11 @@ class hunter : public animal
 	std::vector<std::string> kill_list;
 
 public:
-	hunter(std::string aSpecies);         // create a hunter of the given species
-	void record_kill(std::string kill);   // add a new kill to the end of the hunter's list of kills
-	int numberOfKills();             // how many kills have been recorded
-
-	// implement ONE of the following
-	std::vector<std::string> get_kills();      // return a vector of all kills by this hunter
+	hunter(std::string aSpecies);
+	void record_kill(std::string kill);
+	int numberOfKills();
+	
+	std::vector<std::string> get_kills();
 };
 
 #endif
