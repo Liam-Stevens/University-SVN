@@ -38,7 +38,6 @@ bool team::add_player(player new_player)
 {
 	if(numOfPlayers < size)
 	{
-		//*(teamList + numOfPlayers) = new_player;
 		teamList.push_back(new_player);
 		numOfPlayers++;
 		return true;
@@ -48,5 +47,5 @@ bool team::add_player(player new_player)
 
 team::~team()
 {
-	delete[] &teamList;
+	//delete[] &teamList;
 }
