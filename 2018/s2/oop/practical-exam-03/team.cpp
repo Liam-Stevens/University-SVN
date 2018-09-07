@@ -31,7 +31,8 @@ std::string team::get_name()
 
 player * team::get_roster()
 {
-	return &teamList[0];
+	player * ptr = &teamList[0];
+	return ptr;
 }
 
 bool team::add_player(player new_player)
@@ -48,5 +49,5 @@ bool team::add_player(player new_player)
 
 team::~team()
 {
-	numOfPlayers = 0;
+	
 }
