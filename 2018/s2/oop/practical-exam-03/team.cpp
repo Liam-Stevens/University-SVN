@@ -7,7 +7,7 @@ using namespace std;
 
 team::team()
 {
-	size = 4;
+	size = 0;
 	numOfPlayers = 0;
 	teamName = "?";
 }
@@ -36,6 +36,7 @@ player * team::get_roster()
 
 bool team::add_player(player new_player)
 {
+	//Checks if the team is full
 	if(numOfPlayers < size)
 	{
 		teamList.push_back(new_player);
@@ -47,5 +48,5 @@ bool team::add_player(player new_player)
 
 team::~team()
 {
-	//delete[] &teamList;
+	numOfPlayers = 0;
 }

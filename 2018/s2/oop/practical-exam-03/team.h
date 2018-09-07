@@ -6,6 +6,7 @@
 
 class team
 {
+	//Private variables
 	int numOfPlayers;
 	int size;
 	std::string teamName;
