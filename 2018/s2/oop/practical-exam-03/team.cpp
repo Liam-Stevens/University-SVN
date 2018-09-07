@@ -37,13 +37,13 @@ player * team::get_roster()
 bool team::add_player(player new_player)
 {
 	//Checks if the team is full
-	if(numOfPlayers < size)
+	if(numOfPlayers >= size)
 	{
-		teamList.push_back(new_player);
-		numOfPlayers++;
-		return true;
+		return false;
 	}
-	return false;
+	teamList.push_back(new_player);
+	numOfPlayers++;
+	return true;
 }
 
 team::~team()
