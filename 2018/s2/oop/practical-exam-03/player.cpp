@@ -3,19 +3,19 @@
 
 player::player()
 {
-	name = "?";
+	pName = "?";
 	number = 0;
 }
 
 player::player(int jerseyNumber, std::string playerName)
 {
-	name = playerName;
+	pName = playerName;
 	number = jerseyNumber;
 }
 
 std::string player::get_name()
 {
-	return name;
+	return pName;
 }
 
 int player::get_jersey_number()

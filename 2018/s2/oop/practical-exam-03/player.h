@@ -6,7 +6,7 @@
 class player
 {
 	int number;
-	std::string name;
+	std::string pName;
 
 public:
 	player();
