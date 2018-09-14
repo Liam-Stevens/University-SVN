@@ -1,0 +1,19 @@
+Medieval Market
+
+Array - Items for sale
+Strings - Name of Items
+Objects - The Items
+Input and Output - Money To Pay/Recieve from trading
+Classes - Market stalls
+Inheritance - Market Qualities
+Polymorphism - Generic Stall -> specialist stall
+Abstract Classes - Cost of item (based on size?)
+
+Framework:
+The parent class and two child classes
+Abstract Class for cost
+
+Later:
+Store Inventory of person
+Vendor Inventory (array in class)
+
