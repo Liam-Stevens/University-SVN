@@ -29,4 +29,12 @@ If you have an axe you can chop a tree (durability on items)
 Buy an animal to make animal products
 
 
+Design:
+Start with an amount of money
+You start on a screen with list of shops/vendors
+You can choose to go to a shop with a command (each shops buys and sells types of items at different prices based on what they normally sell)
+You can choose to view your inventory at any time (including money avaliable)
+When you get to the shop, you are given a list of items for purchase, their price and quantity avaliable
+You may choose to spend money to buy an item or choose to sell an item from your inventory at a price the vendor specifys (size of item, the type of item)
 
+Objective: To buy stuff
