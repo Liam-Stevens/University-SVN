@@ -7,7 +7,7 @@ using namespace std;
 
 player::player()
 {
-	money = 500;
+	money = 00;
 }
 
 player::player(double createMoney)
@@ -16,26 +16,29 @@ player::player(double createMoney)
 }
 
 //getters
-player::getMoney()
+double player::getMoney()
 {
 	return money;
 }
 
 //setters
-player::setMoney(double newMoney)
+bool player::setMoney(double newMoney)
 {
 	money = newMoney;
+	return true;
 }
 
 //useful functions
-player::reduceMoney(double reduceMoneyBy)
+bool player::reduceMoney(double reduceMoneyBy)
 {
 	money -= reduceMoneyBy;
+	return true;
 }
 
-player::increaseMoney(double increaseMoneyBy)
+bool player::increaseMoney(double increaseMoneyBy)
 {
 	money += increaseMoneyBy;
+	return true;
 }
 
 player::~player()
