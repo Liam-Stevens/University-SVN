@@ -5,6 +5,7 @@
 using namespace std;
 
 int stall::count = 0;
+string stall::stallList[5] = {"test1","test1","test1","test1","test1"};
 
 
 stall::stall()
@@ -14,6 +15,7 @@ stall::stall()
 	name = "NAME";
   	shopType = "SHOPTYPE";
   	money = 500;
+  	stallList[stallID] = shopType;
 }
 
 stall::stall(std::string createName, std::string createShopType, double createMoney)
@@ -23,50 +25,61 @@ stall::stall(std::string createName, std::string createShopType, double createMo
 	name = createName;
   	shopType = createShopType;
   	money = createMoney;
+  	stallList[stallID] = shopType;
 }
 
 
 //getters
-stall::getName()
+int stall::getId()
+{
+	return stallID;
+}
+
+string stall::getName()
 {
 	return name;
 }
 
-stall::getType()
+string stall::getType()
 {
 	return shopType;
 }
 
-stall::getMoney()
+double stall::getMoney()
 {
 	return money;
 }
 
 
 //setters
-stall::setName(std::string newName)
+bool stall::setName(std::string newName)
 {
 	name = newName;
+	return true;
 }
 
-stall::setType(std::string newType)
+bool stall::setType(std::string newType)
 {
 	shopType = newType;
+	return true;
 }
 
-stall::setMoney(double newMoney)
+bool stall::setMoney(double newMoney)
 {
-	money = newMoney
+	money = newMoney;
+	return true;
 }
 
-stall::reduceMoney(double reduceMoneyBy)
+bool stall::reduceMoney(double reduceMoneyBy)
 {
 	money -= reduceMoneyBy;
+	return true;
 }
 
-stall::increaseMoney(double increaseMoneyBy)
+bool stall::increaseMoney(double increaseMoneyBy)
 {
 	money += increaseMoneyBy;
+	return true;
 }
 
 stall::~stall()

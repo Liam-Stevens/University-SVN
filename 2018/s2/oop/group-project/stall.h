@@ -6,9 +6,10 @@
 class stall
 {
   static int count;
+  static std::string stallList[5];
   int stallID;
   std::string name;
-  std::string shopType
+  std::string shopType;
   double money;
   //Arrays of item, their price and quantity avaliable
 
@@ -17,18 +18,19 @@ class stall
 	stall(std::string createName, std::string createShopType, double createMoney);
 
 	//getters
-	getName();
-	getType();
-	getMoney();
+	int getId();
+	std::string getName();
+	std::string getType();
+	double getMoney();
 
 	//setters
-	setName(std::string newName);
-	setType(std::string newType);
-	setMoney(double newMoney);
+	bool setName(std::string newName);
+	bool setType(std::string newType);
+	bool setMoney(double newMoney);
 
 	//usable functions
-	reduceMoney(double reduceMoneyBy);
-	increaseMoney(double increaseMoneyBy);
+	bool reduceMoney(double reduceMoneyBy);
+	bool increaseMoney(double increaseMoneyBy);
 
 	//Need functions for adjusting shop stock
 

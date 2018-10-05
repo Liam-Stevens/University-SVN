@@ -13,14 +13,14 @@ class player
 	player(double createMoney);
 
 	//getters
-	getMoney();
+	double getMoney();
 
 	//setters
-	setMoney(double newMoney);
+	bool setMoney(double newMoney);
 
 	//useful functions
-	reduceMoney(double reduceMoneyBy);
-	increaseMoney(double increaseMoneyBy);
+	bool reduceMoney(double reduceMoneyBy);
+	bool increaseMoney(double increaseMoneyBy);
 
 	~player();
 };
