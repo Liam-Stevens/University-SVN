@@ -7,8 +7,6 @@
 #include <string>
 using namespace std;
 
-extern void setDefinitions(void);
-
 int main ()
 {
 	string home = "home";
