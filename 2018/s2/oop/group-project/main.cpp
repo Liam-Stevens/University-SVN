@@ -1,3 +1,5 @@
+#include "item.h"
+#include "weapon.h"
 #include "stall.h"
 #include "player.h"
 
@@ -5,14 +7,15 @@
 #include <string>
 using namespace std;
 
+extern void setDefinitions(void);
+
 int main ()
 {
 	string home = "home";
-	player player(500); //amount of money is wrong, send help. (This should be fixed now)
+	player player(500);
 	stall bakery("Bakery", "bakery", 500);
 	stall forge("Forge", "forge", 500);
-
-
+	
 	string location = home;
 	string inputCommand;
 	cout << endl << "Welcome to the Medieval Marketplace." << endl << "You currently have $" << player.getMoney() << "." << endl << "Type help if you are lost." << endl << "Where would you like to go? (type in lower case)" << endl << "> Home" << endl << "> Bakery" << endl << "> Forge" << endl << endl;
@@ -66,3 +69,4 @@ int main ()
 
 	return 0;
 }
+
