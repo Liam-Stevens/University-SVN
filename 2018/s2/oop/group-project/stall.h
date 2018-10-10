@@ -1,17 +1,19 @@
 #ifndef STALL_H
 #define STALL_H
 
+#include "item.h"
+#include "weapon.h"
 #include <string>
 
 class stall
 {
+protected:
   static int count;
-  static std::string stallList[5];
   int stallID;
   std::string name;
   std::string shopType;
   double money;
-  //Arrays of item, their price and quantity avaliable
+  item itemStock[5];
 
  public:
 	stall();

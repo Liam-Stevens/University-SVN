@@ -1,12 +1,12 @@
 #include "stall.h"
+#include "item.h"
+#include "weapon.h"
 #include <string>
 #include <iostream>
 
 using namespace std;
 
 int stall::count = 0;
-string stall::stallList[5] = {"test1","test1","test1","test1","test1"};
-
 
 stall::stall()
 {	
@@ -15,7 +15,6 @@ stall::stall()
 	name = "NAME";
   	shopType = "SHOPTYPE";
   	money = 500;
-  	stallList[stallID] = shopType;
 }
 
 stall::stall(std::string createName, std::string createShopType, double createMoney)
@@ -25,7 +24,6 @@ stall::stall(std::string createName, std::string createShopType, double createMo
 	name = createName;
   	shopType = createShopType;
   	money = createMoney;
-  	stallList[stallID] = shopType;
 }
 
 
