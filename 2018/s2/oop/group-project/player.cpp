@@ -31,13 +31,13 @@ bool player::setMoney(double newMoney)
 //useful functions
 bool player::reduceMoney(double reduceMoneyBy)
 {
-	money -= reduceMoneyBy;
+	money = money - reduceMoneyBy;
 	return true;
 }
 
 bool player::increaseMoney(double increaseMoneyBy)
 {
-	money += increaseMoneyBy;
+	money = money + increaseMoneyBy;
 	return true;
 }
 

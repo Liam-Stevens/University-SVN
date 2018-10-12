@@ -25,6 +25,14 @@ weapon_stall::weapon_stall(std::string createName, std::string createShopType, d
   	money = createMoney;
 }
 
+void weapon_stall::outputWeaponList()
+{
+	for(int i = 0; i < 5; i++)
+	{
+		cout << "> " << weaponStock[i].getName() << " ($" << weaponStock[i].getPrice() << ")" << endl;
+	}
+}
+
 void weapon_stall::setFullWeaponStock(weapon weapon1, weapon weapon2, weapon weapon3, weapon weapon4, weapon weapon5)
 {
 	//Only goes to five because the array is of size 5

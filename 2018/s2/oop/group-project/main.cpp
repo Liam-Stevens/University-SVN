@@ -2,7 +2,7 @@
 #include "weapon.h"
 #include "stall.h"
 #include "player.h"
-
+#include "weapon_stall.h"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -10,14 +10,30 @@ using namespace std;
 extern void callHelp();
 extern void askTravel();
 extern void validLocationList();
+extern string lowerCase(string);
 
 int main ()
 {
 	string home = "home";
 	player player(500);
 	stall bakery("Bakery", "bakery", 500);
-	stall forge("Forge", "forge", 500);
-	
+	weapon_stall forge("Forge", "forge", 500);
+
+	item bread("Rye Bread", 1, 5);
+	item donut("Cinnamon Donut", 2, 3);
+	item cake("Mud Cake", 3, 8);
+	item pie("Apple Pie", 4, 7);
+	item bread2("White Bread", 5, 4);
+
+	weapon sword("Short Sword", 5, 1);
+	weapon axe("Large Axe", 9, 1);
+	weapon mace("Small Mace", 2, 1);
+	weapon spear("Long Spear", 7, 1);
+	weapon dagger("Small Dagger", 1, 1);
+
+	bakery.setFullItemStock(bread, bread2, donut, pie, cake);
+	forge.setFullWeaponStock(sword, axe, mace, spear, dagger);
+
 	string location = home;
 	string inputCommand;
 	bool moveReady = true;
@@ -25,13 +41,14 @@ int main ()
 	<< "You currently have $" << player.getMoney() << "." << endl 
 	<< "Type 'help' if you are lost." << endl;
 	askTravel();
-
+	char input[100];
 
 	for (int loop = 1; loop < 10; loop++)
 	{
 
-		cin >> inputCommand;
+		getline(cin,inputCommand);
 		cout << endl;
+		inputCommand = lowerCase(inputCommand);
 
 		if(inputCommand == "help")
 		{
@@ -59,17 +76,26 @@ int main ()
 			{
 				location = home;
 				inputCommand.clear();
-				moveReady = false;
+				cout << "You're now at " << location << "." << endl;
 				cout << "You currently have $" << player.getMoney() 
-				<< ". Where would you like to go?" << endl << endl;
+				<< "." << endl;
+				askTravel();
 				
 			}
 
 			//Error Checking
 			else if(inputCommand == location)
 			{
-				cout << "You are already at the " << location << endl;
-				moveReady = false;
+				if(location != "home")
+				{
+					cout << "You are already at the " << location << endl;
+					moveReady = false;
+				}
+				else 
+				{
+					cout << "You are already at " << location << endl;
+					askTravel();
+				}
 			}
 			else
 			{
@@ -89,14 +115,28 @@ int main ()
 			else 
 			{
 				if(location == bakery.getType())
-				{
-					cout << "What would you like to purchase?			Money: " 
+				{	
+					//NEED FAILURE TO PURCAHSE NOTIFICATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					for (int i = 0; i < 5; i++)
+					{
+						if(inputCommand == lowerCase(bakery.getItem(i).getName()))
+						{
+							cout << "Successfully purchased " << bakery.getItem(i).getName() << "!" << endl << endl;
+							player.reduceMoney(bakery.getItem(i).getPrice());
+						}
+					}
+					
+
+					cout << "What would you like to purchase?			Money: $" 
 					<< player.getMoney() << endl;
+					bakery.outputItemList();
+
 				}
 				else if(location == forge.getType())
 				{
-					cout << "What would you like to purchase?			Money: " 
+					cout << "What would you like to purchase?			Money: $" 
 					<< player.getMoney() << endl;
+					forge.outputWeaponList();
 				}
 
 				cout << endl << "> Travel" << endl << endl;

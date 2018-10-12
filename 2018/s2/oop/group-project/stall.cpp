@@ -48,6 +48,11 @@ double stall::getMoney()
 	return money;
 }
 
+item stall::getItem(int arrayPosition)
+{
+	return itemStock[arrayPosition];
+}
+
 
 //setters
 bool stall::setName(std::string newName)
@@ -78,6 +83,28 @@ bool stall::increaseMoney(double increaseMoneyBy)
 {
 	money += increaseMoneyBy;
 	return true;
+}
+
+void stall::setFullItemStock(item item1, item item2, item item3, item item4, item item5)
+{
+	itemStock[0] = item1;
+	itemStock[1] = item2;
+	itemStock[2] = item3;
+	itemStock[3] = item4;
+	itemStock[4] = item5;
+}
+
+void stall::setSingleItemStock(int arrayPosition, item item0)
+{
+	itemStock[arrayPosition] = item0;
+}
+
+void stall::outputItemList()
+{
+	for(int i = 0; i < 5; i++)
+	{
+		cout << "> " << itemStock[i].getName() << " ($" << itemStock[i].getPrice() << ")" << endl;
+	}
 }
 
 stall::~stall()

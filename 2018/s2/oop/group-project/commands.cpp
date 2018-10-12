@@ -6,7 +6,7 @@ using namespace std;
 
 void askTravel()
 {
-	cout << "Where would you like to go? (type in lower case)" 
+	cout << "Where would you like to go?" 
 	<< endl << "> Home" << endl << "> Bakery" << endl << "> Forge" << endl << endl;
 }
 
@@ -25,4 +25,13 @@ void callHelp()
 	//location list
 	cout << "Locations:" << endl << "> Home" << endl 
 	<< "> Bakery" << endl << "> Forge" << endl << endl;
+}
+
+string lowerCase(string inputString)
+{
+	for (int i = 0; i<inputString.length(); i++)
+	{
+		inputString[i] = tolower(inputString[i]);
+	}
+	return inputString;
 }

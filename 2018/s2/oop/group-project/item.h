@@ -25,6 +25,8 @@ protected:
 	bool setPrice(double newPrice);
 
 	~item();
+
+	//Restructure to have a generic item class and implement pure virtual into parent class into id or price
 };
 
 #endif
