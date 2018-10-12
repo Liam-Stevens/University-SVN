@@ -24,6 +24,7 @@ protected:
 	std::string getName();
 	std::string getType();
 	double getMoney();
+	item getItem(int arrayPosition);
 
 	//setters
 	bool setName(std::string newName);
@@ -33,6 +34,9 @@ protected:
 	//usable functions
 	bool reduceMoney(double reduceMoneyBy);
 	bool increaseMoney(double increaseMoneyBy);
+	void setFullItemStock(item item1, item item2, item item3, item item4, item item5);
+	void setSingleItemStock(int arrayPosition, item item0);
+	void outputItemList();
 
 	//Need functions for adjusting shop stock
 

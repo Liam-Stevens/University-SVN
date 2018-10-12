@@ -17,6 +17,7 @@ public:
 	weapon_stall(std::string createName, std::string createShopType, double createMoney);
 
 	//getters
+	void outputWeaponList();
 
 	//setters
 	void setFullWeaponStock(weapon weapon1, weapon weapon2, weapon weapon3, weapon weapon4, weapon weapon5);
