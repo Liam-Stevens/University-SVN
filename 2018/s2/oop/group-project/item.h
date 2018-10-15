@@ -5,15 +5,13 @@
 
 class item
 {
-
 protected:
   	int itemID;
- 	std::string name;
   	double price;
+  	std::string name;
 
  public:
 	item();
-	item(std::string createName, int createItemID, double createPrice);
 
 	//getters
 	int getId();
@@ -21,8 +19,8 @@ protected:
 	double getPrice();
 
 	//setters
-	bool setName(std::string newName);
-	bool setPrice(double newPrice);
+	void setName(std::string newName);
+	virtual void setPrice(double newPrice) = 0;
 
 	~item();
 

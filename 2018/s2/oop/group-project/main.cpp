@@ -1,4 +1,5 @@
 #include "item.h"
+#include "generic_item.h"
 #include "weapon.h"
 #include "stall.h"
 #include "player.h"
@@ -12,6 +13,10 @@ extern void askTravel();
 extern void validLocationList();
 extern string lowerCase(string);
 
+//Testing functions
+extern void itemOutput(generic_item, generic_item, generic_item, generic_item, generic_item);
+extern void weaponOutput(weapon, weapon, weapon, weapon, weapon);
+
 int main ()
 {
 	string home = "home";
@@ -19,11 +24,11 @@ int main ()
 	stall bakery("Bakery", "bakery", 500);
 	weapon_stall forge("Forge", "forge", 500);
 
-	item bread("Rye Bread", 1, 5);
-	item donut("Cinnamon Donut", 2, 3);
-	item cake("Mud Cake", 3, 8);
-	item pie("Apple Pie", 4, 7);
-	item bread2("White Bread", 5, 4);
+	generic_item bread("Rye Bread", 1, 5);
+	generic_item bread2("White Bread", 5, 4);
+	generic_item donut("Cinnamon Donut", 2, 3);
+	generic_item cake("Mud Cake", 3, 8);
+	generic_item pie("Apple Pie", 4, 7);
 
 	weapon sword("Short Sword", 5, 1);
 	weapon axe("Large Axe", 9, 1);
@@ -37,6 +42,7 @@ int main ()
 	string location = home;
 	string inputCommand;
 	bool moveReady = true;
+	bool recentMove = false;
 	cout << endl << "Welcome to the Medieval Marketplace." << endl 
 	<< "You currently have $" << player.getMoney() << "." << endl 
 	<< "Type 'help' if you are lost." << endl;
@@ -62,14 +68,14 @@ int main ()
 			{
 				location = bakery.getType();
 				inputCommand.clear();
-				moveReady = false;
+				recentMove = true;
 				cout << "You're now at the " << location << endl;
 			}
 			else if(inputCommand == forge.getType() && location != forge.getType())
 			{
 				location = forge.getType();
 				inputCommand.clear();
-				moveReady = false;
+				recentMove = true;
 				cout << "You're now at the " << location << endl;				
 			}
 			else if(inputCommand == home && location != home) 
@@ -89,7 +95,7 @@ int main ()
 				if(location != "home")
 				{
 					cout << "You are already at the " << location << endl;
-					moveReady = false;
+					recentMove = true;
 				}
 				else 
 				{
@@ -104,6 +110,12 @@ int main ()
 			}
 		}
 
+		//Movement Tracking
+		if (recentMove == true)
+		{
+			moveReady = false;
+		}
+
 		//Market Interactions
 		if(moveReady == false)
 		{
@@ -113,7 +125,8 @@ int main ()
 				askTravel();
 			}
 			else 
-			{
+			{	
+				bool knownCommand = false;
 				if(location == bakery.getType())
 				{	
 					//NEED FAILURE TO PURCAHSE NOTIFICATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -123,9 +136,14 @@ int main ()
 						{
 							cout << "Successfully purchased " << bakery.getItem(i).getName() << "!" << endl << endl;
 							player.reduceMoney(bakery.getItem(i).getPrice());
+							knownCommand = true;
+							break;
 						}
 					}
-					
+					if(knownCommand == false && recentMove == false)
+					{
+						cout << "Unknown Item/Command, please try again." << endl;
+					}
 
 					cout << "What would you like to purchase?			Money: $" 
 					<< player.getMoney() << endl;
@@ -143,6 +161,11 @@ int main ()
 			}
 		}
 		
+		//Movement Reset
+		if (recentMove == true)
+		{
+			recentMove = false;
+		}
 
 		//*IMPORTANT* CONTINUES LOOPING
 		loop--;

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include "generic_item.h"
+#include "weapon.h"
 using namespace std;
 
 //Below are functions called by the system
@@ -34,4 +36,14 @@ string lowerCase(string inputString)
 		inputString[i] = tolower(inputString[i]);
 	}
 	return inputString;
+}
+
+void itemOutput(generic_item item1, generic_item item2, generic_item item3, generic_item item4, generic_item item5)
+{
+	cout << item1.getName() << " " << item2.getPrice() << " " << item3.getPrice() << " " << item4.getPrice() << " " << item5.getPrice() << " " << endl << endl;
+}
+
+void weaponOutput(weapon item1, weapon item2, weapon item3, weapon item4, weapon item5)
+{
+	cout << item1.getPrice() << " " << item2.getPrice() << " " << item3.getPrice() << " " << item4.getPrice() << " " << item5.getPrice() << " " << endl << endl;
 }

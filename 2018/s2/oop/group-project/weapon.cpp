@@ -10,6 +10,7 @@ weapon::weapon()
 	durability = 1;
 	size = 5;
 	weapon::updatePrice();
+	forcePrice = false;
 }
 
 weapon::weapon(string createName, double createSize, double createDurability)
@@ -18,6 +19,7 @@ weapon::weapon(string createName, double createSize, double createDurability)
 	size = createSize;
 	durability = createDurability;
 	weapon::updatePrice();
+	forcePrice = false;
 }
 
 //getters
@@ -29,11 +31,6 @@ double weapon::getSize()
 double weapon::getDurability()
 {
 	return durability;
-}
-
-double weapon::getPrice()
-{
-	return price;
 }
 
 //setters
@@ -52,6 +49,17 @@ void weapon::setDurability(double newDurability)
 void weapon::updatePrice()
 {
 	price = durability*size*10;
+}
+
+void weapon::setPrice(double newPrice)
+{
+	price = newPrice;
+	forcePrice = true;
+	if(newPrice < 0)
+	{
+		forcePrice = false;
+		weapon::updatePrice();
+	}
 }
 
 weapon::~weapon()
