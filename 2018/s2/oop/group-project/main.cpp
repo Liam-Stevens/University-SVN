@@ -116,7 +116,7 @@ int main ()
 			moveReady = false;
 		}
 
-		//Market Interactions
+		//Market Interactions - NEED TO BE ABLE TO PURCHASE FROM ALL SHOPS !!!!!!!!!!!!!!!!!!!
 		if(moveReady == false)
 		{
 			if(inputCommand == "travel")
@@ -129,7 +129,6 @@ int main ()
 				bool knownCommand = false;
 				if(location == bakery.getType())
 				{	
-					//NEED FAILURE TO PURCAHSE NOTIFICATION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 					for (int i = 0; i < 5; i++)
 					{
 						if(inputCommand == lowerCase(bakery.getItem(i).getName()))
