@@ -1,5 +1,6 @@
 #include "stall.h"
 #include "item.h"
+#include "generic_item.h"
 #include "weapon.h"
 #include <string>
 #include <iostream>
@@ -48,7 +49,7 @@ double stall::getMoney()
 	return money;
 }
 
-item stall::getItem(int arrayPosition)
+generic_item stall::getItem(int arrayPosition)
 {
 	return itemStock[arrayPosition];
 }
@@ -85,7 +86,7 @@ bool stall::increaseMoney(double increaseMoneyBy)
 	return true;
 }
 
-void stall::setFullItemStock(item item1, item item2, item item3, item item4, item item5)
+void stall::setFullItemStock(generic_item item1, generic_item item2, generic_item item3, generic_item item4, generic_item item5)
 {
 	itemStock[0] = item1;
 	itemStock[1] = item2;
@@ -94,7 +95,7 @@ void stall::setFullItemStock(item item1, item item2, item item3, item item4, ite
 	itemStock[4] = item5;
 }
 
-void stall::setSingleItemStock(int arrayPosition, item item0)
+void stall::setSingleItemStock(int arrayPosition, generic_item item0)
 {
 	itemStock[arrayPosition] = item0;
 }

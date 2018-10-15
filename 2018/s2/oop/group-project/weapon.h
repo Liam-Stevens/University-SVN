@@ -8,7 +8,7 @@ class weapon : public item
 {
   double durability;
   double size;
-  double price;
+  bool forcePrice;
 
  public:
 	weapon();
@@ -17,7 +17,6 @@ class weapon : public item
 	//getters
 	double getSize();
 	double getDurability();
-	double getPrice();
 
 	//setters
 	void setSize(double newSize);
@@ -25,6 +24,8 @@ class weapon : public item
 
 	//useful functions
 	void updatePrice();
+
+	virtual void setPrice(double newPrice);
 
 	~weapon();
 };

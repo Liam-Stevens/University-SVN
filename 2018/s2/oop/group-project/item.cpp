@@ -11,13 +11,6 @@ item::item()
 	price = 0;
 }
 
-item::item(string createName, int createItemID, double createPrice)
-{
-	itemID = createItemID;
-	name = createName;
-	price = createPrice;
-}
-
 //getters
 int item::getId()
 {
@@ -36,14 +29,9 @@ double item::getPrice()
 
 
 //setters
-bool item::setName(string newName)
+void item::setName(string newName)
 {
 	name = newName;
-}
-
-bool item::setPrice(double newPrice)
-{
-	price = newPrice;
 }
 
 item::~item()
