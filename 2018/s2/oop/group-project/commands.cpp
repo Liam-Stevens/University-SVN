@@ -22,7 +22,7 @@ void validLocationList()
 void callHelp()
 {
 	//commands
-	cout << "Commands:" << endl << endl;
+	cout << "Commands:" << endl << "> Help" << endl << endl;
 
 	//location list
 	cout << "Locations:" << endl << "> Home" << endl 
