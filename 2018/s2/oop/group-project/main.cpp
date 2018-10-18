@@ -103,7 +103,7 @@ int main ()
 					askTravel();
 				}
 			}
-			else
+			else if (inputCommand != "help")
 			{
 				cout << "Invalid input, please enter a valid input:" << endl;
 				validLocationList();
@@ -127,6 +127,10 @@ int main ()
 			else 
 			{	
 				bool knownCommand = false;
+				if(inputCommand == "help")
+				{
+					knownCommand = true;
+				}
 				if(location == bakery.getType())
 				{	
 					for (int i = 0; i < 5; i++)
@@ -151,6 +155,21 @@ int main ()
 				}
 				else if(location == forge.getType())
 				{
+					for (int i = 0; i < 5; i++)
+					{
+						if(inputCommand == lowerCase(forge.getItem(i).getName()))
+						{
+							cout << "Successfully purchased " << forge.getItem(i).getName() << "!" << endl << endl;
+							player.reduceMoney(forge.getItem(i).getPrice());
+							knownCommand = true;
+							break;
+						}
+					}
+					if(knownCommand == false && recentMove == false)
+					{
+						cout << "Unknown Item/Command, please try again." << endl << endl;
+					}
+
 					cout << "What would you like to purchase?			Money: $" 
 					<< player.getMoney() << endl;
 					forge.outputWeaponList();

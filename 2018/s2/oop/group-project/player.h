@@ -6,7 +6,6 @@
 class player
 {
 	double money;
-  	//Array of player inventory
 
  public:
 	player();
