@@ -20,9 +20,9 @@ public:
 	int get_animalID();
 	int get_volume();
 
-	std::string set_name(std::string newName);
-	int set_animalID(int newID);
-	int set_volume(int newVolume);
+	void set_name(std::string newName);
+	void set_animalID(int newID);
+	void set_volume(int newVolume);
 
 };
 
