@@ -5,13 +5,15 @@
 
 class animal
 {
+protected:
 	static int id;
-	int animalID
+	int animalID;
 	int volume;
 	std::string name;
 
 
 public:
+	animal();
 	animal(std::string n, int v) ;   // creates an animal with name n and body volume v.
 
 	std::string get_name();
