@@ -3,20 +3,17 @@
 
 using namespace std;
 
-int animal::id = 0;
 
 animal::animal()
 {
-	animalID = id;
-	id++;
+	animalID = 0;
 	name = "?";
 	volume = 0;
 }
 
 animal::animal(std::string n, int v)
 {
-	animalID = id;
-	id++;
+	animalID = 0;
 	name = n;
 	volume = v;
 }
@@ -36,17 +33,17 @@ int animal::get_volume()
 	return volume;
 }
 
-std::string animal::set_name(std::string newName)
+void animal::set_name(std::string newName)
 {
 	name = newName;
 }
 
-int animal::set_animalID(int newID)
+void animal::set_animalID(int newID)
 {
 	animalID = newID;
 }
 
-int animal::set_volume(int newVolume)
+void animal::set_volume(int newVolume)
 {
 	volume = newVolume;
 }
