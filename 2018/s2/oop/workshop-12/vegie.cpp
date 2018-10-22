@@ -12,7 +12,7 @@ vegie::vegie(string n,int v)
 	nextID++;
 	name = n;
 	volume = v;
-	favourite_food = "?";
+	favourite_food = "grass";
 }   
 
 std::string vegie::get_name()
