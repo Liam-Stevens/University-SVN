@@ -9,7 +9,7 @@ using namespace std;
 zoo::zoo(std::string n,int cows,int lions)
 {
 	name = n;
-	if (cows || lions < 0)
+	if (cows > 0 || lions > 0)
 	{
 		number_of_animals = cows + lions;
 		animals = new animal*[number_of_animals];
