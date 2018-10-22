@@ -18,11 +18,6 @@ animal::animal(std::string n, int v)
 	volume = v;
 }
 
-std::string animal::get_name()
-{
-	return name;
-}
-
 int animal::get_animalID()
 {
 	return animalID;

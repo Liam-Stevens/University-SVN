@@ -11,7 +11,7 @@ class vegie : public animal
 
 public:
 
-	vegie(string n,int v);      // create a vegie with name n and body volume v
+	vegie(std::string n,int v);      // create a vegie with name n and body volume v
 	std::string get_name();
 	std::string get_favourite_food();
 	void set_favourite_food(std::string newFood);

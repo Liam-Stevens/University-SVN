@@ -16,7 +16,7 @@ public:
 	animal();
 	animal(std::string n, int v) ;   // creates an animal with name n and body volume v.
 
-	std::string get_name();
+	virtual std::string get_name() = 0;
 	int get_animalID();
 	int get_volume();
 
