@@ -15,6 +15,7 @@ public:
 	std::string get_name();
 	int get_number_of_animals();
 	animal ** get_animals();
+	~zoo();
 };
 
 #endif

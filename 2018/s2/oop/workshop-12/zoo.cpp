@@ -10,6 +10,8 @@ zoo::zoo(std::string n,int cows,int lions)
 {
 	name = n;
 	number_of_animals = cows + lions;
+	animals = new animal*[number_of_animals];
+
 	for(int i = 0; i < cows; i++)
 	{
 		vegie myCow("Daisy",100);
@@ -35,4 +37,9 @@ int zoo::get_number_of_animals()
 animal ** zoo::get_animals()
 {
 	return animals;
+}
+
+zoo::~zoo()
+{
+	delete[] animals;
 }
