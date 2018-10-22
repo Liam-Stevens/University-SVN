@@ -5,6 +5,14 @@ using namespace std;
 
 int animal::id = 0;
 
+animal::animal()
+{
+	animalID = id;
+	id++;
+	name = "?";
+	volume = 0;
+}
+
 animal::animal(std::string n, int v)
 {
 	animalID = id;

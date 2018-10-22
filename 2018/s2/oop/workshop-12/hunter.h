@@ -10,7 +10,7 @@ class hunter : public animal
 	int kills;               // how many kills have been recorded, initialised to 0
 
 public:
-	hunter(string n, int v);  // create a hunter with name n and body volume v
+	hunter(std::string n, int v);  // create a hunter with name n and body volume v
 
 	std::string get_name();
 	int get_kills();

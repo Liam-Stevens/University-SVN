@@ -15,10 +15,9 @@ hunter::hunter(string n, int v)
 	kills = 0;
 }
 
-get_name()
+string hunter::get_name()
 {
-	string temp = "Hunter: " + name;
-	return temp;
+	return "Hunter: " + name;
 }
 
 int hunter::get_kills()
@@ -30,5 +29,3 @@ int hunter::set_kills(int newKills)
 {
 	kills = newKills;
 }
-
-};
