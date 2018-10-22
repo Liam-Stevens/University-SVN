@@ -25,7 +25,7 @@ int hunter::get_kills()
 	return kills;
 }
 
-int hunter::set_kills(int newKills)
+void hunter::set_kills(int newKills)
 {
 	kills = newKills;
 }

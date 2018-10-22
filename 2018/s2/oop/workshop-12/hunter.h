@@ -14,7 +14,7 @@ public:
 
 	std::string get_name();
 	int get_kills();
-	int set_kills(int newKills);
+	void set_kills(int newKills);
 };
 
 #endif
