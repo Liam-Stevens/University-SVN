@@ -14,7 +14,7 @@ public:
 	zoo(std::string n,int cows,int lions);      // create a zoo with the given number of cows and lions
 	std::string get_name();
 	int get_number_of_animals();
-	animal get_animals();
+	animal ** get_animals();
 };
 
 #endif
