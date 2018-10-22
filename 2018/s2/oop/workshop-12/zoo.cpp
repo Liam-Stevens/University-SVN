@@ -17,7 +17,7 @@ zoo::zoo(std::string n,int cows,int lions)
 		vegie myCow("Daisy",100);
 		**(animals + i) = myCow;
 	}
-	for(int i = cows; i < cows + lions; i++)
+	for(int i = cows; i < number_of_animals; i++)
 	{
 		hunter myLion("Clarence",50);
 		**(animals + i) = myLion;
