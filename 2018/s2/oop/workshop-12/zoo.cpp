@@ -9,10 +9,10 @@ using namespace std;
 zoo::zoo(std::string n,int cows,int lions)
 {
 	name = n;
-	if (cow || lions < 0)
+	if (cows || lions < 0)
 	{
 		number_of_animals = cows + lions;
-		animals[*] = new animal*[number_of_animals];
+		animals = new animal*[number_of_animals];
 
 		for(int i = 0; i < cows; i++)
 		{
@@ -24,6 +24,10 @@ zoo::zoo(std::string n,int cows,int lions)
 			hunter myLion("Clarence",50);
 			**(animals + i) = myLion;
 		}
+	}
+	else
+	{
+		number_of_animals = 0;
 	}
 }
 
