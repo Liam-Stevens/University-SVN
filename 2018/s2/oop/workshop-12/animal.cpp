@@ -35,7 +35,7 @@ std::string animal::set_name(std::string newName)
 
 int animal::set_animalID(int newID)
 {
-	animalID = newID
+	animalID = newID;
 }
 
 int animal::set_volume(int newVolume)
