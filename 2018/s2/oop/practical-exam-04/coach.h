@@ -1,6 +1,7 @@
 #ifndef COACH_H
 #define COACH_H
 
+#include "coach.h"
 #include <string>
 
 class coach : public person
