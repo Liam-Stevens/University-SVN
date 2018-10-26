@@ -4,6 +4,8 @@
 #include "team.h"
 #include <string>
 
+person teamPlayers = new teamPlayers[4]
+
 team::team()
 {
 	teamPlayers*[0] = new coach();
