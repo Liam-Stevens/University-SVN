@@ -4,10 +4,11 @@
 #include "team.h"
 #include <string>
 
-person teamPlayers = new teamPlayers[4]
+//person teamPlayers = new teamPlayers[4]
 
 team::team()
 {
+	/*
 	teamPlayers*[0] = new coach();
 	for(int i = 1; i < 4; i++)
 	{
@@ -28,3 +29,4 @@ team::~team()
 	}
 	delete[] teamPlayers;
 }
+*/
