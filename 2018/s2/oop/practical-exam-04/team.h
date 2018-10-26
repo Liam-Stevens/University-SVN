@@ -11,7 +11,7 @@ class team
 public:
 	team();
 
-	//person **getTeam();
+	person **getTeam();
 
 	//~team();
 
