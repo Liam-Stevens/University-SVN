@@ -16,11 +16,12 @@ team::team()
 	}
 	*/
 }
-
+/*
 person ** team::getTeam()
 {
-	//return teamPlayers*[0];
+	return teamPlayers*[0];
 }
+*/
 
 /*
 team::~team()
