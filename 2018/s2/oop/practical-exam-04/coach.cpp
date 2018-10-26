@@ -10,6 +10,7 @@ coach::coach()
 {
 	personID = nextID;
 	nextID++;
+	occupation = "coach";
 }
 
 coach::coach(std::string n, int sl)
@@ -18,6 +19,7 @@ coach::coach(std::string n, int sl)
 	serviceLength = sl;
 	personID = nextID;
 	nextID++;
+	occupation = "coach";
 }
 
 int coach::get_salary()
