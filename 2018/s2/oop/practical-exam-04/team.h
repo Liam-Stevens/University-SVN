@@ -6,12 +6,12 @@
 
 class team
 {	
-	person **teamPlayers;
+	//person **teamPlayers[] = new;
 
 public:
 	team();
 
-	person **getTeam();
+	//person **getTeam();
 
 	~team();
 
