@@ -5,10 +5,9 @@
 
 class person
 {
+protected:
 	std::string name;
 	std::string occupation;
-
-protected:
 	int salary;
 	int serviceLength;
 	int personID;
