@@ -9,7 +9,6 @@ person::person()
 	occupation = "?";
 	serviceLength = 0;
 	salary = 0;
-	personID = 0;
 }
 
 person::person(std::string n, std::string o, int sl)
@@ -18,7 +17,6 @@ person::person(std::string n, std::string o, int sl)
 	occupation = o;
 	serviceLength = sl;
 	salary = 0;
-	personID = 0;
 }
 
 //getters
