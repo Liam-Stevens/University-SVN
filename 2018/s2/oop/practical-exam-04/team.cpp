@@ -14,13 +14,15 @@ team::team()
 	{
 		teamPlayers*[i] = new player();
 	}
+	*/
 }
 
 person ** team::getTeam()
 {
-	return teamPlayers*[0];
+	//return teamPlayers*[0];
 }
 
+/*
 team::~team()
 {
 	for(int i = 0; i < 4; i++)

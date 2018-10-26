@@ -13,7 +13,7 @@ public:
 
 	//person **getTeam();
 
-	~team();
+	//~team();
 
 };
 
