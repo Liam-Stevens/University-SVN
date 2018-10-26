@@ -1,4 +1,5 @@
-#include "sort_int.h"
+#include "person.h"
+#include "player.h"
 #include <string>
 #include <iostream>
 
