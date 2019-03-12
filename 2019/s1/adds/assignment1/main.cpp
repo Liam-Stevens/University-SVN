@@ -11,8 +11,14 @@ int main()
 	palindrome test(line);
 	test.removeNonLetters();
 	test.lowerCase();
-	cout << test.getPhrase() << endl;
-	cout << test.isPalindrome() << endl;
+	if (test.isPalindrome() == true)
+	{
+		cout << "Yes" << endl;
+	}
+	else
+	{
+		cout << "No" << endl;
+	}
 
 	return 0;
 }
