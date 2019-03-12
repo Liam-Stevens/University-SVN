@@ -20,6 +20,7 @@ string palindrome::getPhrase()
 
 void palindrome::findLength()
 {
+	//Uses the end string marker to determine string length
 	bool found = false;
 	int i = 0;
 	while (found == false)
@@ -42,6 +43,7 @@ void palindrome::removeNonLetters()
 	int movement = 0;
 	for(int i = 0; i < length; i++)
 	{
+		//Filters characters by determining if they are upper or lower case characters
 		if(isupper(phrase[i]) || islower(phrase[i]))
 		{
 			phrase[i-movement] = phrase[i];
@@ -57,6 +59,7 @@ void palindrome::removeNonLetters()
 void palindrome::lowerCase()
 {
 	findLength();
+	//Makes characters lower case
 	for(int i = 0; i < length; i++)
 	{
 		phrase[i] = tolower(phrase[i]);
@@ -66,6 +69,7 @@ void palindrome::lowerCase()
 bool palindrome::isPalindrome()
 {
 	findLength();
+	//Checks if the string is the same in reverse
 	for(int i = 0; i < length; i++)
 	{
 		if (phrase[i] != phrase[length - 1 - i])
