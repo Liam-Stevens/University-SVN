@@ -75,12 +75,20 @@ int main()
 	}
 
 	human player1(args,line);
+	cout << 1;
 	computer player2(args);
+	cout << 2;
 	string *ptr1 = player1.getStrat();
+	cout << 3;
 	string *ptr2 = player2.getStrat();
+	cout << 4;
 	referee judge(ptr1,ptr2,args);
+	cout << 5;
 	judge.compare();
+	cout << 6;
 	judge.printResults();
+	cout << 7;
+	cout << endl;
 
 	return 0;
 }

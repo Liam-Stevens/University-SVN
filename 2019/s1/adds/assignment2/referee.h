@@ -9,7 +9,7 @@ protected:
 	std::string * strat1;
 	std::string * strat2;
 	int games;
-	std::string * results;
+	char * results;
 
 public:
 	

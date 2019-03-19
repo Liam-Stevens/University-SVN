@@ -13,20 +13,20 @@ referee::referee(std::string * newStrat1, std::string * newStrat2, int newGames)
 
 void referee::compare()
 {
-	results = new string[2*games];
+	results = new char[2*games];
 	for (int i = 0; i < games; i++)
 	{
 		if (strat1[i] == strat2[i])
 		{
-			results[2*i] = "T";
+			results[2*i] = 'T';
 		}
 		else if ((strat1[i] == "R" && strat2[i] == "S") || (strat1[i] == "S" && strat2[i] == "P") || (strat1[i] == "P" && strat2[i] == "R"))
 		{
-			results[2*i] = "W";
+			results[2*i] = 'W';
 		}
 		else if ((strat1[i] == "R" && strat2[i] == "P") || (strat1[i] == "P" && strat2[i] == "S") || (strat1[i] == "S" && strat2[i] == "R"))
 		{
-			results[2*i] = "L";
+			results[2*i] = 'L';
 		}
 		if(i > 0)
 		{
@@ -46,5 +46,5 @@ void referee::printResults()
 
 referee::~referee()
 {
-	delete results;
+//	delete results;
 }
