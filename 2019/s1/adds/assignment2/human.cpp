@@ -36,5 +36,6 @@ void human::generatePassStrat()
 
 human::~human()
 {
-	delete passStrat;
+	//Deleting this pointer causes errors?
+	//delete passStrat;
 }
