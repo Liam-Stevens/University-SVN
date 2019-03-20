@@ -1,16 +1,31 @@
 #include "human.h"
 #include <string>
+#include <iostream>
 
 using namespace std;
 
 human::human(int newGames, string newStrat)
 {
 	games = newGames;
-	for (int i = newGames-1; i > 0; i = i-2)
+	bool done = false;
+	bool detNum = false;
+	int inc = 0;
+	while (done == false)
 	{
-		newStrat.erase(i,1);
+		if (newStrat[inc] == ' ')
+		{
+			detNum = true;
+		}
+		newStrat.erase(inc,1);
+		if (detNum == true)
+		{
+			if (inc == games)
+			{
+				done = true;
+			}
+			inc++;
+		}
 	}
-	newStrat.erase(0,1);
 	strat = newStrat;
 	human::generatePassStrat();
 }

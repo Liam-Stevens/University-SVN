@@ -46,5 +46,5 @@ void referee::printResults()
 
 referee::~referee()
 {
-//	delete results;
+	delete results;
 }

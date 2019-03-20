@@ -29,6 +29,7 @@ std::string * computer::getStrat()
 }
 
 computer::~computer()
-{
-//	delete strat;
+{	
+	//Also causes an error when cleared
+	//delete strat;
 }
