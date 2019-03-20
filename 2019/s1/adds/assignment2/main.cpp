@@ -9,7 +9,7 @@ using namespace std;
 int numArgs(string input)
 {
 	int count = 0;
-	for(int i = 0; i < input.length(); i++)
+	for(int i = 0; i < int(input.length()); i++)
 	{
 		if(input[i] == ' ')
 		{
@@ -21,21 +21,23 @@ int numArgs(string input)
 
 bool check(string valid, int num)
 {
-	if(num = 0)
+	if(num == 0)
 	{
 		return false;
 	}
 	if(isdigit(valid[0]))
 	{
+		//Won't detect if they are the same number
+		/*
 		if(valid[0] != num)
 		{
 			return false;
 		}
-
+		*/
 		bool forCheck = true;
-		for(int i = 0; i < num; i++)
+		for(int i = 0; i < num; i = i + 2)
 		{
-			if(valid[i+3] == 'R' || valid[i+3] == 'P' || valid[i+3] == 'S')
+			if(valid[i+2] == 'R' || valid[i+2] == 'P' || valid[i+2] == 'S')
 			{
 
 			}
@@ -45,7 +47,7 @@ bool check(string valid, int num)
 				break;
 			}
 		}
-		if (forCheck = true)
+		if (forCheck == true)
 		{
 			return true;
 		}
@@ -64,7 +66,7 @@ int main()
 		getline(cin,line);
 		args = numArgs(line);
 		input = check(line, args);
-		if(input = false)
+		if(input == false)
 		{
 			cout << "Invalid Input, Please enter a Valid Input" << endl;
 		}
