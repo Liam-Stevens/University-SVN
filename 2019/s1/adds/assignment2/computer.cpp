@@ -9,6 +9,7 @@ computer::computer(int newGames)
 	computer::generateStrat(newGames);
 }
 
+//Makes a dynamic string array filled with R for how many games are played
 void computer::generateStrat(int numGames)
 {
 	strat = new string[numGames];
