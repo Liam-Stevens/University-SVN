@@ -61,20 +61,20 @@ int main()
 	int args = 0;
 	string line;
 
-	//while (input == false)
-	//{
+	while (input == false)
+	{
 		getline(cin,line);
 		args = numArgs(line);
 		input = check(line, args);
-		//if(input == false)
-		//{
-		//	cout << "Invalid Input, Please enter a Valid Input" << endl;
-		//}
-		//else
-		//{
-		//	input = true;
-		//}
-	//}
+		if(input == false)
+		{
+			cout << "Invalid Input, Please enter a Valid Input" << endl;
+		}
+		else
+		{
+			input = true;
+		}
+	}
 
 	human player1(args,line);
 	computer player2(args);
