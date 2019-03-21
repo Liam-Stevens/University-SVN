@@ -61,13 +61,9 @@ hr {
 }
 
 .red-outline {
-	border-style:solid;
-	border-color:red;
-	border-width: 1px;
+	border: 1px solid red;
 }
 
 .blue-outline {
-	border-style:solid;
-	border-color:blue;
-	border-width: 1px;
+	border: 1px solid blue;
 }
