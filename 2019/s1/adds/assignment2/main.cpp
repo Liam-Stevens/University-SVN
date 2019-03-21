@@ -6,6 +6,7 @@
 
 using namespace std;
 
+//Check the number of arguments based on the spaces in the string
 int numArgs(string input)
 {
 	int count = 0;
@@ -19,6 +20,7 @@ int numArgs(string input)
 	return count;
 }
 
+//Checks if the first character is a number and if subsequent characters are valid inputs
 bool check(string valid, int num)
 {
 	if(num == 0)
@@ -61,6 +63,7 @@ int main()
 	int args = 0;
 	string line;
 
+	//Ensures that invalid inputs to not run the system
 	while (input == false)
 	{
 		getline(cin,line);
@@ -76,6 +79,7 @@ int main()
 		}
 	}
 
+	//Game runs
 	human player1(args,line);
 	computer player2(args);
 	string *ptr1 = player1.getStrat();

@@ -7,11 +7,14 @@ using namespace std;
 human::human(int newGames, string newStrat)
 {
 	games = newGames;
+
+	//Checks for the strategy and removes the numbers and spaces
 	bool done = false;
 	bool detNum = false;
 	int inc = 0;
 	while (done == false)
 	{
+		//Finds the start of the strategy
 		if (newStrat[inc] == ' ')
 		{
 			detNum = true;
@@ -26,6 +29,7 @@ human::human(int newGames, string newStrat)
 			inc++;
 		}
 	}
+
 	strat = newStrat;
 	human::generatePassStrat();
 }
@@ -40,6 +44,7 @@ std::string * human::getStrat()
 	return passStrat;
 }
 
+//Places the string into a dynamic string array, ready to be passed to referee
 void human::generatePassStrat()
 {
 	passStrat = new string[games];
