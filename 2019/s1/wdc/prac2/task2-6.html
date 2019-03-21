@@ -19,9 +19,9 @@
 		</div>
 		<div>
 			<p>Notice how the borders double up here:</p>
-			<div style="border: 1px solid red">This div has a red border</div><div style="border: 1px solid blue">This div has a blue border</div>
+			<div class="red-border">This div has a red border</div><div class="blue-border">This div has a blue border</div>
 			<p>Notice how this fixes the borders:</p>
-			<div style="border-radius:8px 8px 0px 0px; border-top: 1px solid red; border-left: 1px solid red; border-right: 1px solid red;">This div has a red border, except on the bottom, and 8px round top corners</div><div style="border-radius:0px 0px 8px 8px; border: 1px solid blue;;">This div has a blue border, and 8px round bottom corners</div>
+			<div style="border-radius:8px 8px 0px 0px; border-bottom: 0px" class="red-border">This div has a red border, except on the bottom, and 8px round top corners</div><div style="border-radius:0px 0px 8px 8px;" class="blue-border">This div has a blue border, and 8px round bottom corners</div>
 		</div>
 	</body>
 </html>
