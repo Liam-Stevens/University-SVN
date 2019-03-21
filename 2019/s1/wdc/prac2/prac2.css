@@ -60,10 +60,14 @@ hr {
 	border-color:#9FEFE4;
 }
 
-.red-outline {
+.red-border {
 	border: 1px solid red;
 }
 
-.blue-outline {
+.red-outline {
+	outline: 1px solid red;
+}
+
+.blue-border {
 	border: 1px solid blue;
 }
