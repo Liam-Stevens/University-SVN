@@ -1,0 +1,73 @@
+h1 {
+	font-family: sans-serif;
+}
+
+a {
+	color: darkgreen;
+	font-family: serif;
+}
+
+del {
+	color: grey;
+}
+
+mark {
+	color: darkblue;
+	background-color: pink;
+}
+
+h2 {
+	text-align: left;
+	font-family: sans-serif;
+}
+
+pre {
+	font-family: monospace;
+}
+
+h3 {
+	color:rgba(0,0,139,0.8);
+}
+
+.transparent-text {
+	color:rgba(0,0,0,0.5);
+}
+
+body {
+	background-color:ghostwhite;
+	background-image:url("rect.png"),url("rect.png"),url("rect.png");
+	background-repeat: repeat,repeat,repeat;
+	background-size: 97px, 67px, 37px;
+}
+
+#content {
+	background-color:white;
+	border-style:solid;
+	border-color:darkgrey;
+	border-width: 1px;
+	border-radius: 8px;
+}
+
+.blue {
+	color:blue;
+}
+
+.fancy {
+	font-family:cursive;
+}
+
+hr {
+	border-color:#9FEFE4;
+}
+
+.red-outline {
+	border-style:solid;
+	border-color:red;
+	border-width: 1px;
+}
+
+.blue-outline {
+	border-style:solid;
+	border-color:blue;
+	border-width: 1px;
+}
