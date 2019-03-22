@@ -45,14 +45,22 @@ void referee::compare()
 void referee::printResults()
 {
 	//Prints the wins vs losses to the console
-	//if(char(results[0]) == "T")
-	//{
-	//	cout << "1" << endl;
-	//}
+	//string winner = "T W L";
+	/*
+	for (int i = 0; i < 2*games; i++)
+	{
+		if(results[i] == winner[i])
+		{
+			cout << "#" << i << endl;
+		}
+	}
+	*/
+	//cout << "#";
 	for (int i = 0; i < 2*games; i++)
 	{
 		cout << results[i];
 	}
+	//cout << "#";
 	cout << endl;
 }
 
