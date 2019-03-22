@@ -42,6 +42,10 @@ void referee::compare()
 void referee::printResults()
 {
 	//Prints the wins vs losses to the console
+	if(char(results[0]) == "T")
+	{
+		cout << "1" << endl;
+	}
 	for (int i = 0; i < 2*games; i++)
 	{
 		cout << char(results[i]);
@@ -53,3 +57,21 @@ referee::~referee()
 {
 	delete results;
 }
+
+
+/*
+
+All of
+
+string s(1, c); std::cout << s << std::endl;
+
+and
+
+std::cout << string(1, c) << std::endl;
+
+and
+
+string s; s.push_back(c); std::cout << s << std::endl;
+
+worked for me.
+*/
