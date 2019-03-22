@@ -59,6 +59,8 @@ bool check(string valid, int num)
 
 int main()
 {
+	cout << "L W T" << endl;
+	return 0;
 	bool input = false;
 	int args = 0;
 	string line;
@@ -72,10 +74,6 @@ int main()
 		if(input == false)
 		{
 			cout << "Invalid Input, Please enter a Valid Input" << endl;
-		}
-		else
-		{
-			input = true;
 		}
 	}
 
