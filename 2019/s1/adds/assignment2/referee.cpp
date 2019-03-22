@@ -56,7 +56,7 @@ void referee::printResults()
 	}
 	*/
 	//cout << "#";
-	for (int i = 0; i < 2*games; i++)
+	for (int i = 0; i < 2*games-1; i++)
 	{
 		cout << results[i];
 	}
