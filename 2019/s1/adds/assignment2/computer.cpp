@@ -31,6 +31,6 @@ std::string * computer::getStrat()
 
 computer::~computer()
 {	
-	//Also causes an error when cleared
+	//Also causes a runtime error
 	//delete strat;
 }
