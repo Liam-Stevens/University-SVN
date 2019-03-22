@@ -59,8 +59,6 @@ bool check(string valid, int num)
 
 int main()
 {
-	cout << "L W T" << endl;
-	return 0;
 	bool input = false;
 	int args = 0;
 	string line;

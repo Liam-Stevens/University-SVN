@@ -44,7 +44,7 @@ void referee::printResults()
 	//Prints the wins vs losses to the console
 	for (int i = 0; i < 2*games; i++)
 	{
-		cout << results[i];
+		cout << char(results[i]);
 	}
 	cout << endl;
 }
