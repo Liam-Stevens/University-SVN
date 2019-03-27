@@ -23,6 +23,8 @@ RandomComputer::RandomComputer(int newGames)
 void RandomComputer::generateStrat(int numGames)
 {
 	strat = new string[numGames];
+
+	//Fills the Strat array with at random
 	for(int i = 0; i < numGames; i++)
 	{
 		int dice = rand() % 3;
@@ -42,6 +44,7 @@ void RandomComputer::generateStrat(int numGames)
 	}
 }
 
+//Debug test
 void RandomComputer::printTest()
 {
 	for (int i = 0; i < games; i++)

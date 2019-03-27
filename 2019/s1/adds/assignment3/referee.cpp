@@ -16,6 +16,7 @@ referee::referee(std::string * newStrat1, std::string * newStrat2, int newGames)
 	games = newGames;
 }
 
+//Set new comparison targets
 void referee::setCompetitors(std::string * newStrat1, std::string * newStrat2)
 {
 	strat1 = newStrat1;
@@ -24,10 +25,12 @@ void referee::setCompetitors(std::string * newStrat1, std::string * newStrat2)
 
 void referee::compare()
 {
+	//Clear results string
 	if (results.length() > 0)
 	{
 		results = "";
 	}
+
 	for (int i = 0; i < games; i++)
 	{
 		//Check if the strategy is the same

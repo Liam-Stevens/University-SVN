@@ -108,16 +108,7 @@ void Tournament::compete()
 	cout << match[0]->getType() << endl;
 }
 
-void Tournament::compare()
-{
-
-}
-
-void Tournament::printResults()
-{
-
-}
-
+//Creates a set type of computer player
 void Tournament::createPlayer(int index, std::string playerType)
 {
 	if (playerType == "RandomComputer")

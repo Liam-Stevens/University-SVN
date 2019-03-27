@@ -22,12 +22,15 @@ Bureaucrat::Bureaucrat(int newGames)
 void Bureaucrat::generateStrat(int numGames)
 {
 	strat = new string[numGames];
+
+	//Fills array with paper
 	for(int i = 0; i < numGames; i++)
 	{
 		strat[i] = 'P';
 	}
 }
 
+//Debug Test
 void Bureaucrat::printTest()
 {
 	for (int i = 0; i < games; i++)

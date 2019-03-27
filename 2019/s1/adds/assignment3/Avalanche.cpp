@@ -22,12 +22,16 @@ Avalanche::Avalanche(int newGames)
 void Avalanche::generateStrat(int numGames)
 {
 	strat = new string[numGames];
+
+	//Sets array to rock
 	for(int i = 0; i < numGames; i++)
 	{
 		strat[i] = 'R';
 	}
 }
 
+
+//Debug test
 void Avalanche::printTest()
 {
 	for (int i = 0; i < games; i++)
