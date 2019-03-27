@@ -24,6 +24,8 @@ void Crescendo::generateStrat(int numGames)
 	strat = new string[numGames];
 	string reference[3] = {"P","S","R"};
 	int counter = 0;
+
+	//Loops through reference array to fill strat
 	for(int i = 0; i < numGames; i++)
 	{	
 		if (counter >= 3)
@@ -35,6 +37,7 @@ void Crescendo::generateStrat(int numGames)
 	}
 }
 
+//Debug tests
 void Crescendo::printTest()
 {
 	for (int i = 0; i < games; i++)

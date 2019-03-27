@@ -20,6 +20,7 @@ int main()
 	string plr[8];
 	int playerCap = 0;
 
+	//Takes inputs until all player slots are filled
 	do {
 		cin >> line;
 		plr[playerCap] = line;
@@ -27,10 +28,7 @@ int main()
 	}
 	while(playerCap < 8);
 
-
-	//Tournament Tournament1;
-	//Tournament Tournament1("Avalanche","Bureaucrat","Bureaucrat","Toolbox","Toolbox","Crescendo","Crescendo","FistfullODollars");
-	
+	//Initiates the Tournament
 	Tournament Tournament1(plr[0],plr[1],plr[2],plr[3],plr[4],plr[5],plr[6],plr[7]);
 	Tournament1.compete();
 

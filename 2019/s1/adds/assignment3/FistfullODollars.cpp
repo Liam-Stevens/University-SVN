@@ -24,6 +24,8 @@ void FistfullODollars::generateStrat(int numGames)
 	strat = new string[numGames];
 	string reference[3] = {"R","P","P"};
 	int counter = 0;
+
+	//Loops through reference array to fill strat
 	for(int i = 0; i < numGames; i++)
 	{	
 		if (counter >= 3)
@@ -35,6 +37,7 @@ void FistfullODollars::generateStrat(int numGames)
 	}
 }
 
+//Debug tests
 void FistfullODollars::printTest()
 {
 	for (int i = 0; i < games; i++)

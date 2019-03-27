@@ -23,8 +23,6 @@ public:
 		std::string newPlayer6, std::string newPlayer7, std::string newPlayer8);
 
 	void compete();
-	void compare();
-	void printResults();
 	void createPlayer(int index, std::string playerType);
 };
 

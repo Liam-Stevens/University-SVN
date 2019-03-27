@@ -24,6 +24,8 @@ void PaperDoll::generateStrat(int numGames)
 	strat = new string[numGames];
 	string reference[3] = {"P","S","S"};
 	int counter = 0;
+
+	//Loops through reference array to fill strat
 	for(int i = 0; i < numGames; i++)
 	{	
 		if (counter >= 3)
@@ -35,6 +37,7 @@ void PaperDoll::generateStrat(int numGames)
 	}
 }
 
+//Debug tests
 void PaperDoll::printTest()
 {
 	for (int i = 0; i < games; i++)
