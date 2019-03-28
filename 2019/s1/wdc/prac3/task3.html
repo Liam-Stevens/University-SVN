@@ -70,13 +70,13 @@
             <div onmouseover="myFunction()" id="mcount"></div>
             <div id="posts"></div>
             <hr />
-            <textarea rows="4" cols="60">Type your text here...</textarea>
+            <textarea id="content-area" rows="4" cols="60">Type your text here...</textarea>
             <br />
             <div class="controls left">
                 <input type="number" name="quantity" value="1" /><br />
                 <input type="radio" name="color" value="blue" /> Blue<br />
                 <input type="radio" name="color" value="red" /> Red<br />
-                <button>Post</button>
+                <button onClick="createPost()">Post</button>
             </div>
             <div class="controls left"> 
                 <input type="range" name="visible" min="1" max="10" value="10"/><br />
