@@ -26,9 +26,13 @@ if [ "$caps" = "true" ];
 then
 	out1=${uppercase[$in1]};
 	out2=${uppercase[$in2]};
-	for (( i=$in1; i<$in2; i++ ))
+	for (( i=$in1+1; i<$in2+1; i++ ))
 	do
 		out1="${out1}${uppercase[$i]}";
+	done
+	for (( i=$in2-1; i>$in1-1; i-- ))
+	do
+		out2="${out2}${uppercase[$i]}";
 	done
 else
 	out1=${lowercase[$in1]};
