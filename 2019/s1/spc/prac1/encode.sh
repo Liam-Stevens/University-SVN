@@ -36,8 +36,11 @@ then
 	done < "${5:-/dev/stdin}"
 fi
 
+echo $(find ./ -name "create_pattern.sh")
+
 #Encoding
-fileOutput=$(echo $fileInput | $(./create_pattern.sh $1 $2 $3 $4))
+local=$(find ./ -name "create_pattern.sh")
+fileOutput=$(echo $fileInput | $($local $1 $2 $3 $4))
 echo $fileOutput > "${5:-/dev/stdout}";
 
 if [ "$inputs" = "0" ]
