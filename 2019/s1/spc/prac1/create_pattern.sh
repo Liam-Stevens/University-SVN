@@ -14,6 +14,7 @@ else
 	then
 		if [ "$3" = "-u" ];
 		then
+			caps=true;
 			docheck3=true;
 		else
 			docheck1=true;
