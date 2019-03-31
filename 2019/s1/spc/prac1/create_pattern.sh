@@ -30,7 +30,7 @@ then
 	if [ $# -eq 2 ]
 	then
 		docheck3=true;
-	elif [ $# -lt 3 ]
+	elif [ $# -lt 2 ]
 	then
 		failed=true;
 	else
@@ -111,9 +111,9 @@ then
 fi
 
 #Checks validity of 1 digits inputs
-if [ "$docheck3" = true ]
+if [ "$docheck3" = true ];
 then
-	if [ "$2" = "-u" ]
+	if [ "$2" = "-u" ];
 	then
 		failed=true;
 	elif [ "$2" -gt 26 ];
@@ -131,7 +131,7 @@ then
 fi
 
 #Moves inputs is backwards
-if [ "$backwards" = true ];
+if [ "$backwards" = true ] && [ "$failed" != true ];
 then
 	let temp=$in1;
 	let in1=$in2;
