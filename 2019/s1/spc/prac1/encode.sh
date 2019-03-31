@@ -2,7 +2,7 @@
 
 
 
-#Read input file
+#Read input file from stdin
 inputs=$#;
 if [ "$inputs" = "0" ]
 then
@@ -38,7 +38,24 @@ fi
 
 #Encoding
 fileOutput=$(echo $fileInput | $(./create_pattern.sh $1 $2 $3 $4))
-echo $fileOutput;
+echo $fileOutput > "${5:-/dev/stdout}";
+
+if [ "$inputs" = "0" ]
+then
+	echo $fileOutput > "${2:-/dev/stdout}";
+elif [ "$inputs" = "1" ]
+then
+	echo $fileOutput > "${3:-/dev/stdout}";
+elif [ "$inputs" = "2" ]
+then
+	echo $fileOutput > "${4:-/dev/stdout}";
+elif [ "$inputs" = "3" ]
+then
+	echo $fileOutput > "${5:-/dev/stdout}";
+elif [ "$inputs" = "4" ]
+then
+	echo $fileOutput > "${6:-/dev/stdout}";
+fi
 
 exit
 
