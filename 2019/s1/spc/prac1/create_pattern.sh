@@ -24,56 +24,13 @@ else
 	fi
 fi
 
-if [ "$docheck3" = true ]
-then
-	if [ "$2" -gt 26 ];
-	then	
-		let in1=25;
-		let in2=25;
-	elif [ "$2" -lt 1 ];
-	then
-		let in1=0;
-		let in2=0;
-	else
-		let in1=$2-1;
-		let in2=$2-1;
-	fi
-fi
-
-#make the check then exe inside
-if [ "$docheck2" = true ];
-then
-	if [ $# -lt 4 ];
-	then
-		failed=true;
-	else
-		if [ "$3" -gt 26 ];
-		then
-			failed=true;
-		elif [ "$4" -lt 1 ];
-		then
-			failed=true;
-		elif [ "$3" -gt "$4" ];
-		then
-			failed=true;
-		elif [ "$3" -lt 1 ];
-		then
-			let in1=0;
-			let in2=$4-1;
-		elif [ "$4" -gt 26 ];
-		then
-			let in1=$3-1;
-			let in2=25;
-		else
-			let in1=$3-1;
-			let in2=$4-1;
-		fi
-	fi
-fi
-#make the check then exe inside
+#Checks middle parameter inputs
 if [ "$docheck1" = true ];
 then
-	if [ $# -lt 3 ]
+	if [ $# -eq 2 ]
+	then
+		docheck3=true;
+	elif [ $# -lt 3 ]
 	then
 		failed=true;
 	else
@@ -103,6 +60,68 @@ then
 				let in2=$3-1;
 			fi
 		fi
+	fi
+fi
+
+#Checks validity of ending parameter inputs
+if [ "$docheck2" = true ];
+then
+	if [ $# -lt 4 ];
+	then
+		if [ "$3" -gt 26 ];
+		then	
+			let in1=25;
+			let in2=25;
+		elif [ "$3" -lt 1 ];
+		then
+			let in1=0;
+			let in2=0;
+		else
+			let in1=$3-1;
+			let in2=$3-1;
+		fi
+	elif [ $# -lt 3 ];
+	then
+		failed=true;
+	else
+		if [ "$3" -gt 26 ];
+		then
+			failed=true;
+		elif [ "$4" -lt 1 ];
+		then
+			failed=true;
+		elif [ "$3" -gt "$4" ];
+		then
+			failed=true;
+		elif [ "$3" -lt 1 ];
+		then
+			let in1=0;
+			let in2=$4-1;
+		elif [ "$4" -gt 26 ];
+		then
+			let in1=$3-1;
+			let in2=25;
+		else
+			let in1=$3-1;
+			let in2=$4-1;
+		fi
+	fi
+fi
+
+#Checks validity of 1 digits inputs
+if [ "$docheck3" = true ]
+then
+	if [ "$2" -gt 26 ];
+	then	
+		let in1=25;
+		let in2=25;
+	elif [ "$2" -lt 1 ];
+	then
+		let in1=0;
+		let in2=0;
+	else
+		let in1=$2-1;
+		let in2=$2-1;
 	fi
 fi
 
