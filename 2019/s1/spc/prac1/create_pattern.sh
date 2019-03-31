@@ -66,7 +66,10 @@ fi
 #Checks validity of ending parameter inputs
 if [ "$docheck2" = true ];
 then
-	if [ $# -lt 4 ];
+	if [ $# -lt 3 ];
+		then
+		failed=true;
+	elif [ $# -eq 3 ];
 	then
 		if [ "$3" -gt 26 ];
 		then	
@@ -80,9 +83,6 @@ then
 			let in1=$3-1;
 			let in2=$3-1;
 		fi
-	elif [ $# -lt 3 ];
-	then
-		failed=true;
 	else
 		if [ "$3" -gt 26 ];
 		then
@@ -111,7 +111,10 @@ fi
 #Checks validity of 1 digits inputs
 if [ "$docheck3" = true ]
 then
-	if [ "$2" -gt 26 ];
+	if [ "$2" = "-u" ]
+	then
+		failed=true;
+	elif [ "$2" -gt 26 ];
 	then	
 		let in1=25;
 		let in2=25;
@@ -125,6 +128,7 @@ then
 	fi
 fi
 
+#Exits the program
 if [ "$failed" = true ];
 then
 	echo "tr" "'[]'" "'[]'";
