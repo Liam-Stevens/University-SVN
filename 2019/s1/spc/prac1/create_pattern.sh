@@ -32,6 +32,9 @@ then
 		elif [ "$4" -lt 1 ]
 		then
 			failed=true;
+		elif [ "$3" -gt "$4" ]
+		then
+			failed=true;
 		elif [ "$3" -lt 1 ]
 		then
 			let in1=0;
@@ -61,6 +64,9 @@ then
 			then
 				failed=true;
 			elif [ "$3" -lt 1 ]
+			then
+				failed=true;
+			elif [ "$2" -gt "$3" ]
 			then
 				failed=true;
 			elif [ "$2" -lt 1 ]
