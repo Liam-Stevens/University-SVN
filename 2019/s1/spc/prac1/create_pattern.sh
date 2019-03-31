@@ -44,9 +44,6 @@ then
 			elif [ "$3" -lt 1 ]
 			then
 				failed=true;
-			elif [ "$2" -gt "$3" ]
-			then
-				failed=true;
 			elif [ "$2" -lt 1 ]
 			then
 				let in1=0;
@@ -58,6 +55,10 @@ then
 			else
 				let in1=$2-1;
 				let in2=$3-1;
+			fi
+			if [ "$2" -gt "$3" ]
+			then
+				backwards=true;
 			fi
 		fi
 	fi
@@ -90,9 +91,6 @@ then
 		elif [ "$4" -lt 1 ];
 		then
 			failed=true;
-		elif [ "$3" -gt "$4" ];
-		then
-			failed=true;
 		elif [ "$3" -lt 1 ];
 		then
 			let in1=0;
@@ -104,6 +102,10 @@ then
 		else
 			let in1=$3-1;
 			let in2=$4-1;
+		fi
+		if [ "$3" -gt "$4" ];
+		then
+			backwards=true;
 		fi
 	fi
 fi
@@ -126,6 +128,14 @@ then
 		let in1=$2-1;
 		let in2=$2-1;
 	fi
+fi
+
+#Moves inputs is backwards
+if [ "$backwards" = true ];
+then
+	let temp=$in1;
+	let in1=$in2;
+	let in2=$temp;
 fi
 
 #Exits the program
