@@ -26,8 +26,24 @@ then
 	then
 		failed=true;
 	else
-		let in1=$3-1;
-		let in2=$4-1;
+		if [ "$3" -gt 26 ]
+		then
+			failed=true;
+		elif [ "$4" -lt 1 ]
+		then
+			failed=true;
+		elif [ "$3" -lt 1 ]
+		then
+			let in1=0;
+			let in2=$4-1;
+		elif [ "$4" -gt 26 ]
+		then
+			let in1=$3-1;
+			let in2=25;
+		else
+			let in1=$3-1;
+			let in2=$4-1;
+		fi
 	fi
 fi
 #make the check then exe inside
@@ -41,8 +57,24 @@ then
 		then
 			failed=true;
 		else
-			let in1=$2-1;
-			let in2=$3-1;
+			if [ "$2" -gt 26 ]
+			then
+				failed=true;
+			elif [ "$3" -lt 1 ]
+			then
+				failed=true;
+			elif [ "$2" -lt 1 ]
+			then
+				let in1=0;
+				let in2=$3-1;
+			elif [ "$3" -gt 26 ]
+			then
+				let in1=$2-1;
+				let in2=25;
+			else
+				let in1=$2-1;
+				let in2=$3-1;
+			fi
 		fi
 	fi
 fi
