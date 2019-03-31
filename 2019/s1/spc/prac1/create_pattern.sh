@@ -130,7 +130,7 @@ then
 	fi
 fi
 
-#Moves inputs is backwards
+#Moves inputs if backwards
 if [ "$backwards" = true ] && [ "$failed" != true ];
 then
 	let temp=$in1;
@@ -176,7 +176,7 @@ else
 	fi
 
 
-	echo "tr" "'[$out1]'" "'[$out2]'";
+	echo "tr" "[$out1]" "[$out2]";
 fi
 
 
