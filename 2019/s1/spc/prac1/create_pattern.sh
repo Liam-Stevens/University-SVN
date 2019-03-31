@@ -5,41 +5,61 @@ if [ "$1" = "-u" ];
 then
 	caps=true;
 	docheck2=true;
+elif [ "$4" = "-u" ];
+then
+	caps=true;
+	docheck1=true;
 else
-	if [ "$4" = "-u" ];
+	if [ "$1" = "-s" ];
 	then
-		caps=true;
-		docheck1=true;
-	else
-		if [ "$1" = "-s" ];
+		if [ "$3" = "-u" ];
 		then
-			docheck1=true;
+			docheck3=true;
 		else
-			failed=true;
+			docheck1=true;
 		fi
+	else
+		failed=true;
 	fi
 fi
+
+if [ "$docheck3" = true ]
+then
+	if [ "$2" -gt 26 ];
+	then	
+		let in1=25;
+		let in2=25;
+	elif [ "$2" -lt 1 ];
+	then
+		let in1=0;
+		let in2=0;
+	else
+		let in1=$2-1;
+		let in2=$2-1;
+	fi
+fi
+
 #make the check then exe inside
 if [ "$docheck2" = true ];
 then
-	if [ $# -lt 4 ]
+	if [ $# -lt 4 ];
 	then
 		failed=true;
 	else
-		if [ "$3" -gt 26 ]
+		if [ "$3" -gt 26 ];
 		then
 			failed=true;
-		elif [ "$4" -lt 1 ]
+		elif [ "$4" -lt 1 ];
 		then
 			failed=true;
-		elif [ "$3" -gt "$4" ]
+		elif [ "$3" -gt "$4" ];
 		then
 			failed=true;
-		elif [ "$3" -lt 1 ]
+		elif [ "$3" -lt 1 ];
 		then
 			let in1=0;
 			let in2=$4-1;
-		elif [ "$4" -gt 26 ]
+		elif [ "$4" -gt 26 ];
 		then
 			let in1=$3-1;
 			let in2=25;
@@ -56,7 +76,7 @@ then
 	then
 		failed=true;
 	else
-		if [ "$2" = "-u" ] || [ "$3" = "-u" ]
+		if [ "$2" = "-u" ]
 		then
 			failed=true;
 		else
