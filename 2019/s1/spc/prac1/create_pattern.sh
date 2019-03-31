@@ -176,7 +176,7 @@ else
 	fi
 
 
-	echo "tr" "[$out1]" "[$out2]";
+	echo "tr" "'[$out1]'" "'[$out2]'";
 fi
 
 
