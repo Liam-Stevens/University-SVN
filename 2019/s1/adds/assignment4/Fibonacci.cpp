@@ -11,6 +11,11 @@ Fibonacci::Fibonacci()
 	
 int Fibonacci::calculate(int num)
 {
+	if (num - num != 0)
+	{
+		cout << "ERROR";
+		return -1;
+	}
 	if (num == 0)
 	{
 		fibNum = fibNum + 0;

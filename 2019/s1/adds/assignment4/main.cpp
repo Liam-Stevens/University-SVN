@@ -39,7 +39,37 @@ int main()
 	output2 = test2.calculate(output2);
 	output3 = test3.calculate(output3);
 
-	cout << output0 << " " << output1 << " " << output2 << " " << output3 << endl;
+	//Output and error handling
+	
+	if (output0 == -1)
+	{
+		cout << "ERROR";
+	}
+	else
+	{
+		cout << output0;
+	}
+	cout << " ";
+	cout << output1;
+	cout << " ";
+	if (output2 == -1)
+	{
+		cout << "ERROR";
+	}
+	else
+	{
+		cout << output2;
+	}
+	cout << " ";
+	if (output3 == -1)
+	{
+		cout << "ERROR";
+	}
+	else
+	{
+		cout << output3;
+	}
+	cout << endl;
 
 	return 0;
 }

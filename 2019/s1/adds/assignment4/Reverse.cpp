@@ -32,13 +32,14 @@ int Reverse::reverseDigit(int value)
 		}
 		else
 		{
-			cout << "ERROR" << endl;
+			return -1;
 		}
 	}
 	else
 	{
-		cout << "ERROR" << endl;
+		return -1;
 	}
+	return -1;
 }
 
 string Reverse::reverseString(string letters)
