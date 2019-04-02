@@ -58,6 +58,7 @@ int main()
 	if (checkForNum(input[0]))
     {
         output0 = atoi (input[0].c_str());
+        output0 = test1.reverseDigit(output0);
     }
     else
     {
@@ -66,6 +67,7 @@ int main()
     if (checkForNum(input[2]))
     {
         output2 = atoi (input[2].c_str());
+        output2 = test2.calculate(output2);
     }
     else
     {
@@ -74,6 +76,7 @@ int main()
     if (checkForNum(input[3]))
     {
         output3 = atoi (input[3].c_str());
+        output3 = test3.calculate(output3);
     }
     else
     {
