@@ -39,7 +39,7 @@ int Reverse::reverseDigit(int value)
 	{
 		return -1;
 	}
-	return -1;
+	return reverse;
 }
 
 string Reverse::reverseString(string letters)
