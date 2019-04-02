@@ -11,10 +11,13 @@ Fibonacci::Fibonacci()
 	
 int Fibonacci::calculate(int num)
 {
+	//Checks if a number
 	if (num - num != 0)
 	{
 		return -1;
 	}
+
+	//Base case of 0 and 1
 	if (num == 0)
 	{
 		fibNum = fibNum + 0;
@@ -25,6 +28,7 @@ int Fibonacci::calculate(int num)
 	}
 	else
 	{
+		//Recurs if as the formula shows
 		calculate(num-1);
 		calculate(num-2);
 	}

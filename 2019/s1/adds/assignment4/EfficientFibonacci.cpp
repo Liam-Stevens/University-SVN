@@ -20,6 +20,7 @@ int EfficientFibonacci::calculate(int num)
 	{
 		fibArray = new int[num+1];
 
+		//For checking if the array has a value
 		for (int i = 0; i < num+1; i++)
 		{
 			fibArray[i] = -1;

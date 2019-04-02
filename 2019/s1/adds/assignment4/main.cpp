@@ -7,6 +7,28 @@
 
 using namespace std;
 
+//Checks if the string contains a number
+bool checkForNum(string check)
+{
+	if (check.find('0') != string::npos ||
+        check.find('1') != string::npos ||
+        check.find('2') != string::npos ||
+        check.find('3') != string::npos ||
+        check.find('4') != string::npos ||
+        check.find('5') != string::npos ||
+        check.find('6') != string::npos ||
+        check.find('7') != string::npos ||
+        check.find('8') != string::npos ||
+        check.find('9') != string::npos)
+    {
+    	return true;
+    }
+    else
+    {
+    	return false;
+    }
+}
+
 int main()
 {
 	string line;
@@ -33,16 +55,7 @@ int main()
 	int output3;
 
 	//Check inputs for errors and do the functions
-	if (input[0].find('0') != std::string::npos ||
-        input[0].find('1') != std::string::npos ||
-        input[0].find('2') != std::string::npos ||
-        input[0].find('3') != std::string::npos ||
-        input[0].find('4') != std::string::npos ||
-        input[0].find('5') != std::string::npos ||
-        input[0].find('6') != std::string::npos ||
-        input[0].find('7') != std::string::npos ||
-        input[0].find('8') != std::string::npos ||
-        input[0].find('9') != std::string::npos)
+	if (checkForNum(input[0]))
     {
         output0 = atoi (input[0].c_str());
     }
@@ -50,16 +63,7 @@ int main()
     {
     	output0 = -1;
     }
-    if (input[2].find('0') != std::string::npos ||
-        input[2].find('1') != std::string::npos ||
-        input[2].find('2') != std::string::npos ||
-        input[2].find('3') != std::string::npos ||
-        input[2].find('4') != std::string::npos ||
-        input[2].find('5') != std::string::npos ||
-        input[2].find('6') != std::string::npos ||
-        input[2].find('7') != std::string::npos ||
-        input[2].find('8') != std::string::npos ||
-        input[2].find('9') != std::string::npos)
+    if (checkForNum(input[2]))
     {
         output2 = atoi (input[2].c_str());
     }
@@ -67,16 +71,7 @@ int main()
     {
     	output2 = -1;
     }
-    if (input[3].find('0') != std::string::npos ||
-        input[3].find('1') != std::string::npos ||
-        input[3].find('2') != std::string::npos ||
-        input[3].find('3') != std::string::npos ||
-        input[3].find('4') != std::string::npos ||
-        input[3].find('5') != std::string::npos ||
-        input[3].find('6') != std::string::npos ||
-        input[3].find('7') != std::string::npos ||
-        input[3].find('8') != std::string::npos ||
-        input[3].find('9') != std::string::npos)
+    if (checkForNum(input[3]))
     {
         output3 = atoi (input[3].c_str());
     }
