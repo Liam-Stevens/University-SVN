@@ -11,8 +11,8 @@ Fibonacci::Fibonacci()
 	
 int Fibonacci::calculate(int num)
 {
-	//Checks if a number
-	if (num - num != 0)
+	//Checks if a positive
+	if (num < 0)
 	{
 		return -1;
 	}

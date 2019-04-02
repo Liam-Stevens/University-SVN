@@ -11,7 +11,8 @@ EfficientFibonacci::EfficientFibonacci()
 	
 int EfficientFibonacci::calculate(int num)
 {
-	if (num - num != 0)
+	//Checks if negative number
+	if (num < 0)
 	{
 		return -1;
 	}
