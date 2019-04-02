@@ -41,7 +41,7 @@ int main()
 
 	//Output and error handling
 	
-	if (output0 == 0)
+	if (output0 == -1)
 	{
 		cout << "ERROR";
 	}
