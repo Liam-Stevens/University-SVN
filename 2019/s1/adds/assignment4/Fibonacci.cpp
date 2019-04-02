@@ -13,8 +13,7 @@ int Fibonacci::calculate(int num)
 {
 	if (num - num != 0)
 	{
-		cout << "ERROR";
-		return -1;
+		return 0;
 	}
 	if (num == 0)
 	{
