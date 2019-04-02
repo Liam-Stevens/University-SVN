@@ -26,18 +26,67 @@ int main()
 	Fibonacci test2;
 	EfficientFibonacci test3;
 
-	//Convert from string to int
-	int output0 = atoi (input[0].c_str());
-	int output2 = atoi (input[2].c_str());
-	int output3 = atoi (input[3].c_str());
-
+	//Declare outputs
+	int output0;
 	string output1;
-	
-	//Do the functions
-	output0 = test1.reverseDigit(output0);
+	int output2;
+	int output3;
+
+	//Check inputs for errors and do the functions
+	if (input[0].find('0') != std::string::npos ||
+        input[0].find('1') != std::string::npos ||
+        input[0].find('2') != std::string::npos ||
+        input[0].find('3') != std::string::npos ||
+        input[0].find('4') != std::string::npos ||
+        input[0].find('5') != std::string::npos ||
+        input[0].find('6') != std::string::npos ||
+        input[0].find('7') != std::string::npos ||
+        input[0].find('8') != std::string::npos ||
+        input[0].find('9') != std::string::npos)
+    {
+        output0 = atoi (input[0].c_str());
+    }
+    else
+    {
+    	output0 = -1;
+    }
+    if (input[2].find('0') != std::string::npos ||
+        input[2].find('1') != std::string::npos ||
+        input[2].find('2') != std::string::npos ||
+        input[2].find('3') != std::string::npos ||
+        input[2].find('4') != std::string::npos ||
+        input[2].find('5') != std::string::npos ||
+        input[2].find('6') != std::string::npos ||
+        input[2].find('7') != std::string::npos ||
+        input[2].find('8') != std::string::npos ||
+        input[2].find('9') != std::string::npos)
+    {
+        output2 = atoi (input[2].c_str());
+    }
+    else
+    {
+    	output2 = -1;
+    }
+    if (input[3].find('0') != std::string::npos ||
+        input[3].find('1') != std::string::npos ||
+        input[3].find('2') != std::string::npos ||
+        input[3].find('3') != std::string::npos ||
+        input[3].find('4') != std::string::npos ||
+        input[3].find('5') != std::string::npos ||
+        input[3].find('6') != std::string::npos ||
+        input[3].find('7') != std::string::npos ||
+        input[3].find('8') != std::string::npos ||
+        input[3].find('9') != std::string::npos)
+    {
+        output3 = atoi (input[3].c_str());
+    }
+    else
+    {
+    	output3 = -1;
+    }
+
 	output1 = test1.reverseString(input[1]);
-	output2 = test2.calculate(output2);
-	output3 = test3.calculate(output3);
+
 
 	//Output and error handling
 	
@@ -52,7 +101,7 @@ int main()
 	cout << " ";
 	cout << output1;
 	cout << " ";
-	if (output2 == 0)
+	if (output2 == -1)
 	{
 		cout << "ERROR";
 	}
@@ -61,7 +110,7 @@ int main()
 		cout << output2;
 	}
 	cout << " ";
-	if (output3 == 0)
+	if (output3 == -1)
 	{
 		cout << "ERROR";
 	}
