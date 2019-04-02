@@ -13,7 +13,7 @@ int EfficientFibonacci::calculate(int num)
 {
 	if (num - num != 0)
 	{
-		return -1;
+		return 0;
 	}
 	//Handles creation of fib num storage
 	if (newCalc == true)

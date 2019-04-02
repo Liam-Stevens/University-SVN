@@ -3,7 +3,7 @@
 #include "EfficientFibonacci.h"
 #include <string>
 #include <iostream>
-#include <cstdlib>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -41,7 +41,7 @@ int main()
 
 	//Output and error handling
 	
-	if (output0 == -1)
+	if (output0 == 0)
 	{
 		cout << "ERROR";
 	}
@@ -52,7 +52,7 @@ int main()
 	cout << " ";
 	cout << output1;
 	cout << " ";
-	if (output2 == -1)
+	if (output2 == 0)
 	{
 		cout << "ERROR";
 	}
@@ -61,7 +61,7 @@ int main()
 		cout << output2;
 	}
 	cout << " ";
-	if (output3 == -1)
+	if (output3 == 0)
 	{
 		cout << "ERROR";
 	}
