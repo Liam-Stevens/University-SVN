@@ -11,6 +11,10 @@ EfficientFibonacci::EfficientFibonacci()
 	
 int EfficientFibonacci::calculate(int num)
 {
+	if (num - num != 0)
+	{
+		return -1;
+	}
 	//Handles creation of fib num storage
 	if (newCalc == true)
 	{
