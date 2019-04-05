@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #filter inputs by type of input
+#first check if caps first or last
 if [ "$1" = "-u" ];
 then
 	caps=true;
@@ -10,6 +11,7 @@ then
 	caps=true;
 	docheck1=true;
 else
+	#check if letters and then blocked by caps
 	if [ "$1" = "-s" ];
 	then
 		if [ "$3" = "-u" ];
@@ -27,6 +29,7 @@ fi
 #Checks middle parameter inputs
 if [ "$docheck1" = true ];
 then
+	#check for single number input
 	if [ $# -eq 2 ]
 	then
 		docheck3=true;
@@ -34,12 +37,14 @@ then
 	then
 		failed=true;
 	else
+		#check for invalid caps
 		if [ "$2" = "-u" ]
 		then
 			failed=true;
 		else
 			filter1=$2;
 			filter2=$3;
+			#check for outside range
 			if [ "$filter1" -gt 26 -a "$filter2" -gt 26 ]
 			then
 				failed=true;
@@ -47,6 +52,7 @@ then
 			then
 				failed=true;
 			fi
+			#check for reverse and single out of range
 			if [ "$filter1" -gt 26 -a "$filter2" -lt 27 ]
 			then
 				let filter1=26;
@@ -54,6 +60,7 @@ then
 			then
 				let filter2=1;
 			fi
+			#check for single out of range
 			if [ "$filter1" -lt 1 ]
 			then
 				let in1=0;
@@ -66,6 +73,7 @@ then
 				let in1=$filter1-1;
 				let in2=$filter2-1;
 			fi
+			#check if numbers are reverse order
 			if [ "$filter1" -gt "$filter2" ]
 			then
 				backwards=true;
@@ -77,8 +85,9 @@ fi
 #Checks validity of ending parameter inputs
 if [ "$docheck2" = true ];
 then
+	#check for single number input with caps
 	if [ $# -lt 3 ];
-		then
+	then
 		failed=true;
 	elif [ $# -eq 3 ];
 	then
@@ -97,6 +106,7 @@ then
 	else
 		filter1=$3;
 		filter2=$4;
+		#check for outside range
 		if [ "$filter1" -gt 26 -a "$filter2" -gt 26 ]
 		then
 			failed=true;
@@ -104,6 +114,7 @@ then
 		then
 			failed=true;
 		fi
+		#check for reverse and single out of range
 		if [ "$filter1" -gt 26 -a "$filter2" -lt 27 ]
 		then
 			let filter1=26;
@@ -111,6 +122,7 @@ then
 		then
 			let filter2=1;
 		fi
+		#check for single out of range
 		if [ "$filter1" -lt 1 ];
 		then
 			let in1=0;
@@ -123,6 +135,7 @@ then
 			let in1=$filter1-1;
 			let in2=$filter2-1;
 		fi
+		#check if numbers are reverse order
 		if [ "$filter1" -gt "$filter2" ];
 		then
 			backwards=true;
@@ -133,6 +146,7 @@ fi
 #Checks validity of 1 digits inputs
 if [ "$docheck3" = true ];
 then
+	#check for invalid input
 	if [ "$2" = "-u" ];
 	then
 		failed=true;
@@ -201,10 +215,7 @@ else
 		done
 	fi
 
-
+	#output result
 	echo "tr" "'[$out1]'" "'[$out2]'";
 fi
 exit
-
-
-
