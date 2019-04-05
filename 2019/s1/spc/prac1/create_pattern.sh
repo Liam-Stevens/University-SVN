@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#filter inputs
+#filter inputs by type of input
 if [ "$1" = "-u" ];
 then
 	caps=true;
@@ -38,25 +38,35 @@ then
 		then
 			failed=true;
 		else
-			if [ "$2" -gt 26 ]
+			filter1=$2;
+			filter2=$3;
+			if [ "$filter1" -gt 26 -a "$filter2" -gt 26 ]
 			then
 				failed=true;
-			elif [ "$3" -lt 1 ]
+			elif [ "$filter1" -lt 1 -a "$filter2" -lt 1 ]
 			then
 				failed=true;
-			elif [ "$2" -lt 1 ]
+			fi
+			if [ "$filter1" -gt 26 -a "$filter2" -lt 27 ]
+			then
+				let filter1=26;
+			elif [ "$filter1" -gt 1 -a "$filter2" -lt 0 ]
+			then
+				let filter2=1;
+			fi
+			if [ "$filter1" -lt 1 ]
 			then
 				let in1=0;
-				let in2=$3-1;
-			elif [ "$3" -gt 26 ]
+				let in2=$filter2-1;
+			elif [ "$filter2" -gt 26 ]
 			then
-				let in1=$2-1;
+				let in1=$filter1-1;
 				let in2=25;
 			else
-				let in1=$2-1;
-				let in2=$3-1;
+				let in1=$filter1-1;
+				let in2=$filter2-1;
 			fi
-			if [ "$2" -gt "$3" ]
+			if [ "$filter1" -gt "$filter2" ]
 			then
 				backwards=true;
 			fi
@@ -85,25 +95,35 @@ then
 			let in2=$3-1;
 		fi
 	else
-		if [ "$3" -gt 26 ];
+		filter1=$3;
+		filter2=$4;
+		if [ "$filter1" -gt 26 -a "$filter2" -gt 26 ]
 		then
 			failed=true;
-		elif [ "$4" -lt 1 ];
+		elif [ "$filter1" -lt 1 -a "$filter2" -lt 1 ]
 		then
 			failed=true;
-		elif [ "$3" -lt 1 ];
+		fi
+		if [ "$filter1" -gt 26 -a "$filter2" -lt 27 ]
+		then
+			let filter1=26;
+		elif [ "$filter1" -gt 1 -a "$filter2" -lt 0 ]
+		then
+			let filter2=1;
+		fi
+		if [ "$filter1" -lt 1 ];
 		then
 			let in1=0;
-			let in2=$4-1;
-		elif [ "$4" -gt 26 ];
+			let in2=$filter2-1;
+		elif [ "$filter2" -gt 26 ];
 		then
-			let in1=$3-1;
+			let in1=$filter1-1;
 			let in2=25;
 		else
-			let in1=$3-1;
-			let in2=$4-1;
+			let in1=$filter1-1;
+			let in2=$filter2-1;
 		fi
-		if [ "$3" -gt "$4" ];
+		if [ "$filter1" -gt "$filter2" ];
 		then
 			backwards=true;
 		fi
@@ -152,23 +172,29 @@ else
 
 	if [ "$caps" = true ];
 	then
+		#Makes the list for upper case letters
 		out1=${uppercase[$in1]};
 		out2=${uppercase[$in2]};
+		#First output
 		for (( i=$in1+1; i<$in2+1; i++ ))
 		do
 			out1="${out1}${uppercase[$i]}";
 		done
+		#Second output
 		for (( i=$in2-1; i>$in1-1; i-- ))
 		do
 			out2="${out2}${uppercase[$i]}";
 		done
 	else
+		#Makes the list for lower case letters
 		out1=${lowercase[$in1]};
 		out2=${lowercase[$in2]};
+		#First output
 		for (( i=$in1+1; i<$in2+1; i++ ))
 		do
 			out1="${out1}${lowercase[$i]}";
 		done
+		#Second output
 		for (( i=$in2-1; i>$in1-1; i-- ))
 		do
 			out2="${out2}${lowercase[$i]}";
