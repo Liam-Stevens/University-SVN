@@ -32,9 +32,9 @@ router.get('/colour.html', function (req, res, next) {
 			</html>'); 
   colorTag = colorTag + 1;
   
-  if (colorTag > 3)
+  if (colorTag >= 4)
   {
-  	//colorTag = 0;
+  	colorTag = 0;
   } 
 });
 
