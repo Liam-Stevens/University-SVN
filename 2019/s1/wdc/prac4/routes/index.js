@@ -30,11 +30,12 @@ router.get('/colour.html', function (req, res, next) {
 			<h1 style="color:' + colorVis[colorTag] + '">' + colorVis[colorTag] + '</h1> \
 			</body> \
 			</html>');
-  colorTag++;/*
+  colorTag = colorTag + 1;
+  
   if (colorTag > 3)
   {
   	colorTag = 0;
-  }*/
+  }
 });
 
 router.get('/log.html', function (req, res, next) {
