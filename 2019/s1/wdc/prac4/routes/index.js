@@ -3,7 +3,7 @@ var router = express.Router();
 
 var date = "";
 var colorTag = 0;
-var colorVis = "red";
+var colorVis = ["red", "yellow", "green", "blue"];
 var dateList = "";
 
 /* GET home page. */
@@ -27,29 +27,13 @@ router.get('/colour.html', function (req, res, next) {
 			</title> \
 			</head> \
 			<body> \
-			<h1 style="color:' + colorVis + '">' + colorVis + '</h1> \
+			<h1 style="color:' + colorVis[colorTag] + '">' + colorVis[colorTag] + '</h1> \
 			</body> \
 			</html>');
-  //colorTag++;
+  colorTag++;
   if (colorTag > 3)
   {
   	colorTag = 0;
-  }
-  if (colorTag === 0)
-  {
-  	colorVis = "red";
-  }
-  else if (colorTag === 1)
-  {
-  	colorVis = "yellow";
-  }
-  else if (colorTag === 2)
-  {
-  	colorVis = "green";
-  }
-  else (colorTag === 3)
-  {
-  	colorVis = "blue";
   }
 });
 
