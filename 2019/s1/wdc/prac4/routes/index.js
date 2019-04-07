@@ -30,8 +30,7 @@ router.get('/colour.html', function (req, res, next) {
 			<h1 style="color:' + colorVis + '">' + colorVis + '</h1> \
 			</body> \
 			</html>');
-	});/*
-  colorTag++;
+  //colorTag++;
   if (colorTag > 3)
   {
   	colorTag = 0;
@@ -48,11 +47,11 @@ router.get('/colour.html', function (req, res, next) {
   {
   	colorVis = "green";
   }
-  else if (colorTag == 3)
+  else (colorTag == 3)
   {
   	colorVis = "blue";
   }
-});*/
+});
 
 router.get('/log.html', function (req, res, next) {
   var dateAdd = "<li>" + Date() + "</li>";
