@@ -29,9 +29,9 @@ router.get('/colour.html', function (req, res, next) {
 			<body> \
 			<h1 style="color:' + colorVis[colorTag] + '">' + colorVis[colorTag] + '</h1> \
 			</body> \
-			</html>'); /*
+			</html>'); 
   colorTag = colorTag + 1;
-  
+  /*
   if (colorTag > 3)
   {
   	colorTag = 0;
