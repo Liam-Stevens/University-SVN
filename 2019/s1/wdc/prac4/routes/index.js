@@ -27,7 +27,7 @@ router.get('/colour.html', function (req, res, next) {
 			</title> \
 			</head> \
 			<body> \
-			<h1 style="color:'+colorVis+'">'+colorVis+'</h1> \
+			<h1 style="color:' + colorVis + '">' + colorVis + '</h1> \
 			</body> \
 			</html>');
 	
@@ -55,7 +55,7 @@ router.get('/colour.html', function (req, res, next) {
 });
 
 router.get('/log.html', function (req, res, next) {
-  var dateAdd = "<li>"+Date()+"</li>";
+  var dateAdd = "<li>" + Date() + "</li>";
   dateList = dateList.concat(dateAdd);
   res.send('<!DOCTYPE html> \
 			<html lang="en"> \
@@ -65,7 +65,7 @@ router.get('/log.html', function (req, res, next) {
 			Colour Stuff \
 			</title> \
 			</head> \
-			<body><ul>'+dateList+'</ul></body> \
+			<body><ul>' + dateList + '</ul></body> \
 			</html>');
 });
 
