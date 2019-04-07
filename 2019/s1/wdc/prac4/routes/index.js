@@ -35,19 +35,19 @@ router.get('/colour.html', function (req, res, next) {
   {
   	colorTag = 0;
   }
-  if (colorTag == 0)
+  if (colorTag === 0)
   {
   	colorVis = "red";
   }
-  else if (colorTag == 1)
+  else if (colorTag === 1)
   {
   	colorVis = "yellow";
   }
-  else if (colorTag == 2)
+  else if (colorTag === 2)
   {
   	colorVis = "green";
   }
-  else (colorTag == 3)
+  else (colorTag === 3)
   {
   	colorVis = "blue";
   }
