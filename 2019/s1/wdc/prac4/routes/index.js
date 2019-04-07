@@ -31,11 +31,11 @@ router.get('/colour.html', function (req, res, next) {
 			</body> \
 			</html>'); 
   colorTag = colorTag + 1;
-  /*
+  
   if (colorTag > 3)
   {
-  	colorTag = 0;
-  } */
+  	//colorTag = 0;
+  } 
 });
 
 router.get('/log.html', function (req, res, next) {
