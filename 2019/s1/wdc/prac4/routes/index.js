@@ -15,7 +15,7 @@ router.get('/last.txt', function (req, res, next) {
   res.send(date);
   date = Date();
 });
-
+/*
 router.get('/colour.html', function (req, res, next) {
   
   res.send('<!DOCTYPE html> \
@@ -53,7 +53,7 @@ router.get('/colour.html', function (req, res, next) {
   	colorVis = "blue";
   }
 });
-/*
+*/
 router.get('/log.html', function (req, res, next) {
   var dateAdd = "<li>" + Date() + "</li>";
   dateList = dateList.concat(dateAdd);
@@ -68,5 +68,5 @@ router.get('/log.html', function (req, res, next) {
 			<body><ul>' + dateList + '</ul></body> \
 			</html>');
 });
-*/
+
 module.exports = router;
