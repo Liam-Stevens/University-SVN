@@ -53,7 +53,7 @@ router.get('/colour.html', function (req, res, next) {
   	colorVis = "blue";
   }
 });
-
+/*
 router.get('/log.html', function (req, res, next) {
   var dateAdd = "<li>" + Date() + "</li>";
   dateList = dateList.concat(dateAdd);
@@ -68,5 +68,5 @@ router.get('/log.html', function (req, res, next) {
 			<body><ul>' + dateList + '</ul></body> \
 			</html>');
 });
-
+*/
 module.exports = router;
