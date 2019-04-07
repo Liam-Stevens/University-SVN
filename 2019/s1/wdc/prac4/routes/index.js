@@ -18,7 +18,18 @@ router.get('/last.txt', function (req, res, next) {
 
 router.get('/colour.html', function (req, res, next) {
   
-  res.send('<h1 style="color:'+colorVis+'">'+colorVis+'</h1>');
+  res.send('<!DOCTYPE html> \
+			<html lang="en"> \
+			<head> \
+			<meta charset="UTF-8"> \
+			<title>  \
+			Colour Stuff \
+			</title> \
+			</head> \
+			<body> \
+			<h1 style="color:'+colorVis+'">'+colorVis+'</h1> \
+			</body> \
+			</html>');
 	
   colorTag++;
   if (colorTag > 3)
@@ -46,7 +57,16 @@ router.get('/colour.html', function (req, res, next) {
 router.get('/log.html', function (req, res, next) {
   var dateAdd = "<li>"+Date()+"</li>";
   dateList = dateList.concat(dateAdd);
-  res.send(dateList);
+  res.send('<!DOCTYPE html> \
+			<html lang="en"> \
+			<head> \
+			<meta charset="UTF-8"> \
+			<title>  \
+			Colour Stuff \
+			</title> \
+			</head> \
+			<body><ul>'+dateList+'</ul></body> \
+			</html>');
 });
 
 module.exports = router;
