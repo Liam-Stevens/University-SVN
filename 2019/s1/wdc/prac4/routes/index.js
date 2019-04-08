@@ -54,11 +54,11 @@ router.get('/colour.txt', function (req, res, next) {
   res.send(colorVis[colorTag2]); 
   colorTag2 = colorTag2 + 1;
 });
-/*
+
 router.get('/contact.ajax', function (req, res, next) {
   res.send('<a href="a1742143@student.adelaide.edu.au">Link to my Email</a>');
 });
-
+/*
 router.get('/search.ajax', function (req, res, next) {
   res.send('<input type="text"> \
   			<button>Search</button>');
