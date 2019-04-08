@@ -1,4 +1,4 @@
-/*
+
 var xhttp = new XMLHttpRequest();
 
 function getContact() {
@@ -45,4 +45,3 @@ function getAbout() {
 	xhttp.send();
 
 }
-*/
