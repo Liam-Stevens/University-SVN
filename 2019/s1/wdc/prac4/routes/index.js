@@ -58,10 +58,9 @@ router.get('/colour.txt', function (req, res, next) {
 router.get('/contact.ajax', function (req, res, next) {
   res.send('<a href="a1742143@student.adelaide.edu.au">Link to my Email</a>');
 });
-/*
+
 router.get('/search.ajax', function (req, res, next) {
-  res.send('<input type="text"> \
-  			<button>Search</button>');
+  //res.send('<input type="text"><button>Search</button>');
 });
-*/
+
 module.exports = router;
