@@ -3,6 +3,7 @@ var router = express.Router();
 
 var date = "";
 var colorTag = 0;
+var colorTag2 = 0;
 var colorVis = ["red", "yellow", "green", "blue", "red", "yellow", "green", "blue"];
 var dateList = "";
 
@@ -46,6 +47,12 @@ router.get('/log.html', function (req, res, next) {
 			</head> \
 			<body><ul>' + dateList + '</ul></body> \
 			</html>');
+});
+
+router.get('/colour.txt', function (req, res, next) {
+  
+  res.send(colorVis[colorTag2]); 
+  colorTag2 = colorTag2 + 1;
 });
 
 module.exports = router;
