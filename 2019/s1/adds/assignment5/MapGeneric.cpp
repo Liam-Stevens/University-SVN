@@ -5,9 +5,14 @@ using namespace std;
 
 vector<int> MapGeneric::map(vector<int> inputList)
 {
-	for(int i = 0; i < inputList.size(); i++)
+	//Maps integer, removes integer from map list, then recurs
+	if (inputList.size() == 0)
 	{
-		inputList[i] = f(inputList[i]);
+		return inputList;
 	}
-	return inputList;
+	mapper.push_back(f(inputList[0]));
+	inputList.erase(inputList.begin());
+	map(inputList);
+
+	return mapper;
 }

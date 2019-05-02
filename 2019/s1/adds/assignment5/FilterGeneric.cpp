@@ -5,12 +5,18 @@ using namespace std;
 
 std::vector<int> FilterGeneric::filter(vector<int> inputList)
 {
-	for(int i = 0; i < inputList.size(); i++)
+	
+	//Stores filtered integer, removes integer from map list then recurs
+	if (inputList.size() == 0)
 	{
-		if(g(inputList[i]) == true)
-		{
-			listFiltered.push_back(inputList[i]);
-		}
+		return inputList;
 	}
+	if (g(inputList[0]) == true)
+	{
+		listFiltered.push_back(inputList[0]);
+	}
+	inputList.erase(inputList.begin());
+	filter(inputList);
+
 	return listFiltered;
 }
