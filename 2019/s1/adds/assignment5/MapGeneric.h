@@ -6,13 +6,13 @@
 class MapGeneric
 {
 private:
-	virtual int f(int);
-
+	virtual int f(int x) = 0;
+/*
 protected:
 	std::vector<int> list;
+*/
 
 public:
-
 	std::vector<int> map(std::vector<int> inputList);
 
 };
