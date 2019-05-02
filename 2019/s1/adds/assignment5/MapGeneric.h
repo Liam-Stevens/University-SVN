@@ -7,10 +7,7 @@ class MapGeneric
 {
 private:
 	virtual int f(int x) = 0;
-/*
-protected:
-	std::vector<int> list;
-*/
+	std::vector<int> mapper;
 
 public:
 	std::vector<int> map(std::vector<int> inputList);

@@ -39,7 +39,6 @@ int main()
 		list.push_back(filter);
 	}
 
-
 	//Converts L to L'
 	MapTriple triple;
 	MapAbsoluteValue absolute;
