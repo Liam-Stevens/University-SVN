@@ -1,1 +1,1 @@
-SELECT subject FROM Subjects;
+SELECT * FROM Subjects;
