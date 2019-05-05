@@ -1,0 +1,1 @@
+SELECT subject FROM Subjects;
