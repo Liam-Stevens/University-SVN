@@ -11,7 +11,7 @@ private:
 public:
     Mutator();
 
-    virtual Individual mutate(Individual mutatee, int k);
+    virtual Individual mutate(Individual mute, int k);
 
 };
 

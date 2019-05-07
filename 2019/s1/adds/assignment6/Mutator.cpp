@@ -5,8 +5,3 @@ Mutator::Mutator()
 {
 
 }
-
-Individual Mutator::mutate(Individual mutatee, int k)
-{
-
-}
