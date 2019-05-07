@@ -1,10 +1,7 @@
 #include "Individual.h"
+#include "Mutator.h"
 #include "BitFlip.h"
 
-BitFlip::BitFlip()
-{
-
-}
 
 Individual BitFlip::mutate(Individual mute, int k)
 {

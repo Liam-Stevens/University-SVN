@@ -22,7 +22,7 @@ public:
 	int getLength();
 
 	void flipBit(int pos);
-
+	void setString(std::string newString);
 };
 
 #endif

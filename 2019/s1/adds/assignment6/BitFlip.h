@@ -9,7 +9,7 @@ private:
 
 
 public:
-    BitFlip();
+    Individual mutate(Individual mute, int k);
 
 };
 
