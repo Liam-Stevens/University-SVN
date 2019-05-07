@@ -6,7 +6,8 @@ using namespace std;
 Individual::Individual(int newLength)
 {
 	length = newLength;
-	string binaryString(newLength, '0');
+	string temp(newLength, '0');
+	binaryString = temp;
 	maxOnes = 0;
 }
 
@@ -20,15 +21,30 @@ Individual::Individual(std::string newString)
 //Rework for intended functionality
 int Individual::calcMaxOnes()
 {
-	int temp = 0;
+	int max = 0;
+	int inc = 0;
+	bool prev = false;
 	for (int i = 0; i < binaryString.length(); i++)
 	{
-		if (binaryString[i] == 1)
+		if(prev == false)
 		{
-			temp++;
+			inc = 0;
+		}
+		if(binaryString[i] == '1')
+		{
+			inc++;
+			prev = true;
+		}
+		else
+		{
+			prev = false;
+		}
+		if(inc > max)
+		{
+			max = inc;
 		}
 	}
-	return temp;
+	return max;
 }
 
 std::string Individual::getString()
@@ -40,7 +56,8 @@ int Individual::getBit(int pos)
 {
 	if (pos <= binaryString.length())
 	{
-		return binaryString[pos];
+		//Must take 48 because the value is a char
+		return binaryString[pos] - 48;
 	}
 	else
 	{
@@ -60,13 +77,20 @@ int Individual::getLength()
 
 void Individual::flipBit(int pos)
 {
-	if(binaryString[pos] == 0)
+	if(binaryString[pos] == '0')
 	{
-		binaryString[pos] = 1;
+		binaryString[pos] = '1';
 	}
-	else if (binaryString[pos] == 1)
+	else if (binaryString[pos] == '1')
 	{
-		binaryString[pos] = 0;
+		binaryString[pos] = '0';
 	}
 	maxOnes = calcMaxOnes();
+}
+
+void Individual::setString(string newString)
+{
+	binaryString = newString;
+	maxOnes = calcMaxOnes();
+	length = newString.length();
 }

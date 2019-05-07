@@ -9,7 +9,7 @@ private:
 
 
 public:
-    Rearrange();
+    Individual mutate(Individual mute, int k);
 
 };
 
