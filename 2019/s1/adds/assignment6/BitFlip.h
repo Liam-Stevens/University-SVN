@@ -5,9 +5,6 @@
 
 class BitFlip : public Mutator
 {
-private:
-
-
 public:
     Individual mutate(Individual mute, int k);
 
