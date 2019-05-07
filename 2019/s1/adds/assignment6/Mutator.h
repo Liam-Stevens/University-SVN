@@ -5,11 +5,7 @@
 
 class Mutator
 {
-private:
-
-
 public:
-
     virtual Individual mutate(Individual mute, int k) = 0;
 
 };

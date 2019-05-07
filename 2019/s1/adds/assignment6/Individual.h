@@ -13,14 +13,17 @@ private:
 	int calcMaxOnes();
 
 public:
+	//Constructors
 	Individual(int newLength);
 	Individual(std::string newString);
 
+	//Getters
 	std::string getString();
 	int getBit(int pos);
 	int getMaxOnes();
 	int getLength();
 
+	//Setters
 	void flipBit(int pos);
 	void setString(std::string newString);
 };
