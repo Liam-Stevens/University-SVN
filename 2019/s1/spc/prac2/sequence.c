@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <unistd.h>
 
 int main()
 {
@@ -15,7 +14,7 @@ int main()
         {
             break;
         }
-        //printf("%s", line);
+
         //Saves line to command list
         int i = 0;
         for(i; i < 256; i++)
@@ -25,37 +24,36 @@ int main()
         maxCom++;
     }
 
-    pid_t parent = getpid();
-    pid_t child = 0;
-    pid_t childList[maxCom];
+    //Testable pids for parent and children
+    int child = 0;
+    int childList[maxCom];
     int i = 0;
     for(i; i < maxCom; i++) {
+        //Forks and checks for errors
         child = fork();
         if(child < 0) {
             printf("Error");
-            //break;
         } else if (child == 0) {
-            //printf("Child (%d): %d\n", i + 1, getpid());
+            //Sets child pid
             childList[i] = getpid();
-            //break;
         }
 
+        //Waits if the parent
         if(child != 0){
             wait(NULL);
         }
         else{
+            //Assigns child respective command from list
             for(i = 0; i < maxCom; i++)
             {
                 if(childList[i] == getpid())
                 {
-                    //printf("%s", commandList[i]);
+                    //Executes command
                     system(commandList[i]);
                 }
             }
         }
     }
-
-
 
     return(0);
 }
