@@ -48,31 +48,32 @@ int main()
                 numArg[maxCom]++;
             }
         }
-        char * yo = strtok(commandList[maxCom], " ");
-        strcpy(commandFilter[maxCom][0], yo);
+        char * buf = strtok(commandList[maxCom], " ");
+        strcpy(commandFilter[maxCom][0], buf);
 
 
         for (i = 1; i < numArg[maxCom]+1; i++){
 
-            yo = strtok(NULL," ");
-            strcpy(commandFilter[maxCom][i], yo);
+            buf = strtok(NULL," ");
+            strcpy(commandFilter[maxCom][i], buf);
         }
         /*
-        yo = strtok(NULL," ");
-        strcpy(arg1[maxCom], yo);
-        yo = strtok(NULL," ");
-        strcpy(arg2[maxCom], yo);
-        yo = strtok(NULL," ");
-        strcpy(arg3[maxCom], yo);*/
+        buf = strtok(NULL," ");
+        strcpy(arg1[maxCom], buf);
+        buf = strtok(NULL," ");
+        strcpy(arg2[maxCom], buf);
+        buf = strtok(NULL," ");
+        strcpy(arg3[maxCom], buf);*/
         //commandFilter[i+1] = NULL;
-        //char *yo3 = NULL;
-        //strcpy(commandFilter[i+1], yo3);
+        //char *buf3 = NULL;
+        //strcpy(commandFilter[i+1], buf3);
 
 
-        //printf("%s %s \n", commandFilter[maxCom][0], commandFilter[maxCom][1]);
+        printf("%s %s \n", commandFilter[maxCom][0], commandFilter[maxCom][1]);
         //printf("%d \n", maxCom);
-        //printf("%d \n", numArg[maxCom]);
+        printf("%d \n", numArg[maxCom]);
         maxCom++;
+        printf("%d \n", maxCom);
     }
 
 
@@ -131,7 +132,34 @@ int main()
 
             //printf("{(%d): %d %d }", i+1, new_pipe[0], new_pipe[1]);
             //printf("{%s}", commandList[i]);
-            execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], NULL);
+            if(numArg[i] == 0)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], NULL);
+            }
+            else if(numArg[i] == 1)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], NULL);
+            }
+            else if(numArg[i] == 2)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], commandFilter[i][2], NULL);
+            }
+            else if(numArg[i] == 3)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], commandFilter[i][2], commandFilter[i][3], NULL);
+            }
+            else if(numArg[i] == 4)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], commandFilter[i][2], commandFilter[i][3], commandFilter[i][4], NULL);
+            }
+            else if(numArg[i] == 5)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], commandFilter[i][2], commandFilter[i][3], commandFilter[i][4], commandFilter[i][5], NULL);
+            }
+            else if(numArg[i] == 6)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], commandFilter[i][2], commandFilter[i][3], commandFilter[i][4], commandFilter[i][5], commandFilter[i][6], NULL);
+            }
             /*
             char argList2[100][255];
             int j = 0;
@@ -139,7 +167,7 @@ int main()
             {
                 strcpy(argList2[j], argList[j]);
             } */
-            //execvp(*commandFilter[i],commandFilter);
+            //execvp(commandFilter[i][0],commandFilter[i]);
             //system(commandList[i]);
             break;
         }
