@@ -160,6 +160,22 @@ int main()
             {
                 execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], commandFilter[i][2], commandFilter[i][3], commandFilter[i][4], commandFilter[i][5], commandFilter[i][6], NULL);
             }
+            else if(numArg[i] == 7)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], commandFilter[i][2], commandFilter[i][3], commandFilter[i][4], commandFilter[i][5], commandFilter[i][6], commandFilter[i][7], NULL);
+            }
+            else if(numArg[i] == 8)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], commandFilter[i][2], commandFilter[i][3], commandFilter[i][4], commandFilter[i][5], commandFilter[i][6], commandFilter[i][7], commandFilter[i][8], NULL);
+            }
+            else if(numArg[i] == 9)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], commandFilter[i][2], commandFilter[i][3], commandFilter[i][4], commandFilter[i][5], commandFilter[i][6], commandFilter[i][7], commandFilter[i][8], commandFilter[i][9], NULL);
+            }
+            else if(numArg[i] == 10)
+            {
+                execlp(commandFilter[i][0],commandFilter[i][0], commandFilter[i][1], commandFilter[i][2], commandFilter[i][3], commandFilter[i][4], commandFilter[i][5], commandFilter[i][6], commandFilter[i][7], commandFilter[i][8], commandFilter[i][9], commandFilter[i][10], NULL);
+            }
             /*
             char argList2[100][255];
             int j = 0;
