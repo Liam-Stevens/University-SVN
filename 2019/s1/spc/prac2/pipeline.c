@@ -120,7 +120,7 @@ int main()
                 //redirect input to prev_pipe
                 dup2 (prev_pipe[0], 0);
                 close(prev_pipe[0]);
-                close(prev_pipe[1]); //May not need to close
+                //close(prev_pipe[1]); //May not need to close
             }
             if(i != maxCom - 1) //not final command
             {
