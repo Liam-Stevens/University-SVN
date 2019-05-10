@@ -69,11 +69,11 @@ int main()
         //strcpy(commandFilter[i+1], buf3);
 
 
-        printf("%s %s \n", commandFilter[maxCom][0], commandFilter[maxCom][1]);
+        //printf("%s %s \n", commandFilter[maxCom][0], commandFilter[maxCom][1]);
         //printf("%d \n", maxCom);
-        printf("%d \n", numArg[maxCom]);
+        //printf("%d \n", numArg[maxCom]);
         maxCom++;
-        printf("%d \n", maxCom);
+        //printf("%d \n", maxCom);
     }
 
 
