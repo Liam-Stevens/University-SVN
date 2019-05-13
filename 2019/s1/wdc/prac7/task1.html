@@ -9,10 +9,18 @@
 
         <style>
 
+            .nightcolor {
+                background-color: #111111;
+                color: #eeeeee;
+            }
+
+            .lightcolor {
+                color: #111111;
+            }
+
             body,#vuemain {
                 padding: 0;
                 margin: 0;
-                color: #111111;
             }
 
             div, header {
@@ -71,7 +79,7 @@
 
     <body>
 
-        <div id="vuemain">
+        <div id="vuemain" v-bind:class="{ 'nightcolor': nightmode, 'lightcolor': !nightmode }">
 
         <header>
             <h1>Welcome to the WDC Store!</h1>
@@ -82,13 +90,13 @@
             </div>
         </header>
 
-        <div id="ad">
+        <div id="ad" v-if="showad === true">
             <button class="pure-button" style="float:right;" onclick="vueinst.showad = false;">close</button>
-            <img src="" alt="" onclick="vueinst.image=ads[Math.floor((Math.random() * 3))];" />
-            <h2></h2>
+            <img v-bind:src="image.url" alt="" onclick="vueinst.image=ads[Math.floor((Math.random() * 3))];" />
+            <h2>{{ image.name }}</h2>
         </div>
 
-        <div id="main" class="container">
+        <div id="main" class="container" v-if="showad === false">
 
             <div style="float:right; margin: 1em; border-left: 1px solid #111111;">
 
@@ -100,8 +108,8 @@
 
                 <span>Nightmode:</span>
                 <div class="pure-button-group" role="group" aria-label="Nightmode">
-                    <button class="pure-button pure-button-active" onclick="vueinst.nightmode = false;">OFF</button>
-                    <button class="pure-button" onclick="vueinst.nightmode = true;">ON</button>
+                    <button v-bind:class="{ 'pure-button-active': !nightmode }" class="pure-button" onclick="vueinst.nightmode = false;">OFF</button>
+                    <button v-bind:class="{ 'pure-button-active': nightmode, 'pure-button-primary': nightmode }" class="pure-button" onclick="vueinst.nightmode = true;">ON</button>
                 </div>
 
                 <hr />

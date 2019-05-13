@@ -18,8 +18,12 @@ var ads = [
 ];
 
 var vueinst = new Vue({
-    el: '#first',
+    el: '#vuemain',
     data: {
-        text: 'Pretty good.'
+        text: 'Pretty good.',
+        image: ads[0],
+        showad: true,
+        nightmode: false
     }
 });
+//[nightmode ? 'pure-button' 'pure-button-active' : 'pure-button']
