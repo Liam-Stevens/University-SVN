@@ -23,7 +23,12 @@ var vueinst = new Vue({
         text: 'Pretty good.',
         image: ads[0],
         showad: true,
-        nightmode: false
+        nightmode: false,
+        topmenu: [
+            { title:'Home',         url:'/' },
+            { title:'About',        url:'/about' },
+            { title:'Contact Us',   url:'/contact' }
+        ]
     }
 });
 //[nightmode ? 'pure-button' 'pure-button-active' : 'pure-button']
