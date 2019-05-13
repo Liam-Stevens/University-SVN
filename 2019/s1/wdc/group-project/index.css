@@ -1,0 +1,49 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #212226;
+    color: #e6e9ed;
+    text-align: center;
+    min-height: 100%;
+}
+
+div, header {
+
+}
+
+#content {
+    min-height: 38em;
+    margin: 1%;
+    padding: 0;
+    width: 88%;
+    display: inline-block;
+    background-color: #373941;
+    text-align: left;
+}
+
+#header {
+    background-color: #303136;
+    margin: 0;
+    padding: 0.1em;
+    width: 100%;
+    display: block;
+}
+
+#title {
+    color: #ffffff;
+    text-align: left;
+    font-family: serif;
+}
+ #booker {
+    background-color: #444956;
+    height: 12em;
+    width: 100%;
+ }
+
+ #googlelocation {
+    color: #ea2f60;
+ }
+
+#searchbutton {
+    background-color: #ff3956;
+}
