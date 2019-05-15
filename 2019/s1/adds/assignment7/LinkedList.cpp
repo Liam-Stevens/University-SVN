@@ -1,6 +1,7 @@
 #include "LinkedList.h"
 #include "Node.h"
 #include <iostream>
+#include <limits>
 
 using namespace std;
 
@@ -47,7 +48,30 @@ void LinkedList::addEnd(int newItem) {
 }
 
 void LinkedList::addAtPosition(int position, int newItem) {
+	if( position < 1 || position == 1 )
+	{
+		addFront(newItem);
+	} else {
+		Node * pick;
+		pick = head;
+		Node * newNode = new Node();
 
+		if (position > 2){
+			for(int i = 2; i < position; i++)
+			{
+				if(pick->getPtr() != NULL) {
+					pick = pick->getPtr();
+				} else {
+					break;
+				}
+			}
+		}
+
+		newNode->setData(newItem);
+		newNode->setPtr(pick->getPtr());
+		pick->setPtr(newNode);
+
+	}
 }
 
 int LinkedList::search(int item) {
@@ -84,15 +108,74 @@ int LinkedList::search(int item) {
 void LinkedList::deleteFront() {
 	Node * pick;
 	pick = head;
-	head = pick->getPtr();
-	delete pick;
+	if(head == NULL)
+	{
+		//Do Nothing
+	}
+	else
+	{
+		head = pick->getPtr();
+		delete pick;
+	}
 }
 
 void LinkedList::deleteEnd() {
+	Node * pick = head;
+	Node * nuller = pick;
+	if (pick != NULL) {
 
+		while(pick->getPtr() != NULL)
+		{
+			nuller = pick;
+			pick = pick->getPtr();
+		}
+
+		//delete
+		nuller->setPtr(NULL);
+		delete pick;
+
+	} else {
+		//Do Nothing
+	}
 }
 
 void LinkedList::deletePosition(int position) {
+	bool failed = false;
+	if (head == NULL) {
+		failed = true;
+	} else if ( position < 1 )
+	{
+		failed = true;
+	} else {
+		Node * pick = head;
+		Node * mover = pick;
+
+		if (position > 1){
+			for(int i = 1; i < position; i++)
+			{
+				if(pick->getPtr() != NULL) {
+					mover = pick;
+					pick = pick->getPtr();
+				} else {
+					failed = true;
+					break;
+				}
+			}
+		}
+
+		if (position == 1 && failed == false)
+		{
+			deleteFront();
+		} else if (failed == false) {
+			mover->setPtr(pick->getPtr());
+			delete pick;
+		}
+	}
+
+	if (failed == true)
+	{
+		cout << "outside range" << endl;
+	}
 
 }
 
@@ -116,16 +199,15 @@ int LinkedList::getItem(int position) {
 		}
 		if (outside == false)
 		{
-			cout << pick->getData() << endl;
+			cout << pick->getData() << " ";
 			return pick->getData();
 		}
-	} else
-	{
-		//IF LIST IS EMPTY
 	}
 
-	cout << "std :: numeric limits < int >:: max()" << " ";
-	return 0; //return std :: numeric limits < int >:: max()
+	int value = std::numeric_limits<int>::max();
+
+	cout << value << " ";
+	return value; //return std :: numeric limits < int >:: max()
 	//THIS PART IS NOT COMPLETE
 }
 
@@ -135,11 +217,15 @@ void LinkedList::printItems() {
 	pick = head;
 	while(pick != NULL)
 	{
-		cout << pick->getData() << endl;
+		cout << pick->getData() << " ";
 		pick = pick->getPtr();
 	}
+	cout << endl;
 }
 
 LinkedList::~LinkedList() {
-
+	while(head != NULL)
+	{
+		deleteFront();
+	}
 }
