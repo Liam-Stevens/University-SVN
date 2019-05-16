@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Group Project Website</title>
+		<link rel="stylesheet" type="text/css" href="stylesheets/index.css">
+	</head>
+	<div id="vuebody">
+		<body>
+			<div id="content">
+				<div id="header">
+					<img id="logo" src="images/placeholder-1.JPG"></img>
+					<h1 id="title" class="title-margin-up">Group Project Website</h1>
+					<button style="margin-left: 45%" id="userlogin" class="title-margin-up" onclick="window.location.href = 'login.html';">Login</button>
+					<button id="usercreate" class="title-margin-up" onclick="window.location.href = 'create-account.html';">Create Account</button>
+				</div>
+				<button id="restaurantlogin" onclick="window.location.href = 'login-restaurant.html';">Login For Restaurants</button>
+				<div id="booker">
+					<h1 id="rest-h1">Enter details to find a Restaurant</h1>
+					<form>
+						<select><option value="Test Booking Date">Booking Date</option></select>
+						<select><option value="Test Booking Time">Booking Time</option></select>
+						<select><option value="Test Num of People">Num. of People</option></select>
+						<input type="text" placeholder="Search Location">
+						<input type="button" id="searchbutton" value="Search" onclick="window.location.href = 'search.html';">
+					</form>
+				</div>
+				<h2 id="recc-h2">Recommendations for {{ Location }}</h2>
+				<a href="https://www.google.com" id="googlelocation">Get Current Loction</a>
+				<div id="recommendations">
+					<div id="recc-1" class="reccommendation">
+						<h3 class="rest-title">Placeholder Name</h3>
+						<img class="rest-img" src="images/placeholder-2.JPG"></img>
+						<p class="rest-desc">Type of Restaurant</p>
+						<p class="rest-rate">Ratings:</p>
+						<div class="align-center">
+							<button class="rest-book">Make Booking</button>
+						</div>
+					</div>
+					<div id="recc-2" class="reccommendation">
+						<h3 class="rest-title">Placeholder Name</h3>
+						<img class="rest-img" src="images/placeholder-2.JPG"></img>
+						<p class="rest-desc">Type of Restaurant</p>
+						<p class="rest-rate">Ratings:</p>
+						<div class="align-center">
+							<button class="rest-book">Make Booking</button>
+						</div>
+					</div>
+					<div id="recc-3" class="reccommendation">
+						<h3 class="rest-title">Placeholder Name</h3>
+						<img class="rest-img" src="images/placeholder-2.JPG"></img>
+						<p class="rest-desc">Type of Restaurant</p>
+						<p class="rest-rate">Ratings:</p>
+						<div class="align-center">
+							<button class="rest-book">Make Booking</button>
+						</div>
+					</div>
+					<div id="recc-4" class="reccommendation">
+						<h3 class="rest-title">Placeholder Name</h3>
+						<img class="rest-img" src="images/placeholder-2.JPG"></img>
+						<p class="rest-desc">Type of Restaurant</p>
+						<p class="rest-rate">Ratings:</p>
+						<div class="align-center">
+							<button class="rest-book">Make Booking</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</body>
+	</div>
+</html>
