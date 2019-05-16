@@ -1,7 +1,7 @@
 #include "Node.h"
 
 Node::Node() {
-
+	//Does Nothing
 }
 
 int Node::getData() {
