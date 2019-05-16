@@ -9,14 +9,16 @@ private:
 	Node * next;
 
 public:
+	//Constructor
 	Node();
 
+	//Getters
 	int getData();
 	Node * getPtr();
 
+	//Setters
 	void setData(int newData);
 	void setPtr(Node * newPtr);
-
 };
 
 #endif

@@ -6,14 +6,14 @@
 class LinkedList
 {
 private:
-	//Should be null if empty
 	Node * head;
 
-
 public:
+	//Constructors
 	LinkedList();
 	LinkedList(int array[], int size);
 
+	//Functions
 	void addFront(int newItem);
 	void addEnd(int newItem);
 	void addAtPosition(int position, int newItem);
@@ -24,6 +24,7 @@ public:
 	int getItem(int position);
 	void printItems();
 
+	//Deconstructor
 	~LinkedList();
 
 };

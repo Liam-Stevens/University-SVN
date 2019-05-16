@@ -9,39 +9,6 @@
 using namespace std;
 
 int main() {
-	/*
-	Node test;
-	Node test2;
-
-	test.setData(65);
-	cout << test.getData() << endl;
-
-	Node * ptr;
-	ptr = &test2;
-	ptr->setData(88);
-	test.setPtr(ptr);
-	Node * ptr2;
-	ptr2 = test.getPtr();
-	cout << ptr2->getData() << endl;
-	*/
-
-	/*
-	int array[5] = {1,2,3,4,5};
-
-	LinkedList test(array,5);
-
-	test.deleteEnd();
-
-	test.addAtPosition(3, 8);
-
-	test.printItems();
-
-	test.deletePosition(6);
-
-	test.printItems();
-	*/
-
-
 	//Takes inputs
     string line;
 	int numInput[100];
@@ -50,9 +17,11 @@ int main() {
 	int	funcInc = 0;
 	bool end = false;
 
+	//Takes input
 	do {
 		cin >> line;
 
+		//Takes integers until it encouters a non-integer
 		if(((int)line[0] - 48) < 10 && end == false)
 		{
 			numInput[size] = atoi (line.c_str());
@@ -60,6 +29,7 @@ int main() {
 			end = true;
 		}
 
+		//Takes three function parameters
 		if(end == true)
 		{
 			funcInput[funcInc] = line;
@@ -73,7 +43,7 @@ int main() {
 	//Create object
 	LinkedList list(numInput,size);
 
-	//Ifs
+	//Checks for type of function call
 	if(funcInput[0] == "AF") {
 		list.addFront(atoi (funcInput[1].c_str()));
 	} else if(funcInput[0] == "AE") {
