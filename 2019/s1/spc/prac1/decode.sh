@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Checks for an upper case encoding
-for (( i=1; i<27; i++))
+for (( i=1; i<27; i++ ))
 do
 	for (( j=i; j<27; j++ ))
 	do
