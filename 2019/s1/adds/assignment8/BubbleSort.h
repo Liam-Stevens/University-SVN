@@ -5,12 +5,8 @@
 
 class BubbleSort : public Sort
 {
-private:
-
-
 public:
     BubbleSort(int array[], int size);
-
     void doSort();
 
 };

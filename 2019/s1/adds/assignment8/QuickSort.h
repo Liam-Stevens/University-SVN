@@ -5,9 +5,6 @@
 
 class QuickSort : public Sort
 {
-private:
-
-
 public:
     QuickSort(int array[], int size);
 

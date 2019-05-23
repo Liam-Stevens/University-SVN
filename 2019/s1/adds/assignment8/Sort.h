@@ -7,11 +7,9 @@ class Sort
 {
 protected:
     std::vector<int> list;
-
     void swap(int pos1, int pos2);
 
 public:
-
     virtual void doSort() = 0;
     virtual void doSort(int bottom, int top) = 0;
     void print();
