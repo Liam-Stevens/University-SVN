@@ -5,7 +5,7 @@
 using namespace std;
 
 void Sort::print() {
-    for (int i = 0; i < list.size(); i++) {
+    for (int i = 0; i < (signed int)(list.size()); i++) {
         cout << list[i] << " ";
     }
     cout << endl;
