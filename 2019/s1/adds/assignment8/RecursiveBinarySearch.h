@@ -5,6 +5,7 @@
 
 class RecursiveBinarySearch
 {
+private:
     std::vector<int> list;
     int searchTerm;
 

@@ -18,21 +18,26 @@ int main() {
 		input[inc] = line;
 		inc++;
 	}
+    //Will continue to take inputs until it reaches an end of line, end of file or maximum array size
 	while(cin.peek() != '\n' && inc < 100 && feof(stdin) == false);
 
+    //Sorts using quicksort
     QuickSort quick(input, inc);
     quick.doSort();
 
+    //Passes the sorted list to the search
     vector<int> listPass = quick.getList();
-    RecursiveBinarySearch qs(1, listPass);
+    RecursiveBinarySearch rbs(1, listPass);
 
-    bool findOne = qs.search();
+    //Checks if the search found the search term
+    bool findOne = rbs.search();
     if (findOne == true) {
         cout << "true ";
     } else {
         cout << "false ";
     }
 
+    //Prints sorted list
     quick.print();
 
 }
