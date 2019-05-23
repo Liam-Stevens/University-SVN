@@ -9,7 +9,7 @@ RecursiveBinarySearch::RecursiveBinarySearch(int find, vector<int> arr) {
 }
 
 bool RecursiveBinarySearch::search() {
-    return search(0, list.size()-1);
+    return search(0, (signed int)(list.size()-1));
 }
 
 bool RecursiveBinarySearch::search(int bottom, int top) {
