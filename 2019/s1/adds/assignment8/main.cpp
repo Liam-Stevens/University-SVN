@@ -18,7 +18,7 @@ int main() {
 		input[inc] = line;
 		inc++;
 	}
-	while(cin.peek() != '\n' && inc < 100);
+	while(cin.peek() != '\n' && inc < 100 && feof(stdin) == false);
 
     QuickSort quick(input, inc);
     quick.doSort();
