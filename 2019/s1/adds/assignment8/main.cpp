@@ -18,7 +18,7 @@ int main() {
 		input[inc] = line;
 		inc++;
 	}
-	while(cin.peek() != '\n');
+	while(cin.peek() != '\n' && inc < 100);
 
     QuickSort quick(input, inc);
     quick.doSort();
@@ -32,7 +32,7 @@ int main() {
     } else {
         cout << "false ";
     }
-    
+
     quick.print();
 
 }
