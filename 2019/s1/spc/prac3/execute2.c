@@ -72,10 +72,9 @@ int execute(char *argv[], int maxCom, int skips[])
 				close(new_pipe[1]);
 			}
 
-
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
-			execvp(argv[skips[i]], argv); //Fix number of arguments
+			execvp(argv[skips[i]], &argv[skips[i]]); //Fix number of arguments
 			perror("cannot execute command");
 			exit(1);
 
