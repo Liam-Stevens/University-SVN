@@ -37,19 +37,21 @@ int main()
 		if ( (arglist = splitline(cmdline)) != NULL  ){
 
 			//sets the pipe to NULL
-			int pipes = 0;
+			int pipes = 0, skips[argSize];
+			skips[0] = 0;
 			for(i = 0; i < argSize+1; i++)
 	        {
 				//printf("[%d] %c \n",i,*arglist[i]);
 	            if(*arglist[i] == '|')
 	            {
 	                pipes++;
+					skips[pipes] = i+1;
 					arglist[i] = NULL;
 	            }
 	        }
 
 
-			result = execute(arglist,pipes+1);
+			result = execute(arglist,pipes+1,skips);
 			freelist(arglist);
 		}
 		free(cmdline);
