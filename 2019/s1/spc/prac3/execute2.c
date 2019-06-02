@@ -6,7 +6,7 @@
 #include	<signal.h>
 #include	<sys/wait.h>
 
-int execute(char *argv[], int maxCom)
+int execute(char *argv[], int maxCom, int skips[])
 /*
  * purpose: run a program passing it arguments
  * returns: status returned via wait, or -1 on error
@@ -75,7 +75,7 @@ int execute(char *argv[], int maxCom)
 
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
-			execvp(argv[2*i], argv);
+			execvp(argv[skips[i]], argv); //Fix number of arguments
 			perror("cannot execute command");
 			exit(1);
 
