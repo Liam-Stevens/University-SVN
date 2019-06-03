@@ -13,21 +13,6 @@
 
 #define	DFL_PROMPT	"> "
 
-int wildCheck(char *arglist)
-{
-	int j = 0;
-	while (arglist[j] != '\0' || arglist != NULL)
-	{
-		//If wildcard, expand
-		if(arglist[j] == '*') {
-			return 1;
-		}
-		j++;
-	}
-
-	return 0;
-}
-
 int main()
 {
 	char	*cmdline, *prompt, **arglist;
@@ -77,9 +62,12 @@ int main()
 					arglist[i] = NULL;
 				} else if (wildCheck(arglist[i]))
 				{
+					//check glob
 					globNum = 1;
+					//set glob offset
 					globResults.gl_offs = i;
 					glob(arglist[i],GLOB_DOOFFS, NULL, &globResults);
+					//Moves offset into the glob
 					int j;
 					for (j = 0; j < i; j++)
 					{
@@ -89,13 +77,15 @@ int main()
 
 	        }
 
-			//Executes command using pipe location
+			//Executes command using pipe location and glob data
 			if (globNum == 0)
 			{
 				result = execute(arglist,pipes+1,skips, redirect);
 			} else if (globNum == 1)
 			{
+				//Execute using glob info and free glob
 				result = execute(globResults.gl_pathv,pipes+1,skips, redirect);
+				globfree(&globResults);
 			}
 			freelist(arglist);
 		}
@@ -118,4 +108,22 @@ void fatal(char *s1, char *s2, int n)
 {
 	fprintf(stderr,"Error: %s,%s\n", s1, s2);
 	exit(n);
+}
+
+//Check for wildcard
+int wildCheck(char *arglist)
+{
+	int j = 0;
+	//while not the end of line
+	while (arglist[j] != '\0' || arglist != NULL)
+	{
+		//If wildcard, then return true
+		if(arglist[j] == '*') {
+			return 1;
+		}
+		j++;
+	}
+
+	//failed
+	return 0;
 }
