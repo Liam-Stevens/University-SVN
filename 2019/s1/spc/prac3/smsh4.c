@@ -13,6 +13,21 @@
 
 #define	DFL_PROMPT	"> "
 
+int wildCheck(char *arglist)
+{
+	int j = 0;
+	while (arglist[j] != '\0' || arglist != NULL)
+	{
+		//If wildcard, expand
+		if(arglist[j] == '*') {
+			return 1;
+		}
+		j++;
+	}
+
+	return 0;
+}
+
 int main()
 {
 	char	*cmdline, *prompt, **arglist;
@@ -35,39 +50,6 @@ int main()
 		}
 
 		if ( (arglist = splitline(cmdline)) != NULL  ){
-
-			//Do glob expansion
-			/*
-			int j;
-
-			for (i = 0; i < argSize+1; i++)
-			{
-				for (j = 0; j < 255; j++)
-				{
-					//If end of argument, end check
-					if (arglist[i][j] == '\0' || arglist[i] == NULL)
-					{
-						break;
-					}
-					//If wildcard, expand
-					if(arglist[i][j] == '*') {
-
-						glob_t globResults;
-						globResults.gl_offs = i;
-						glob(arglist[i],GLOB_DOOFFS, NULL, &globResults);
-
-						//update argSize after glob
-
-
-						//globfree(globResults);
-					}
-
-				}
-
-
-			}
-			*/
-
 
 			//Define location of pipe
 			int pipes = 0, skips[argSize];
@@ -93,7 +75,7 @@ int main()
 				{
 					redirect[1] = arglist[i+1];
 					arglist[i] = NULL;
-				} else if (*arglist[i] == '*')
+				} else if (wildCheck(arglist[i]))
 				{
 					globNum = 1;
 					globResults.gl_offs = i;
