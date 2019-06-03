@@ -5,8 +5,9 @@
 #include	<unistd.h>
 #include	<signal.h>
 #include	<sys/wait.h>
+#include	<fcntl.h>
 
-int execute(char *argv[], int maxCom, int skips[])
+int execute(char *argv[], int maxCom, int skips[], char *redirect[])
 /*
  * purpose: run a program passing it arguments
  * returns: status returned via wait, or -1 on error
@@ -70,6 +71,20 @@ int execute(char *argv[], int maxCom, int skips[])
 				//redirect output to new_pipe
 				dup2(new_pipe[1], 1);
 				close(new_pipe[1]);
+			}
+
+			//redirect if < or >
+			//Redirect stdin to file
+			if(redirect[0] != NULL && i == 0)
+			{
+				int filefd_in = open(redirect[0], O_RDONLY, 0);
+				dup2 (filefd_in, 0);
+			}
+			//Redirect stdout to file
+			if(redirect[1] != NULL && i == maxCom - 1)
+			{
+				int filefd_out = open(redirect[1], O_WRONLY | O_CREAT, 0644);
+				dup2 (filefd_out, 1);
 			}
 
 			signal(SIGINT, SIG_DFL);
