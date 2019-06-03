@@ -8,7 +8,8 @@
 #include	<stdlib.h>
 #include	<unistd.h>
 #include	<signal.h>
-#include	"smsh3.h"
+#include 	<glob.h>
+#include	"smsh4.h"
 
 #define	DFL_PROMPT	"> "
 
@@ -33,17 +34,51 @@ int main()
 			}
 		}
 
-
 		if ( (arglist = splitline(cmdline)) != NULL  ){
+
+			//Do glob expansion
+			/*
+			int j;
+
+			for (i = 0; i < argSize+1; i++)
+			{
+				for (j = 0; j < 255; j++)
+				{
+					//If end of argument, end check
+					if (arglist[i][j] == '\0' || arglist[i] == NULL)
+					{
+						break;
+					}
+					//If wildcard, expand
+					if(arglist[i][j] == '*') {
+
+						glob_t globResults;
+						globResults.gl_offs = i;
+						glob(arglist[i],GLOB_DOOFFS, NULL, &globResults);
+
+						//update argSize after glob
+
+
+						//globfree(globResults);
+					}
+
+				}
+
+
+			}
+			*/
+
 
 			//Define location of pipe
 			int pipes = 0, skips[argSize];
 			skips[0] = 0;
+			int globNum = 0;
 			char *redirect[2] = {NULL, NULL};
+			glob_t globResults;
 			//sets the pipe to NULL
 			for(i = 0; i < argSize+1; i++)
 	        {
-				//printf("[%d] %c \n",i,*arglist[i]);
+
 	            if(*arglist[i] == '|')
 	            {
 					//checks for an amount of pipe and location of next commands
@@ -52,20 +87,34 @@ int main()
 					arglist[i] = NULL;
 	            } else if (*arglist[i] == '<')
 				{
-					//stores input name of file
 					redirect[0] = arglist[i+1];
 					arglist[i] = NULL;
 				} else if (*arglist[i] == '>')
 				{
-					//stores output name of file
 					redirect[1] = arglist[i+1];
 					arglist[i] = NULL;
+				} else if (*arglist[i] == '*')
+				{
+					globNum = 1;
+					globResults.gl_offs = i;
+					glob(arglist[i],GLOB_DOOFFS, NULL, &globResults);
+					int j;
+					for (j = 0; j < i; j++)
+					{
+						globResults.gl_pathv[j] = arglist[j];
+					}
 				}
 
 	        }
 
 			//Executes command using pipe location
-			result = execute(arglist,pipes+1,skips, redirect);
+			if (globNum == 0)
+			{
+				result = execute(arglist,pipes+1,skips, redirect);
+			} else if (globNum == 1)
+			{
+				result = execute(globResults.gl_pathv,pipes+1,skips, redirect);
+			}
 			freelist(arglist);
 		}
 		free(cmdline);
