@@ -8,7 +8,7 @@
 #include	<stdlib.h>
 #include	<unistd.h>
 #include	<signal.h>
-#include	"smsh2.h"
+#include	"smsh3.h"
 
 #define	DFL_PROMPT	"> "
 
@@ -39,6 +39,7 @@ int main()
 			//Define location of pipe
 			int pipes = 0, skips[argSize];
 			skips[0] = 0;
+			char *redirect[2] = {NULL, NULL};
 			//sets the pipe to NULL
 			for(i = 0; i < argSize+1; i++)
 	        {
@@ -49,11 +50,20 @@ int main()
 	                pipes++;
 					skips[pipes] = i+1;
 					arglist[i] = NULL;
-	            }
+	            } else if (*arglist[i] == '<')
+				{
+					redirect[0] = arglist[i+1];
+					arglist[i] = NULL;
+				} else if (*arglist[i] == '>')
+				{
+					redirect[1] = arglist[i+1];
+					arglist[i] = NULL;
+				}
+
 	        }
 
 			//Executes command using pipe location
-			result = execute(arglist,pipes+1,skips);
+			result = execute(arglist,pipes+1,skips, redirect);
 			freelist(arglist);
 		}
 		free(cmdline);
