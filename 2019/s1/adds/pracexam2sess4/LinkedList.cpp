@@ -83,7 +83,7 @@ void LinkedList::bubbleSort(){
         currentNode = head;
         nextNode = currentNode->next;
         while(whileFlag) {
-            if(nextNode != nullptr && currentNode != nullptr) {
+            if(nextNode != nullptr && currentNode != nullptr && trackerNode != nullptr) {
                 if(currentNode->data > nextNode->data)
                 {
                     swap(currentNode, nextNode);
