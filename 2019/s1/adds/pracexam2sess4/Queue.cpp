@@ -22,11 +22,13 @@ int Queue::remove() {
 	}
 	else
 	{
+		int temp = content[0];
 		for (int i = 0; i < count-1; i++)
 		{
 			content[i] = content[i+1];
 		}
 		count--;
 		end = count;
+		return temp;
 	}
 }
