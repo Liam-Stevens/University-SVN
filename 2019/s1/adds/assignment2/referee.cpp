@@ -1,6 +1,7 @@
 #include "referee.h"
 #include <string>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -44,8 +45,9 @@ void referee::printResults()
 	//Prints the wins vs losses to the console
 	for (int i = 0; i < 2*games-1; i++)
 	{
-		cout << results[i];
+		cout << string(results[i]);
 	}
+	cout << "#";
 	cout << endl;
 }
 
