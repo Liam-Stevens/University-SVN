@@ -12,7 +12,9 @@ class SlowKeyboard
         int elements = 5;
         int minutes = 0;
         int seconds = 0;
-        int keys[4];
+        int minutes2 = 0;
+        int seconds2 = 0;
+        int keys[5];
         bool colon = true;
 
         for (int i = 0; i < elements; i++)
@@ -43,7 +45,7 @@ class SlowKeyboard
         for(int j = 0; j < min; j++)
         {
             int test = 1;
-            for (int i = 1; i < 4; i++)
+            for (int i = 1; i < 5; i++)
             {
                 if(keys[i] != keys[i-1])
                 {
@@ -55,17 +57,19 @@ class SlowKeyboard
             if (test < min)
             {
                 min = test;
+                minutes2 = 10*keys[0] + keys[1];
+                seconds2 = 10*keys[3] + keys[4];
             }
 
-            //cout << "Test " << j+1 << ": "<< keys[0] << keys[1] << ":" << keys[2] << keys[3] << endl;
+            //cout << "Test " << j+1 << ": "<< keys[0] << keys[1] << ":" << keys[3] << keys[4] << endl;
 
             keys[3]++;
-            if (keys[3] > 9)
+            if (keys[4] > 9)
             {
-                keys[3] = 0;
-                keys[2]++;
+                keys[4] = 0;
+                keys[3]++;
             }
-            if (keys[2] > 5)
+            if (keys[3] > 5)
             {
                 keys[2] = 0;
                 keys[1]++;
@@ -81,6 +85,8 @@ class SlowKeyboard
             }
         }
 
+        //cout << minutes << ":" << seconds << endl;
+        //cout << minutes2 << ":" << seconds2 << endl;
 
 
         return min;
