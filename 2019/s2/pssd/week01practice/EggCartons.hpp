@@ -14,11 +14,15 @@ class EggCartons
             min = -1;
         } else {
 
-            min = min + 3*(eggs/24);
-            eggs = eggs % 24;
+            //cout << "Initial Eggs: " << eggs << " Cartons: " << min << endl;
 
             for (int i = 0; i < n; i++)
             {
+                //cout <<"Test "<< i << " Eggs: " << eggs << " Cartons: " << min << endl;
+                if(eggs % 24 > 6 || eggs % 24 == 0) {
+                    min = min + 3*(eggs/24);
+                    eggs = eggs % 24;
+                }
                 if(eggs % 8 == 0) {
                     min = min + (eggs/8);
                     eggs = eggs % 8;
@@ -32,7 +36,7 @@ class EggCartons
 
                 eggs = eggs - 8;
                 min++;
-
+                //cout <<"Test "<< i << " Eggs: " << eggs << " Cartons: " << min << endl;
                 if(eggs < 6 && eggs != 0) {
                     min = -1;
                     break;
@@ -40,8 +44,7 @@ class EggCartons
             }
 
         }
-
-
+        //cout <<"Final Eggs: " << eggs << " Cartons: " << min << endl;
         return min;
     }
 };
