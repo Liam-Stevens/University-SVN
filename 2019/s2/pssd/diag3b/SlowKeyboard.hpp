@@ -1,38 +1,39 @@
 #include <vector>
 #include <string>
+#include <iostream>
 #include <ctype.h>
 using namespace std;
 
 class SlowKeyboard
 {
     public:
-    int enterTime(string time)
+    int enterTime(string time1)
     {
         int elements = 5;
-        int minutes;
-        int seconds;
+        int minutes = 0;
+        int seconds = 0;
         int keys[4];
         bool colon = true;
 
         for (int i = 0; i < elements; i++)
         {
             if(colon == true) {
-                if (isdigit (time[i]))
+                if (isdigit (time1[i]))
                 {
                     minutes = minutes * 10;
-                    minutes = minutes + time[i] - 48;
-                    keys[i] = time[i] - 48;
+                    minutes = minutes + time1[i] - 48;
+                    keys[i] = time1[i] - 48;
                 }
                 else
                 {
                     colon = false;
                 }
             } else {
-                if (isdigit (time[i]))
+                if (isdigit (time1[i]))
                 {
                     seconds = seconds * 10;
-                    seconds = seconds + time[i] - 48;
-                    keys[i] = time[i] - 48;
+                    seconds = seconds + time1[i] - 48;
+                    keys[i] = time1[i] - 48;
                 }
             }
         }
@@ -56,13 +57,15 @@ class SlowKeyboard
                 min = test;
             }
 
+            //cout << "Test " << j+1 << ": "<< keys[0] << keys[1] << ":" << keys[2] << keys[3] << endl;
+
             keys[3]++;
             if (keys[3] > 9)
             {
                 keys[3] = 0;
                 keys[2]++;
             }
-            if (keys[2] > 9)
+            if (keys[2] > 5)
             {
                 keys[2] = 0;
                 keys[1]++;
@@ -72,12 +75,13 @@ class SlowKeyboard
                 keys[1] = 0;
                 keys[0]++;
             }
-            if (keys[0] > 9)
+            if (keys[0] > 5)
             {
                 keys[0] = 0;
             }
-
         }
+
+
 
         return min;
     }
