@@ -19,7 +19,7 @@ class EggCartons
             for (int i = 0; i < n; i++)
             {
                 //cout <<"Test "<< i << " Eggs: " << eggs << " Cartons: " << min << endl;
-                if(eggs % 24 > 6 || eggs % 24 == 0) {
+                if(eggs % 24 > 12 || eggs % 24 == 0) {
                     min = min + 3*(eggs/24);
                     eggs = eggs % 24;
                 }
