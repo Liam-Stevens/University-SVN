@@ -12,7 +12,7 @@ int main()
 	//test32.push_back("LEFT");
 	//test32.push_back("RIGHT 90");
 	EggCartons test;
-	cout << test.minCartons(30) << endl;
+	cout << test.minCartons(60) << endl;
 
 	return 0;
 }
