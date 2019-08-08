@@ -47,11 +47,14 @@ class SlowKeyboard
             int test = 1;
             for (int i = 1; i < 5; i++)
             {
-                if(keys[i] != keys[i-1])
+                if(keys[i] != keys[i-1] && i != 3)
                 {
                     test = test + 2;
                 }
-                test++;
+                if (i != 3)
+                {
+                    test++;
+                }
             }
 
             if (test < min)
