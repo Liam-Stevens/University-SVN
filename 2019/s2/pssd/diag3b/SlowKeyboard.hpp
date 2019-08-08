@@ -38,41 +38,40 @@ class SlowKeyboard
                     keys[i] = time1[i] - 48;
                 }
             }
+            //cout << keys[i] << endl;
         }
+        //cout << "Initial " << ": "<< keys[0] << keys[1] << ":" << keys[2] << keys[3] << endl;
 
         int min = 60;
 
         for(int j = 0; j < min; j++)
         {
             int test = 1;
-            for (int i = 1; i < 5; i++)
+            for (int i = 1; i < 4; i++)
             {
-                if(keys[i] != keys[i-1] && i != 3)
+                if(keys[i] != keys[i-1])
                 {
                     test = test + 2;
                 }
-                if (i != 3)
-                {
-                    test++;
-                }
+                test++;
             }
 
             if (test < min)
             {
                 min = test;
                 minutes2 = 10*keys[0] + keys[1];
-                seconds2 = 10*keys[3] + keys[4];
+                seconds2 = 10*keys[2] + keys[3];
             }
 
-            //cout << "Test " << j+1 << ": "<< keys[0] << keys[1] << ":" << keys[3] << keys[4] << endl;
+            //cout << "Test " << j+1 << ": "<< keys[0] << keys[1] << ":" << keys[2] << keys[3] << endl;
 
             keys[3]++;
-            if (keys[4] > 9)
+            if (keys[3] > 9)
             {
-                keys[4] = 0;
-                keys[3]++;
+                keys[3] = 0;
+                keys[2]++;
             }
-            if (keys[3] > 5)
+            if (keys[2] > 5)
             {
                 keys[2] = 0;
                 keys[1]++;
