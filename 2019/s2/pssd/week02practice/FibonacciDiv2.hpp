@@ -68,28 +68,33 @@ class FibonacciDiv2
         int bounds[2];
         bounds[0] = 0;
 
-        for (int i = 0; i < N; i++)
+        //Finds the fibinacci bounds around N
+        int i = 0;
+        while(true)
         {
             int tmp = calculate(i,true);
-            if(tmp >= N) {
-                //cout << "Higher: " << tmp << endl;
+            if(tmp > N) {
+                //Upper Bound
                 bounds[1] = tmp;
                 break;
             } else {
-                //cout << "Lower: " << tmp << endl;
+                //Lower Bound
                 bounds[0] = tmp;
             }
+            i++;
         }
-        //cout << "0: " << bounds[0] << " 1: " << bounds[1] << endl;
+
+        //Finds the shortest distance from a bound to N
         steps = abs(bounds[0] - N);
         if(abs(bounds[1] - N) < steps)
         {
             steps = abs(bounds[1] - N);
         }
 
+        /* OLD Workaround
         if(bounds[0] == 0 || bounds[1] == 0) {
             steps = 0;
-        }
+        } */
 
         return steps;
     }
