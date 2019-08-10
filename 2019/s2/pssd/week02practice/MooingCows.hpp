@@ -58,6 +58,10 @@ class MooingCows
                             }
                             //cout << endl;
                         }
+                        if(min == 0)
+                        {
+                            min = sum;
+                        }
                         dissatisfaction[y][x] = sum;
 
                     } else {
@@ -75,7 +79,6 @@ class MooingCows
 
         if (skip == false && cows != 1)
         {
-            min = 999;
 
             for (int i = 0; i < xElements; i++)
             {
