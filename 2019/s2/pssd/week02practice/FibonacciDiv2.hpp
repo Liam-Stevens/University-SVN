@@ -71,21 +71,23 @@ class FibonacciDiv2
         for (int i = 0; i < N; i++)
         {
             int tmp = calculate(i,true);
-            if(tmp > N) {
+            if(tmp >= N) {
+                //cout << "Higher: " << tmp << endl;
                 bounds[1] = tmp;
                 break;
             } else {
+                //cout << "Lower: " << tmp << endl;
                 bounds[0] = tmp;
             }
         }
-
+        //cout << "0: " << bounds[0] << " 1: " << bounds[1] << endl;
         steps = abs(bounds[0] - N);
         if(abs(bounds[1] - N) < steps)
         {
             steps = abs(bounds[1] - N);
         }
 
-        if(N == 1 || N == 0) {
+        if(bounds[0] == 0 || bounds[1] == 0) {
             steps = 0;
         }
 
