@@ -16,6 +16,15 @@ class MooingCows
         int dissatisfaction[xElements][yElements];
         int cows = 0;
 
+        for (int i = 0; i < xElements; i++)
+        {
+            for (int j = 0; j < yElements; j++)
+            {
+                dissatisfaction[i][j] = 0;
+            }
+        }
+
+
         if(xElements == 1 && yElements == 1)
         {
             skip = true;
@@ -51,7 +60,7 @@ class MooingCows
 
                     } else {
                         //Arbitrarily large value to invalidate the square
-                        dissatisfaction[x][y] = 9999;
+                        dissatisfaction[x][y] = 999;
                     }
                     //cout << endl;
                 }
@@ -64,7 +73,7 @@ class MooingCows
 
         if (skip == false && cows != 1)
         {
-            min = 9999;
+            min = 999;
 
             for (int i = 0; i < xElements; i++)
             {
