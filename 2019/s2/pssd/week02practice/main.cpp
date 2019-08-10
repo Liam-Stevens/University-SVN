@@ -13,7 +13,7 @@ int main()
 	//test32.push_back("....C");
 	//test32.push_back("CC...");
 	FibonacciDiv2 test;
-	cout << test.find(15) << endl;
+	cout << test.find(1) << endl;
 
 	return 0;
 }

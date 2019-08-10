@@ -68,21 +68,26 @@ class FibonacciDiv2
         int bounds[2];
         bounds[0] = 0;
 
-        for (int i = 0; i < N; i++)
+        if(N != 0)
         {
-            int tmp = calculate(i,true);
-            if(tmp > N) {
-                bounds[1] = tmp;
-                break;
-            } else {
-                bounds[0] = tmp;
+            for (int i = 0; i < N; i++)
+            {
+                int tmp = calculate(i,true);
+                if(tmp > N) {
+                    bounds[1] = tmp;
+                    break;
+                } else {
+                    bounds[0] = tmp;
+                }
             }
-        }
 
-        steps = abs(bounds[0] - N);
-        if(abs(bounds[1] - N) < steps)
-        {
-            steps = abs(bounds[1] - N);
+            steps = abs(bounds[0] - N);
+            if(abs(bounds[1] - N) < steps)
+            {
+                steps = abs(bounds[1] - N);
+            }
+        } else {
+            steps = 0;
         }
 
         return steps;
