@@ -68,7 +68,7 @@ class FibonacciDiv2
         int bounds[2];
         bounds[0] = 0;
 
-        if(N != 0)
+        if(N != 0 || N != 1)
         {
             for (int i = 0; i < N; i++)
             {
