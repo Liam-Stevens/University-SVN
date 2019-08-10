@@ -13,8 +13,10 @@ class MooingCows
         int yElements = farmland.size();
         int min = 0;
         bool skip = false;
-        int dissatisfaction[xElements][yElements];
+        int dissatisfaction[yElements][xElements];
         int cows = 0;
+
+        //cout << xElements << ")(" << yElements << endl;
 
         for (int i = 0; i < xElements; i++)
         {
@@ -37,7 +39,7 @@ class MooingCows
                 for (int y = 0; y < yElements; y++)
                 {
                     //If no cow, no moo
-                    if(farmland[x][y] == 'C')
+                    if(farmland[y][x] == 'C')
                     {
                         cows++;
                         int sum = 0;
@@ -45,7 +47,7 @@ class MooingCows
                         {
                             for (int j = 0; j < yElements; j++)
                             {
-                                if(( i == x && j == y) || farmland[i][j] == '.' )
+                                if(( i == x && j == y) || farmland[j][i] == '.' )
                                 {
                                     //Cow is not dissatisfied by itself
                                     //cout << "." << " | ";
@@ -56,11 +58,11 @@ class MooingCows
                             }
                             //cout << endl;
                         }
-                        dissatisfaction[x][y] = sum;
+                        dissatisfaction[y][x] = sum;
 
                     } else {
                         //Arbitrarily large value to invalidate the square
-                        dissatisfaction[x][y] = 999;
+                        dissatisfaction[y][x] = 999;
                     }
                     //cout << endl;
                 }
@@ -79,10 +81,10 @@ class MooingCows
             {
                 for (int j = 0; j < yElements; j++)
                 {
-                    //cout << dissatisfaction[i][j] << " | ";
-                    if (dissatisfaction[i][j] < min)
+                    //cout << dissatisfaction[j][i] << " | ";
+                    if (dissatisfaction[j][i] < min)
                     {
-                        min = dissatisfaction[i][j];
+                        min = dissatisfaction[j][i];
                     }
                 }
                 //cout << endl;
