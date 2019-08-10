@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <string>
 using namespace std;
 
 class ChangingString
@@ -9,31 +10,27 @@ class ChangingString
     {
         int elements = A.length();
         int distance = 0;
-        int difference[2][elements];
+        int difference[elements];
 
-
+        //Find the difference between the strings
         for (int i = 0; i < elements; i++)
         {
-            difference[0][i] = abs((int)A[i] - (int)B[i]);
-            difference[1][i] = i;
-            //cout << difference[1][i] << ": " << difference[0][i] << " | ";
+            difference[i] = abs((int)A[i] - (int)B[i]);
         }
-        //cout << endl;
 
+        //Sort the difference lowest -> highest
         while(true)
         {
             bool sorted = true;
 
             for (int i = 0; i < elements-1; i++)
             {
-                if (difference[0][i] > difference[0][i+1])
+                if (difference[i] > difference[i+1])
                 {
-                    int tmp = difference[0][i];
-                    int tmp2 = difference[1][i];
-                    difference[0][i] = difference[0][i+1];
-                    difference[1][i] = difference[1][i+1];
-                    difference[0][i+1] = tmp;
-                    difference[1][i+1] = tmp2;
+                    //
+                    int tmp = difference[i];
+                    difference[i] = difference[i+1];
+                    difference[i+1] = tmp;
                     sorted = false;
                 }
             }
@@ -45,22 +42,23 @@ class ChangingString
 
         }
 
+        //Change the highest difference letters to their match
         for(int i = elements-1; i > elements - K - 1; i--)
         {
-            if(difference[0][i] == 0)
+            //Must change letter even if it is a match
+            if(difference[i] == 0)
             {
-                difference[0][i]++;
+                difference[i]++;
             } else {
-                difference[0][i] = 0;
+                difference[i] = 0;
             }
         }
 
+        //Sum the difference
         for (int i = 0; i < elements; i++)
         {
-            distance = distance + difference[0][i];
-            //cout << difference[1][i] << ": " << difference[0][i] << " | ";
+            distance = distance + difference[i];
         }
-        //cout << endl;
 
         return distance;
     }
