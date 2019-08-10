@@ -16,9 +16,9 @@ class ChangingString
         {
             difference[0][i] = abs((int)A[i] - (int)B[i]);
             difference[1][i] = i;
-            cout << difference[1][i] << ": " << difference[0][i] << " | ";
+            //cout << difference[1][i] << ": " << difference[0][i] << " | ";
         }
-        cout << endl;
+        //cout << endl;
 
         while(true)
         {
@@ -53,9 +53,9 @@ class ChangingString
         for (int i = 0; i < elements; i++)
         {
             distance = distance + difference[0][i];
-            cout << difference[1][i] << ": " << difference[0][i] << " | ";
+            //cout << difference[1][i] << ": " << difference[0][i] << " | ";
         }
-        cout << endl;
+        //cout << endl;
 
         return distance;
     }
