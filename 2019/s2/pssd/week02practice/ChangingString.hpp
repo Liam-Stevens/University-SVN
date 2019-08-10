@@ -47,7 +47,12 @@ class ChangingString
 
         for(int i = elements-1; i > elements - K - 1; i--)
         {
-            difference[0][i] = 0;
+            if(difference[0][i] == 0)
+            {
+                difference[0][i]++;
+            } else {
+                difference[0][i] = 0;
+            }
         }
 
         for (int i = 0; i < elements; i++)
