@@ -12,6 +12,32 @@ class AlternateColors
             return false;
         }
     }
+    long findMultiple(long in1,long in2, long in3, long in4)
+    {
+        long ans = 0;
+        for(int i = 0; i < in1; i++)
+        {
+                ans++;
+                if(ans % in1 == 0 && ans % in2 == 0 && ans % in3 == 0 && ans % in4 == 0)
+                {
+                    break;
+                }
+        }
+        return ans;
+    }
+    long findMultiple(long in1,long in2, long in3)
+    {
+        long ans = 0;
+        for(int i = 0; i < in1; i++)
+        {
+                ans++;
+                if(ans % in1 == 0 && ans % in2 == 0 && ans % in3 == 0)
+                {
+                    break;
+                }
+        }
+        return ans;
+    }
 
     public:
     string getColor(long r, long g, long b, long k)
@@ -25,31 +51,35 @@ class AlternateColors
             //cout << i << endl;
             if(r > 1000 && g > 1000 && b > 1000 && k > 1000) {
                 //All Reduction
-                r = r/10;
-                g = g/10;
-                b = b/10;
-                k = k/10;
+                long multiple = findMultiple(r,g,b,k);
+                r = r/multiple;
+                g = g/multiple;
+                b = b/multiple;
+                k = k/multiple;
                 //cout << "Executed at: R " << r << " G " << g << " B " << b << " K " << k << endl;
 
             } else if (r > 1000 && g > 1000  && k > 1000) {
                 //Red and Green Reduction
-                r = r/10;
-                g = g/10;
-                k = k/10;
+                long multiple = findMultiple(r,g,k);
+                r = r/multiple;
+                g = g/multiple;
+                k = k/multiple;
                 //cout << "Executed at: R " << r << " G " << g << " K " << k << endl;
 
             } else if (r > 1000 && b > 1000 && k > 1000) {
                 //Red and Blue Reduction
-                r = r/10;
-                b = b/10;
-                k = k/10;
+                long multiple = findMultiple(r,b,k);
+                r = r/multiple;
+                b = b/multiple;
+                k = k/multiple;
                 //cout << "Executed at: R " << r << " B " << b << " K " << k << endl;
 
             } else if (g > 1000 && b > 1000 && k > 1000) {
                 //Green and Blue Reduction
-                g = g/10;
-                b = b/10;
-                k = k/10;
+                long multiple = findMultiple(g,b,k);
+                g = g/multiple;
+                b = b/multiple;
+                k = k/multiple;
                 //cout << "Executed at: G " << g << " B " << b << " K " << k << endl;
 
             }
