@@ -13,10 +13,10 @@ int main()
 	//test32.push_back("....C");
 	//test32.push_back("CC...");
 	AlternateColors test;
-	long r = 1362806;
-	long g = 9637722;
-	long b = 7058502;
-	long k = 1977778;
+	long r = 1159652;
+	long g = 9711153;
+	long b = 312878;
+	long k = 1395426;
 	cout << test.getColor(r, g, b, k) << endl;
 
 	return 0;
