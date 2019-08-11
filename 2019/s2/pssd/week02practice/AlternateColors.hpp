@@ -24,7 +24,7 @@ class AlternateColors
 
         for (long i = 0; i < runTime; i++)
         {
-            cout << i << endl;
+            //cout << i << endl;
             if(r > 0)
             {
                 r--;
