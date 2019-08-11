@@ -68,7 +68,7 @@ class AlternateColors
         for (long i = 0; i < runTime; i++)
         {
             //cout << i << endl;
-            cout << none << endl;
+            //cout << none << endl;
             if (none >= 10000)
             {
                 break;
