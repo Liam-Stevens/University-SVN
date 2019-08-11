@@ -55,6 +55,23 @@ class AlternateColors
                     break;
                 }
             }
+
+            if (r == 0 && g == 0)
+            {
+                color = "BLUE";
+                break;
+            }
+            if (g == 0 && b == 0)
+            {
+                color = "RED";
+                break;
+            }
+            if (b == 0 && r == 0)
+            {
+                color = "GREEN";
+                break;
+            }
+
         }
 
         return color;
