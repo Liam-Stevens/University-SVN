@@ -5,8 +5,8 @@ using namespace std;
 class AlternateColors
 {
     private:
-    int goal;
-    bool check(int num) {
+    long goal;
+    bool check(long num) {
         if(goal == num) {
             return true;
         } else {
@@ -18,12 +18,13 @@ class AlternateColors
     string getColor(long r, long g, long b, long k)
     {
         string color = "NONE";
-        int inc = 0;
-        int runTime = (int)(r + g + b);
-        goal = (int)k;
+        long inc = 0;
+        long runTime = (r + g + b);
+        goal = k;
 
-        for (int i = 0; i < runTime; i++)
+        for (long i = 0; i < runTime; i++)
         {
+            cout << i << endl;
             if(r > 0)
             {
                 r--;
