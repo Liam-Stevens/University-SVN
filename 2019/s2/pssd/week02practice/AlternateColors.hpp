@@ -63,17 +63,23 @@ class AlternateColors
         string color = "NONE";
         long inc = 0;
         long runTime = (r + g + b);
-        bool none = false;
+        int none = 0;
 
         for (long i = 0; i < runTime; i++)
         {
             //cout << i << endl;
-            if(r > 10000 && g > 10000 && b > 10000 && k > 10000 && none == false) {
+            cout << none << endl;
+            if (none >= 10000)
+            {
+                break;
+            }
+
+            if(r > 10000 && g > 10000 && b > 10000 && k > 10000 && none < 10000) {
                 //All Reduction
                 long multiple = findMultiple(r,g,b,k);
                 if (multiple == 1)
                 {
-                    none = true;
+                    none++;
                 }
                 r = r/multiple;
                 g = g/multiple;
@@ -81,36 +87,36 @@ class AlternateColors
                 k = k/multiple;
                 //cout << "Executed at: R " << r << " G " << g << " B " << b << " K " << k << endl;
 
-            } else if (r > 10000 && g > 10000  && k > 10000 && none == false) {
+            } else if (r > 10000 && g > 10000  && k > 10000 && none < 10000) {
                 //Red and Green Reduction
                 long multiple = findMultiple(r,g,k);
                 if (multiple == 1)
                 {
-                    none = true;
+                    none++;
                 }
                 r = r/multiple;
                 g = g/multiple;
                 k = k/multiple;
                 //cout << "Executed at: R " << r << " G " << g << " K " << k << endl;
 
-            } else if (r > 10000 && b > 10000 && k > 10000 && none == false) {
+            } else if (r > 10000 && b > 10000 && k > 10000 && none < 10000) {
                 //Red and Blue Reduction
                 long multiple = findMultiple(r,b,k);
                 if (multiple == 1)
                 {
-                    none = true;
+                    none++;
                 }
                 r = r/multiple;
                 b = b/multiple;
                 k = k/multiple;
                 //cout << "Executed at: R " << r << " B " << b << " K " << k << endl;
 
-            } else if (g > 10000 && b > 10000 && k > 10000 && none == false) {
+            } else if (g > 10000 && b > 10000 && k > 10000 && none < 10000) {
                 //Green and Blue Reduction
                 long multiple = findMultiple(g,b,k);
                 if (multiple == 1)
                 {
-                    none = true;
+                    none++;
                 }
                 g = g/multiple;
                 b = b/multiple;
