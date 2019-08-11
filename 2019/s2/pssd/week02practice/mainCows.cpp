@@ -9,11 +9,9 @@ using namespace std;
 int main()
 {
 	vector<string> test32;
-	test32.push_back("CCC....");
-	test32.push_back("C......");
-	test32.push_back("....C.C");
-	test32.push_back(".C.CC..");
-	test32.push_back("C......");
+	test32.push_back("C....");
+	test32.push_back("....C");
+	test32.push_back("CC...");
 	MooingCows test;
 	cout << test.dissatisfaction(test32) << endl;
 
