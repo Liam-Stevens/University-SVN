@@ -1,4 +1,4 @@
-#include "DerivativeSequence.hpp"
+#include "AlternateColors.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,22 +8,16 @@ using namespace std;
 
 int main()
 {
-	vector<int> test32;
-	test32.push_back(5);
-	test32.push_back(6);
-	test32.push_back(3);
-	test32.push_back(9);
-	test32.push_back(-1);
-	DerivativeSequence test;
-	int reduce = 4;
-	vector<int> array(test32.size()-reduce);
-	array = test.derSeq(test32,reduce);
-
-	for (int i = 0; i < array.size(); i++)
-	{
-		cout << array[i] << " | ";
-	}
-	cout << endl;
+	//vector<string> test32;
+	//test32.push_back("C....");
+	//test32.push_back("....C");
+	//test32.push_back("CC...");
+	AlternateColors test;
+	long r = 1;
+	long g = 1;
+	long b = 1;
+	long k = 3;
+	cout << test.getColor(r, g, b, k) << endl;
 
 	return 0;
 }
