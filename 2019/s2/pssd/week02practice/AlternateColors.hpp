@@ -5,24 +5,39 @@ using namespace std;
 class AlternateColors
 {
     private:
-    long goal;
-    bool check(long num) {
+    //long goal;
+    /*bool check(long num) {
         if(goal == num) {
             return true;
         } else {
             return false;
         }
-    }
+    }*/
 
     public:
     string getColor(long r, long g, long b, long k)
     {
         string color = "NONE";
-        long inc = 0;
-        long runTime = (r + g + b);
-        goal = k;
+        //long inc = 0;
+        long sum = (r + g + b);
+        //goal = k;
 
-        for (long i = 0; i < runTime; i++)
+        int select = (int)(sum/k);
+
+        while(select > 3)
+        {
+            select = select - 3;
+        }
+
+        if (select == 1) {
+            color = "RED";
+        } else if (select == 2) {
+            color = "GREEN";
+        } else if (select == 3) {
+            color = "BLUE";
+        }
+
+        /*for (long i = 0; i < runTime; i++)
         {
             //cout << i << endl;
             if(r > 0)
@@ -72,7 +87,7 @@ class AlternateColors
                 break;
             }
 
-        }
+        }*/
 
         return color;
     }
