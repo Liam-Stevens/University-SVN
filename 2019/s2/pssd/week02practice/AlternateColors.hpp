@@ -5,46 +5,60 @@ using namespace std;
 class AlternateColors
 {
     private:
-    //long goal;
-    /*bool check(long num) {
-        if(goal == num) {
+    bool check(long goal) {
+        if(goal == 0) {
             return true;
         } else {
             return false;
         }
-    }*/
+    }
 
     public:
     string getColor(long r, long g, long b, long k)
     {
         string color = "NONE";
-        //long inc = 0;
-        long sum = (r + g + b);
-        //goal = k;
+        long inc = 0;
+        long runTime = (r + g + b);
 
-        int select = (int)(sum/k);
-
-        while(select > 3)
-        {
-            select = select - 3;
-        }
-
-        if (select == 1) {
-            color = "RED";
-        } else if (select == 2) {
-            color = "GREEN";
-        } else if (select == 3) {
-            color = "BLUE";
-        }
-
-        /*for (long i = 0; i < runTime; i++)
+        for (long i = 0; i < runTime; i++)
         {
             //cout << i << endl;
+            if(r > 1000 && g > 1000 && b > 1000 && k > 1000) {
+                //All Reduction
+                r = r/10;
+                g = g/10;
+                b = b/10;
+                k = k/10;
+                //cout << "Executed at: R " << r << " G " << g << " B " << b << " K " << k << endl;
+
+            } else if (r > 1000 && g > 1000  && k > 1000) {
+                //Red and Green Reduction
+                r = r/10;
+                g = g/10;
+                k = k/10;
+                //cout << "Executed at: R " << r << " G " << g << " K " << k << endl;
+
+            } else if (r > 1000 && b > 1000 && k > 1000) {
+                //Red and Blue Reduction
+                r = r/10;
+                b = b/10;
+                k = k/10;
+                //cout << "Executed at: R " << r << " B " << b << " K " << k << endl;
+
+            } else if (g > 1000 && b > 1000 && k > 1000) {
+                //Green and Blue Reduction
+                g = g/10;
+                b = b/10;
+                k = k/10;
+                //cout << "Executed at: G " << g << " B " << b << " K " << k << endl;
+
+            }
+
             if(r > 0)
             {
                 r--;
-                inc++;
-                if (check(inc))
+                k--;
+                if (check(k))
                 {
                     color = "RED";
                     break;
@@ -53,8 +67,8 @@ class AlternateColors
             if(g > 0)
             {
                 g--;
-                inc++;
-                if (check(inc))
+                k--;
+                if (check(k))
                 {
                     color = "GREEN";
                     break;
@@ -63,8 +77,8 @@ class AlternateColors
             if(b > 0)
             {
                 b--;
-                inc++;
-                if (check(inc))
+                k--;
+                if (check(k))
                 {
                     color = "BLUE";
                     break;
@@ -87,7 +101,7 @@ class AlternateColors
                 break;
             }
 
-        }*/
+        }
 
         return color;
     }
