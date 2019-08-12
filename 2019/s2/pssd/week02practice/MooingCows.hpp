@@ -9,9 +9,9 @@ class MooingCows
     public:
     int dissatisfaction(vector<string> farmland)
     {
-        vector<string> farmcopy = farmland;
-        int xElements = farmcopy[0].length();
-        int yElements = farmcopy.size();
+        //cout << "new" << endl;
+        int xElements = farmland[0].length();
+        int yElements = farmland.size();
         int min = 0;
         bool skip = false;
         int dissatisfaction[yElements][xElements];
@@ -23,7 +23,7 @@ class MooingCows
         {
             for (int j = 0; j < yElements; j++)
             {
-                dissatisfaction[i][j] = 0;
+                dissatisfaction[j][i] = 0;
             }
         }
 
@@ -39,8 +39,9 @@ class MooingCows
             {
                 for (int x = 0; x < xElements; x++)
                 {
+                    //cout << x << endl;
                     //If no cow, no moo
-                    if(farmcopy[y][x] == 'C')
+                    if(farmland[y][x] == 'C')
                     {
                         cows++;
                         int sum = 0;
@@ -49,7 +50,7 @@ class MooingCows
                             for (int i = 0; i < xElements; i++)
                             {
                                 //cout << y << " | " << x << " <> " << j << " | " << i << endl;
-                                if(( i == x && j == y) || farmcopy[j][i] == '.' )
+                                if(( i == x && j == y) || farmland[j][i] == '.' )
                                 {
                                     //Cow is not dissatisfied by itself
                                     //cout << "." << " | ";
