@@ -17,7 +17,7 @@ class MooingCows
         int dissatisfaction[yElements][xElements];
         int cows = 0;
 
-        cout << "(Y: "<< yElements << ")(X:" << xElements << ")" << endl;
+        //cout << "(Y: "<< yElements << ")(X:" << xElements << ")" << endl;
 
         for (int i = 0; i < xElements; i++)
         {
@@ -49,7 +49,7 @@ class MooingCows
                         {
                             for (int i = 0; i < xElements; i++)
                             {
-                                cout << y << " | " << x << " <> " << j << " | " << i << endl;
+                                //cout << y << " | " << x << " <> " << j << " | " << i << endl;
                                 if(( i == x && j == y) || farmland[j][i] == '.' )
                                 {
                                     //Cow is not dissatisfied by itself
