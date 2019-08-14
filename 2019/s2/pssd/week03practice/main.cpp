@@ -13,7 +13,7 @@ int main()
 	//test32.push_back("....C");
 	//test32.push_back("CC...");
 	Arrows test;
-	cout << test.longestArrow("<----=====>") << endl;
+	cout << test.longestArrow(">----=====<") << endl;
 
 	return 0;
 }

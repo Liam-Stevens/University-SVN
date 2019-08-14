@@ -44,9 +44,7 @@ public:
                 //cout << "Pass: " << i << " RIGHT" << endl;
                 update();
                 reset();
-            }
-
-            if(s[i] == '-' && doubleArrow == false)
+            } else if(s[i] == '-' && doubleArrow == false)
             {
                 consecArrowNum++;
                 //cout << "Pass: " << i << " B" << " Arrow Num: " << consecArrowNum << endl;
@@ -80,13 +78,11 @@ public:
                 update();
                 reset();
                 //cout << "Pass: " << i << " H" << endl;
-            } else {
-                //cout << "Pass: " << i << " SKIP" << endl;
-            }
-
-            if(s[i] == '<')
+            } else if(s[i] == '<')
             {
-                update();
+                if (left == true) {
+                    update();
+                }
                 reset();
                 left = true;
                 consecArrowNum++;
