@@ -55,7 +55,13 @@ public:
                     update();
                     //cout << "Pass: " << i << " C" << endl;
                 }
-                reset();
+                if (i > 0)
+                {
+                    if (s[i-1] != '<')
+                    {
+                        reset();
+                    }
+                }
                 consecArrowNum++;
                 doubleArrow = true;
                 //cout << "Pass: " << i << " D" << endl;
