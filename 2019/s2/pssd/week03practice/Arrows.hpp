@@ -87,7 +87,8 @@ public:
                 left = true;
                 consecArrowNum++;
                 //cout << "Pass: " << i << " LEFT" << endl;
-            } else if (i == s.length()-1 && left == true)
+            }
+            if (i == s.length()-1 && left == true)
             {
                 update();
             }
