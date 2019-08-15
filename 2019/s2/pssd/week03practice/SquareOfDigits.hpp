@@ -24,11 +24,15 @@ public:
             		{
             			int difference = k - j;
 
-            			if (difference+1 <= yElements)
+            			if (difference+1 <= yElements - i)
             			{
+            				//cout << "i: " << i << " j: " << j << " k: " << k << " difference: " << difference << endl;
             				if (data[i][j] == data[i+difference][j] && data[i][j] == data[i+difference][k])
 	            			{
-	            				return (difference+1)*(difference+1);
+	            				if (cells < (difference+1)*(difference+1))
+								{
+									cells = (difference+1)*(difference+1);
+								}
 	            			}
             			}
             			
