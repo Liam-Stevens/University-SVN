@@ -1,4 +1,4 @@
-#include "StreetParking.hpp"
+#include "ExerciseMachine.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -12,8 +12,8 @@ int main()
 	//test32.push_back("42101");
 	//test32.push_back("22100");
 	//test32.push_back("22101");
-	StreetParking test;
-	cout << test.freeParks("") << endl;
+	ExerciseMachine test;
+	cout << test.getPercentages("00:28:00") << endl;
 
 	return 0;
 }
