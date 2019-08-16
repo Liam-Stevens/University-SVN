@@ -36,11 +36,11 @@ public:
         }
 
         long totalSeconds = seconds + 60*minutes + 60*60*hours;
-        cout << totalSeconds << endl;
+        //cout << totalSeconds << endl;
         double part = (double)totalSeconds/(double)100;
         double whole = part;
         double store = whole;
-        cout << part << endl;
+        //cout << part << endl;
         //Get non decimal percentage
         for(int i = 0; i < 100; i++)
         {
@@ -48,7 +48,7 @@ public:
             {
                 whole = i*part;
             }
-            cout << i*part << " | " << (long)i*part << endl;
+            //cout << i*part << " | " << (long)i*part << endl;
         }
         //Number of time it displays the percentage (removing 100%)
         int displays = (totalSeconds/(int)whole)-1;
