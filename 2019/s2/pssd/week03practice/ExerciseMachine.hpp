@@ -35,25 +35,27 @@ public:
             }
         }
 
-        long totalSeconds = seconds + 60*minutes + 60*60*hours;
-        //cout << totalSeconds << endl;
-        double part = (double)totalSeconds/(double)100;
-        double whole = part;
-        double store = whole;
-        //cout << part << endl;
-        //Get non decimal percentage
-        while (whole != static_cast<long>(whole))
-        {
-            //cout << whole << " | " << static_cast<long>(whole) << endl;
-            whole = whole + part;
+        int totalSeconds = seconds + 60*minutes + 60*60*hours;
+        int displays = 0;
 
-            if(whole > totalSeconds)
-            {
-                break;
-            }
+        if (totalSeconds % 100 == 0) {
+            displays = 99;
+        } else if (totalSeconds % 50 == 0) {
+            displays = 49;
+        } else if (totalSeconds % 25 == 0) {
+            displays = 24;
+        } else if (totalSeconds % 20 == 0) {
+            displays = 19;
+        } else if (totalSeconds % 10 == 0) {
+            displays = 9;
+        } else if (totalSeconds % 5 == 0) {
+            displays = 4;
+        } else if (totalSeconds % 4 == 0) {
+            displays = 3;
+        } else if (totalSeconds % 2 == 0) {
+            displays = 1;
         }
-        //Number of time it displays the percentage (removing 100%)
-        int displays = (totalSeconds/(int)whole)-1;
+
 
         return displays;
     }
