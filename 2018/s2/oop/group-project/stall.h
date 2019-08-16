@@ -39,8 +39,6 @@ protected:
 	void setSingleItemStock(int arrayPosition, generic_item item0);
 	void outputItemList();
 
-	//Need functions for adjusting shop stock
-
 	~stall();
 };
 
