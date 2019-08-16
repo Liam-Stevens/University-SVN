@@ -42,13 +42,15 @@ public:
         double store = whole;
         //cout << part << endl;
         //Get non decimal percentage
-        for(int i = 0; i < 100; i++)
+        while (whole != static_cast<long>(whole))
         {
-            if((double)i*part == (long)i*part)
+            //cout << whole << " | " << static_cast<long>(whole) << endl;
+            whole = whole + part;
+
+            if(whole > totalSeconds)
             {
-                whole = i*part;
+                break;
             }
-            //cout << i*part << " | " << (long)i*part << endl;
         }
         //Number of time it displays the percentage (removing 100%)
         int displays = (totalSeconds/(int)whole)-1;
