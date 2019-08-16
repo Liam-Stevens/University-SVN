@@ -33,7 +33,7 @@ public:
                 }
                 if(i + 1 < elements)
                 {
-                    if(street[i+1] != 'B')
+                    if(street[i+1] != 'B' && street[i+1] != 'S')
                     {
                         street[i+1] = 'Z';
                     }
