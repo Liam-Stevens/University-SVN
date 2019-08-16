@@ -13,7 +13,7 @@ int main()
 	//test32.push_back("22100");
 	//test32.push_back("22101");
 	ExerciseMachine test;
-	cout << test.getPercentages("00:19:16") << endl;
+	cout << test.getPercentages("19:21:52") << endl;
 
 	return 0;
 }

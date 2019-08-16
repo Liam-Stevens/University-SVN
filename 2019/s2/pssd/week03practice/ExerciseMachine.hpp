@@ -37,12 +37,14 @@ public:
 
         int totalSeconds = seconds + 60*minutes + 60*60*hours;
         //cout << totalSeconds << endl;
-        double part = (double)totalSeconds/100;
-        double whole = part;
+        long double part = (long double)totalSeconds/100;
+        long double whole = part;
+        long double store = whole;
+        //cout << part << endl;
         //Get non decimal percentage
-        while (whole != (int)whole)
+        while (whole != static_cast<int>(whole))
         {
-            //cout << whole << " | " << (int)whole << endl;
+            //cout << whole << " | " << static_cast<int>(whole) << endl;
             whole = whole + part;
 
             if(whole > totalSeconds)
