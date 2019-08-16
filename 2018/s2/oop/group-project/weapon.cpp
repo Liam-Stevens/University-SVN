@@ -6,7 +6,8 @@
 using namespace std;
 
 weapon::weapon()
-{
+{	
+	name = "?";
 	durability = 1;
 	size = 5;
 	weapon::updatePrice();
@@ -31,6 +32,11 @@ double weapon::getSize()
 double weapon::getDurability()
 {
 	return durability;
+}
+
+string weapon::getName()
+{
+	return name;
 }
 
 //setters

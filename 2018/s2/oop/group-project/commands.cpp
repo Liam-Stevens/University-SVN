@@ -21,9 +21,6 @@ void validLocationList()
 
 void callHelp()
 {
-	//commands
-	cout << "Commands:" << endl << "> Help" << endl << endl;
-
 	//location list
 	cout << "Locations:" << endl << "> Home" << endl 
 	<< "> Bakery" << endl << "> Forge" << endl << endl;

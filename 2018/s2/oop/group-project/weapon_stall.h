@@ -18,6 +18,7 @@ public:
 
 	//getters
 	void outputWeaponList();
+	weapon getWeapon(int arrayPosition);
 
 	//setters
 	void setFullWeaponStock(weapon weapon1, weapon weapon2, weapon weapon3, weapon weapon4, weapon weapon5);

@@ -6,6 +6,7 @@
 
 class weapon : public item
 {
+	std::string name;
   double durability;
   double size;
   bool forcePrice;
@@ -17,6 +18,7 @@ class weapon : public item
 	//getters
 	double getSize();
 	double getDurability();
+	std::string getName();
 
 	//setters
 	void setSize(double newSize);

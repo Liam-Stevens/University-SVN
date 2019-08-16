@@ -24,6 +24,10 @@ weapon_stall::weapon_stall(std::string createName, std::string createShopType, d
   	shopType = createShopType;
   	money = createMoney;
 }
+weapon weapon_stall::getWeapon(int arrayPosition)
+{
+	return weaponStock[arrayPosition];
+}
 
 void weapon_stall::outputWeaponList()
 {
