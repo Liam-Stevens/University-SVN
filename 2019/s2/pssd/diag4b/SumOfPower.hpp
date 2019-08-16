@@ -9,13 +9,15 @@ class SumOfPower
         int elements = array.size();
         int bottom = 1;
         int top = elements;
-        int sum;
+        int sum = 0;
 
         for (int i = 0; i < elements; i++)
         {
-            sum = sum + (bottom*top);
-            bottom++;
-            top--;
+            for (int j = i; j < elements; j++)
+            {
+                sum = sum + array[j];
+            }
+
         }
 
         

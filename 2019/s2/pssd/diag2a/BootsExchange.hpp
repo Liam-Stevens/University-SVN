@@ -45,6 +45,7 @@ class BootsExchange
 
         for (int i = 0; i < elements; i++)
         {
+            cout << "Left: " << left[i] << " Right: " << right[i] << endl;
             if(left[i] != right[i])
             {
                 diff++;
