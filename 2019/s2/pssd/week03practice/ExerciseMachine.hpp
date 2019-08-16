@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <ctype.h>
+#include <math.h>
 using namespace std;
 
 class ExerciseMachine
@@ -35,12 +36,19 @@ public:
         }
 
         int totalSeconds = seconds + 60*minutes + 60*60*hours;
-        float part = (float)totalSeconds/100;
-        float whole = part;
+        //cout << totalSeconds << endl;
+        double part = (double)totalSeconds/100;
+        double whole = part;
         //Get non decimal percentage
         while (whole != (int)whole)
         {
+            //cout << whole << " | " << (int)whole << endl;
             whole = whole + part;
+
+            if(whole > totalSeconds)
+            {
+                break;
+            }
         }
         //Number of time it displays the percentage (removing 100%)
         int displays = (totalSeconds/(int)whole)-1;
