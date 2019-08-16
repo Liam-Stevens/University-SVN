@@ -13,7 +13,7 @@ int main()
 	//test32.push_back("22100");
 	//test32.push_back("22101");
 	StreetParking test;
-	cout << test.freeParks("SSD-B---BD-DDSB-----S-S--------S-B----BSB-S--B-S-D") << endl;
+	cout << test.freeParks("") << endl;
 
 	return 0;
 }
