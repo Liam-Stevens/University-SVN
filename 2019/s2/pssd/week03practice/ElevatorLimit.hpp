@@ -58,6 +58,9 @@ public:
         if (minRiders > maxRiders)
         {
             valid = false;
+        } else if (minRiders > physicalLimit-maxRiders)
+        {
+            valid = false;
         }
         //cout << endl << minRiders << " > " << maxRiders << endl;
 
