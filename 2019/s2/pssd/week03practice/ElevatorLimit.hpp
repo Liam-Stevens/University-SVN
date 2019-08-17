@@ -48,6 +48,11 @@ public:
                 minRiders = riders;
             }
 
+            if (enter[i] > physicalLimit || exiter[i] > physicalLimit)
+            {
+                valid = false;
+                break;
+            }
         }
 
         //cout << endl << minRiders << " > " << maxRiders << endl;
