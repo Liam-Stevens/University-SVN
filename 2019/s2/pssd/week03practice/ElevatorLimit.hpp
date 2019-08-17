@@ -55,6 +55,10 @@ public:
             }
         }
 
+        if (minRiders > maxRider)
+        {
+            valid = false;
+        }
         //cout << endl << minRiders << " > " << maxRiders << endl;
 
         vector<int> start;
