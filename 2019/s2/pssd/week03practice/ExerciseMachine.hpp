@@ -38,6 +38,7 @@ public:
         int totalSeconds = seconds + 60*minutes + 60*60*hours;
         int displays = 0;
 
+        //Find if seconds is one of the factors of 100
         if (totalSeconds % 100 == 0) {
             displays = 99;
         } else if (totalSeconds % 50 == 0) {
