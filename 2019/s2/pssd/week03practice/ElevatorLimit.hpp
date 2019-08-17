@@ -55,7 +55,7 @@ public:
             }
         }
 
-        if (minRiders > maxRider)
+        if (minRiders > maxRiders)
         {
             valid = false;
         }
