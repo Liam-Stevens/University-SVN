@@ -58,7 +58,7 @@ public:
         if (minRiders > maxRiders)
         {
             valid = false;
-        } else if (minRiders > physicalLimit-maxRiders)
+        } else if (abs(minRiders) > physicalLimit-maxRiders)
         {
             valid = false;
         }
