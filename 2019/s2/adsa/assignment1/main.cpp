@@ -65,7 +65,7 @@ int main()
 	{
 		workingSecondNumber.insert(workingSecondNumber.begin(),0);
 	}
-
+/*
 	//Line Checker
 	for (int i = 0; i < maxLength; i++)
 	{
@@ -76,7 +76,7 @@ int main()
 	{
 		cout << workingSecondNumber[i];
 	}
-	cout << endl;
+	cout << endl;*/
 
 
 
@@ -88,6 +88,8 @@ int main()
 	for (int i = maxLength - 1; i >= 0; i--)
 	{
 		sum[i] = workingFirstNumber[i] + workingSecondNumber[i] + carry;
+		//cout << "Num" << i << " | " << sum[i] << endl;
+		carry = 0;
 		//Makes the carry for the next number
 		while (sum[i] >= baseNumber)
 		{
