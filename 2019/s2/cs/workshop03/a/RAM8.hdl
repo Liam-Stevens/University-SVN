@@ -15,33 +15,17 @@ CHIP RAM8 {
     OUT out[16];
 
     PARTS:
-    DMux(in=load,sel=address[0],a=dmux01A,b=dmux01B);
+    DMux8Way(in=load,sel=address,a=dmuxA,b=dmuxB,c=dmuxC,d=dmuxD,e=dmuxE,f=dmuxF,g=dmuxG,h=dmuxH);
 
-    DMux(in=dmux01A,sel=address[1],a=dmux02A,b=dmux02B);
-    DMux(in=dmux01B,sel=address[1],a=dmux02C,b=dmux02D);
+    Register(in=in,load=dmuxA,out=regA);
+    Register(in=in,load=dmuxB,out=regB);
+    Register(in=in,load=dmuxC,out=regC);
+    Register(in=in,load=dmuxD,out=regD);
+    Register(in=in,load=dmuxE,out=regE);
+    Register(in=in,load=dmuxF,out=regF);
+    Register(in=in,load=dmuxG,out=regG);
+    Register(in=in,load=dmuxH,out=regH);
 
-    DMux(in=dmux02A,sel=address[2],a=dmux03A,b=dmux03B);
-    DMux(in=dmux02B,sel=address[2],a=dmux03C,b=dmux03D);
-    DMux(in=dmux02C,sel=address[2],a=dmux03E,b=dmux03F);
-    DMux(in=dmux02D,sel=address[2],a=dmux03G,b=dmux03H);
-
-    Register(in=in,load=dmux03A,out=regA);
-    Register(in=in,load=dmux03B,out=regB);
-    Register(in=in,load=dmux03C,out=regC);
-    Register(in=in,load=dmux03D,out=regD);
-    Register(in=in,load=dmux03E,out=regE);
-    Register(in=in,load=dmux03F,out=regF);
-    Register(in=in,load=dmux03G,out=regG);
-    Register(in=in,load=dmux03H,out=regH);
-
-    Mux16(a=regA,b=regB,sel=address[2],out=mux01A);
-    Mux16(a=regC,b=regD,sel=address[2],out=mux01B);
-    Mux16(a=regE,b=regF,sel=address[2],out=mux01C);
-    Mux16(a=regG,b=regH,sel=address[2],out=mux01D);
-
-    Mux16(a=mux01A,b=mux01B,sel=address[1],out=mux02A);
-    Mux16(a=mux01C,b=mux01D,sel=address[1],out=mux02B);
-
-    Mux16(a=mux02A,b=mux02B,sel=address[0],out=out);
+    Mux8Way16(a=regA,b=regB,c=regC,d=regD,e=regE,f=regF,g=regG,h=regH,sel=address,out=out);
 
 }
