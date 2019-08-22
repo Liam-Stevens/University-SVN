@@ -30,38 +30,19 @@ class ChickensAndCows
             return animals;
         }
 
-        //animals.push_back((head*legs)/animalTest[0]);
-        //animals.push_back((head*legs)/animalTest[1]);
         int tester[2] = {0,0};
         tester[1] = legs/2 - head;
         tester[0] = head - tester[1];
-/*
-        int index = 0;
-        int oppo = 1;
-        if (animalTest[0] > animalTest[1])
-        {
-            index = 1;
-            oppo = 0;
-        }
-        int mainLegs = 4;
-        int remainLegs = 2;
-        if(index == 1)
-        {
-            mainLegs = 2;
-            remainLegs = 4;
-        }
-        int storage[2] = {0,0};
 
-        storage[oppo] = ((head*animalTest[index])/animalTest[oppo]);
-        storage[index] = head - ((heads*animalTest[index])/animalTest[oppo]);
-
-        cout << "Chickens: " << storage[0] << " | Cows: " << storage[1] << endl;
-*/
-        if((tester[0]*2 + tester[1]*4) == legs)
-        {
-            animals.push_back(tester[0]);
-            animals.push_back(tester[1]);
+        if(tester[0] > 0 && tester[1] > 0) {
+            if((tester[0]*2 + tester[1]*4) == legs)
+            {
+                animals.push_back(tester[0]);
+                animals.push_back(tester[1]);
+            }
         }
+        
+
         
         return animals;
     }
