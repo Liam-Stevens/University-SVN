@@ -48,8 +48,10 @@ class ChickensAndCows
         int storage[2] = {0,0};
 
         storage[index] = ((legs*animalTest[index])/animalTest[oppo])/mainLegs;
-        legs = legs - ((legs*animalTest[index])/animalTest[oppo]);
-        storage[oppo] = legs/remainLegs;
+        int checkLegs = legs - ((legs*animalTest[index])/animalTest[oppo]);
+        storage[oppo] = checkLegs/remainLegs;
+
+        //cout << "Chickens: " << storage[0] << " | Cows: " << storage[1] << endl;
 
         if((storage[0]*2 + storage[1]*4) == legs)
         {
