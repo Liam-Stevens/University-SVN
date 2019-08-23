@@ -119,7 +119,7 @@ vector<int> schoolAddition(vector<int> first, vector<int> second, int base)
 	}
 
 	int cut = 0;
-	for (int i = 0; i < sum.size()-1; i++)
+	for (int i = 0; i < sum.size(); i++)
 	{
 		if (sum[i] == 0)
 		{
@@ -202,54 +202,34 @@ vector<int> recursiveKaratsuba (vector<int> first, vector<int> second, int base)
 	int halfer = first.size()/2; //k
 	vector<int> lowFirst = separate(first,halfer,true); //a0
 	vector<int> highFirst = separate(first,halfer,false); //a1
-	first.clear();
 	vector<int> lowSecond = separate(second,halfer,true); //b0
 	vector<int> highSecond = separate(second,halfer,false); //b1
-	second.clear();
-
 
 	vector<int> section1 = recursiveKaratsuba(highFirst,highSecond,base);
+	vector<int> section2 = recursiveKaratsuba(highFirst,lowSecond,base);
+	vector<int> section3 = recursiveKaratsuba(lowFirst,highSecond,base);
+	vector<int> section4 = recursiveKaratsuba(lowFirst,lowSecond,base);
 
-	vector<int> section3 = recursiveKaratsuba(lowFirst,lowSecond,base);
-
-	vector<int> section2Part1 = schoolAddition(highFirst,lowSecond,base);
-
-
-	vector<int> section2Part2 = schoolAddition(lowFirst,highSecond,base);
-
-
-	lowFirst.clear();
-	highFirst.clear();
-	lowSecond.clear();
-	highSecond.clear();
-
-	vector<int> section2 = recursiveKaratsuba(section2Part1,section2Part2,base);
-
-	section2Part1.clear();
-	section2Part2.clear();
-
-
-
-	vector<int> intermediate = schoolAddition(section1,section3,base);
-	intermediate = negative(intermediate);
-	intermediate = schoolAddition(intermediate,section2,base);
 
 	for (int i = 0; i < 2*halfer; i++)
 	{
 		section1.push_back(0);
 	}
+	vector<int> intermediate = schoolAddition(section2,section3,base);
+	//intermediate = (section1+section4)
+	//negate intermediate
+	//intermediate = (section2+intermediate)
 	for (int i = 0; i < halfer; i++)
 	{
 		intermediate.push_back(0);
 	}
 
+
 	vector<int> finale (1,0);
+
 	finale = schoolAddition(finale,section1,base);
-	section1.clear();
 	finale = schoolAddition(finale,intermediate,base);
-	intermediate.clear();
-	finale = schoolAddition(finale,section3,base);
-	section3.clear();
+	finale = schoolAddition(finale,section4,base);
 
 
 	return finale;
@@ -320,16 +300,13 @@ int main()
 
 	//School Addition
 	vector<int> sum = schoolAddition(firstNum,secondNum,baseNumber);
-
+	int cut1 = 0;
 
 	//Karatsuba Multiplication
-	//vector<int> karatsubaResult = karatsubaMultiplication(firstNum,secondNum,baseNumber);
-	vector<int> karatsubaResult (1,0);
-
+	vector<int> karatsubaResult = karatsubaMultiplication(firstNum,secondNum,baseNumber);
 
 	//Division for postgraduates only (NOT REQUIRED)
 	int divisionResult = 0;
-
 
 	//Outputs the results
 	//Output Addition
