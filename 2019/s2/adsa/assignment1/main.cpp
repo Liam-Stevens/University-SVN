@@ -119,7 +119,7 @@ vector<int> schoolAddition(vector<int> first, vector<int> second, int base)
 	}
 
 	int cut = 0;
-	for (int i = 0; i < sum.size(); i++)
+	for (int i = 0; i < sum.size()-1; i++)
 	{
 		if (sum[i] == 0)
 		{
@@ -177,7 +177,7 @@ vector<int> schoolMultiplication(vector<int> first, vector<int> second, int base
 	return sum;
 }
 
-
+//Makes all elements negative
 vector<int> negative (vector<int> num)
 {
 	vector<int> negative = num;
@@ -188,14 +188,12 @@ vector<int> negative (vector<int> num)
 	return negative;
 }
 
-
+//The recursive function of karatsuba multiplication
 vector<int> recursiveKaratsuba (vector<int> first, vector<int> second, int base)
 {
-
-
+	//Base Case
 	if (first.size() <= 3 && second.size() <= 3)
 	{
-		//cout << "First: " << first.size() << " | Second: " << second.size() << endl;
 		return schoolMultiplication(first,second,base);
 	}
 
@@ -205,32 +203,31 @@ vector<int> recursiveKaratsuba (vector<int> first, vector<int> second, int base)
 	vector<int> lowSecond = separate(second,halfer,true); //b0
 	vector<int> highSecond = separate(second,halfer,false); //b1
 
-	vector<int> section1 = recursiveKaratsuba(highFirst,highSecond,base);
-	vector<int> section2 = recursiveKaratsuba(highFirst,lowSecond,base);
-	vector<int> section3 = recursiveKaratsuba(lowFirst,highSecond,base);
-	vector<int> section4 = recursiveKaratsuba(lowFirst,lowSecond,base);
+	vector<int> section1 = recursiveKaratsuba(highFirst,highSecond,base); //p2
+	vector<int> section3 = recursiveKaratsuba(lowFirst,lowSecond,base); //p0
+	vector<int> section2Part1 = schoolAddition(highFirst,lowSecond,base);
+	vector<int> section2Part2 = schoolAddition(lowFirst,highSecond,base);
+	vector<int> section2 = recursiveKaratsuba(section2Part1,section2Part2,base); //p1
 
+	vector<int> intermediate = schoolAddition(section1,section3,base); //p2+p0
+	intermediate = negative(intermediate);
+	intermediate = schoolAddition(intermediate,section2,base); //p1-(p2+p0)
 
+	//Pad 2k zeroes to the end of p2
 	for (int i = 0; i < 2*halfer; i++)
 	{
 		section1.push_back(0);
 	}
-	vector<int> intermediate = schoolAddition(section2,section3,base);
-	//intermediate = (section1+section4)
-	//negate intermediate
-	//intermediate = (section2+intermediate)
+	//Pad k zeroes to the end of p1-(p2+p0)
 	for (int i = 0; i < halfer; i++)
 	{
 		intermediate.push_back(0);
 	}
 
-
 	vector<int> finale (1,0);
-
 	finale = schoolAddition(finale,section1,base);
 	finale = schoolAddition(finale,intermediate,base);
-	finale = schoolAddition(finale,section4,base);
-
+	finale = schoolAddition(finale,section3,base);
 
 	return finale;
 
@@ -300,21 +297,24 @@ int main()
 
 	//School Addition
 	vector<int> sum = schoolAddition(firstNum,secondNum,baseNumber);
-	int cut1 = 0;
-
-	//Karatsuba Multiplication
-	vector<int> karatsubaResult = karatsubaMultiplication(firstNum,secondNum,baseNumber);
-
-	//Division for postgraduates only (NOT REQUIRED)
-	int divisionResult = 0;
-
-	//Outputs the results
-	//Output Addition
 	for (int i = 0; i < sum.size(); i++)
 	{
 		cout << sum[i];
 	}
 	cout << " ";
+	sum.clear();
+
+
+	//Karatsuba Multiplication
+	vector<int> karatsubaResult = karatsubaMultiplication(firstNum,secondNum,baseNumber);
+
+
+	//Division for postgraduates only (NOT REQUIRED)
+	int divisionResult = 0;
+
+
+	//Outputs the results
+	//Output Addition
 	for (int j = 0; j < karatsubaResult.size(); j++)
 	{
 		cout << karatsubaResult[j];
