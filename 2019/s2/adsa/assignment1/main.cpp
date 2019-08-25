@@ -214,8 +214,8 @@ vector<int> recursiveKaratsuba (vector<int> first, vector<int> second, int base)
 	cout << endl;*/
 	//Base Case
 	if (first.size() <= 3 && second.size() <= 3)
-	{/*
-		cout << "Multiplier: ";
+	{
+		/*cout << "Multiplier: ";
 		printNumber(schoolMultiplication(first,second,base));
 		cout << endl;*/
 		return schoolMultiplication(first,second,base);
@@ -236,8 +236,8 @@ vector<int> recursiveKaratsuba (vector<int> first, vector<int> second, int base)
 	printNumber(lowSecond);
 	cout << " HighSecond: ";
 	printNumber(highSecond);
-	cout << endl;
-*/
+	cout << endl;*/
+
 	vector<int> section1 = recursiveKaratsuba(highFirst,highSecond,base); //p2
 	/*cout << "Number1: ";
 	printNumber(first);
@@ -270,7 +270,7 @@ vector<int> recursiveKaratsuba (vector<int> first, vector<int> second, int base)
 	cout << " Section3 ";
 	printNumber(section3);
 	cout << endl;*/
-	vector<int> section2Part1 = schoolAddition(highFirst,lowSecond,base);
+	vector<int> section2Part1 = schoolAddition(highFirst,lowFirst,base);
 	/*cout << "Number1: ";
 	printNumber(first);
 	cout << " Number2: ";
@@ -286,7 +286,7 @@ vector<int> recursiveKaratsuba (vector<int> first, vector<int> second, int base)
 	cout << " Section2Part1 ";
 	printNumber(section2Part1);
 	cout << endl;*/
-	vector<int> section2Part2 = schoolAddition(lowFirst,highSecond,base);
+	vector<int> section2Part2 = schoolAddition(lowSecond,highSecond,base);
 	/*cout << "Number1: ";
 	printNumber(first);
 	cout << " Number2: ";
@@ -345,7 +345,11 @@ vector<int> recursiveKaratsuba (vector<int> first, vector<int> second, int base)
 	intermediate = removeLeading(intermediate);
 
 	vector<int> finale (1,0);
-	/*cout << "SECTION1 ";
+	/*cout << "Number1: ";
+	printNumber(first);
+	cout << " Number2: ";
+	printNumber(second);
+	cout << " SECTION1 ";
 	printNumber(section1);
 	cout << " INTERMEDIATE ";
 	printNumber(intermediate);
