@@ -17,36 +17,40 @@ private:
 public:
     string fixTheSpell(string spell)
     {
-        int elements = spell.length();
+        int elements = 0;
+
+        for(int i = 0; i < spell.length(); i++)
+        {
+            if(spell[i] == 'A' || spell[i] == 'Z')
+            {
+                elements++;
+            }
+        }
+
         vector<int> firstHalf;
         vector<int> secondHalf;
 
         //Records locations of A and Z
-        for(int i = 0; i < elements/2; i++)
+        for(int i = 0; i < spell.length(); i++)
         {
             if(spell[i] == 'A' || spell[i] == 'Z')
             {
                 firstHalf.push_back(i);
             }
+            if(firstHalf.size() == elements/2)
+            {
+                break;
+            }
         }
-        for(int i = elements-1; i >= elements/2; i--)
+        for(int i = spell.length()-1; i >= 0; i--)
         {
             if(spell[i] == 'A' || spell[i] == 'Z')
             {
                 secondHalf.push_back(i);
             }
-        }
-
-        //Ensures that both halfs are the same size
-        while(firstHalf.size() != secondHalf.size())
-        {
-            if(firstHalf.size() > secondHalf.size())
+            if(secondHalf.size() == elements/2)
             {
-                firstHalf.erase(firstHalf.begin()+firstHalf.size()-1);
-            }
-            if(firstHalf.size() < secondHalf.size())
-            {
-                secondHalf.erase(secondHalf.begin()+secondHalf.size()-1);
+                break;
             }
         }
 

@@ -11,7 +11,7 @@ int main()
 	//vector<int> test32;
 	//test32.push_back(0);
 	MagicSpell test;
-	cout << test.fixTheSpell("ZZZAZZFAZAZBANZZZFZAZZZPZAAASZZAZZZ") << endl;
+	cout << test.fixTheSpell("ZKAVAEAYXXAGPZDOEXBZJVVBYPZLPN") << endl;
 
 
 	return 0;
