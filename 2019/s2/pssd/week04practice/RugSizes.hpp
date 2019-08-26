@@ -13,7 +13,10 @@ public:
             int test = area/i;
             if(i % 2 == 0 && test % 2 == 0)
             {
-
+                if(i == test)
+                {
+                    sizes++;
+                }
             } else {
                 if (test*i == area)
                 {
