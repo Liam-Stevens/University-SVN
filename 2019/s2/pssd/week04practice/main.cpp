@@ -1,4 +1,4 @@
-#include "MagicSpell.hpp"
+#include "RugSizes.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -10,8 +10,8 @@ int main()
 {
 	//vector<int> test32;
 	//test32.push_back(0);
-	MagicSpell test;
-	cout << test.fixTheSpell("ZKAVAEAYXXAGPZDOEXBZJVVBYPZLPN") << endl;
+	RugSizes test;
+	cout << test.rugCount(100) << endl;
 
 
 	return 0;
