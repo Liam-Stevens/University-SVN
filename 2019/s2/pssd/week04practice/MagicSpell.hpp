@@ -42,11 +42,11 @@ public:
         {
             if(firstHalf.size() > secondHalf.size())
             {
-                firstHalf.erase(firstHalf.begin()+firstHalf.size());
+                firstHalf.erase(firstHalf.begin()+firstHalf.size()-1);
             }
             if(firstHalf.size() < secondHalf.size())
             {
-                secondHalf.erase(secondHalf.begin()+secondHalf.size());
+                secondHalf.erase(secondHalf.begin()+secondHalf.size()-1);
             }
         }
 
