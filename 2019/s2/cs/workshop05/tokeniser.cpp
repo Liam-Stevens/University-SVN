@@ -19,6 +19,8 @@ namespace Workshop_Tokeniser
         // always read the next character - we have read past the end of the token
         nextch() ;
 
+
+
         // return a new Token object
         return new_token(kind,spelling) ;
     }
@@ -79,10 +81,15 @@ namespace Workshop_Tokeniser
                                         // single character symbols
             case '{':       return parse_single_char_symbol(tk_lcb,spelling) ;
             case '}':       return parse_single_char_symbol(tk_rcb,spelling) ;
+            case '+':       return parse_single_char_symbol(tk_add,spelling) ;
+            case '-':       return parse_single_char_symbol(tk_sub,spelling) ;
+            case '*':       return parse_single_char_symbol(tk_times,spelling) ;
+            case '/':       return parse_single_char_symbol(tk_divide,spelling) ;
 
                                         // add new case labels to find the start of other Tokens
                                         // you may need to write additional parse_ functions
-                                        // ...
+            case 'a'...'z': return parse_single_char_symbol(tk_identifier,spelling) ;
+            case 'A'...'Z': return parse_single_char_symbol(tk_identifier,spelling) ;
 
                                         // you can use ranges such as '0' to '9'
             case '0'...'9': return parse_integer(tk_integer,spelling) ;
