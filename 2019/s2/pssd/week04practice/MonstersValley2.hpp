@@ -5,13 +5,13 @@ using namespace std;
 class MonstersValley2
 {
 private:
-    vector<int> freePower;
-    vector<int> powerCost;
+    vector<long> freePower;
+    vector<long> powerCost;
 public:
     int minimumPrice(vector<int> dread, vector<int> price)
     {
-        int cost = 0;
-        int power = 0;
+        long cost = 0;
+        long power = 0;
         freePower.clear();
         powerCost.clear();
 
@@ -29,27 +29,27 @@ public:
                 {
                     while(power < dread[i])
                     {
-                        float bestPowerCost = 0;
-                        int index = 0;
+                        long double bestPowerCost = 0;
+                        long index = 0;
                         for (int j = 0; j < freePower.size(); j++)
                         {
-                            if((float)freePower[j]/(float)powerCost[j] > bestPowerCost)
+                            if((long double)freePower[j]/(long double)powerCost[j] > bestPowerCost)
                             {
-                                bestPowerCost = (float)freePower[j]/(float)powerCost[j];
+                                bestPowerCost = (long double)freePower[j]/(long double)powerCost[j];
                                 index = j;
                             }
                         }
 
                         //cout << "Best Power " << bestPowerCost << endl;
 
-                        if (bestPowerCost > (float)dread[i]/(float)price[i])
+                        if (bestPowerCost > (long double)dread[i]/(long double)price[i])
                         {
                             //cout << "[1] Price: " << powerCost[index] << " | Power Gained: " << freePower[index] << " | Current Power: " << power << endl;
                             cost = cost + powerCost[index];
                             power = power + freePower[index];
                             powerCost.erase(powerCost.begin()+index);
                             freePower.erase(freePower.begin()+index);
-                        } else if (bestPowerCost == (float)dread[i]/(float)price[i]) {
+                        } else if (bestPowerCost == (long double)dread[i]/(long double)price[i]) {
 
                             if (power + freePower[index] >= dread[i] && powerCost[index] < price[i])
                             {
