@@ -36,7 +36,6 @@ public:
                 if(i == test && test*i == area)
                 {
                     sizes++;
-                    //cout << i << " | " << test << endl;
                 }
             } else {
                 if (test*i == area)
@@ -45,7 +44,6 @@ public:
                     {
                         found.push_back(i);
                         sizes++;
-                        //cout << i << " | " << test << endl;
                     }
                 }
             }
