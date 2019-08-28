@@ -4,7 +4,7 @@ ifeq (4.8.5,$(shell test -x /usr/bin/g++ && /usr/bin/g++ --version | head -1 | c
     export CXX=/usr/bin/g++
 
 # Just in case its ubuntu and g++ 4.8.5 is actually /usr/bin/g++-4.8
-else ifeq (4.8.5,$(shell test -x /usr/bin/g++-4.8 && /usr/bin/g++-4.8 --version | head -1 | cut -f 3 -d ' '| cut -f 1,1 -d '-'))
+else ifeq (4.8.4,$(shell test -x /usr/bin/g++-4.8 && /usr/bin/g++-4.8 --version | head -1 | cut -f 3 -d ' '| cut -f 1,1 -d '-'))
           $(info export CXX=/usr/bin/g++-4.8)
           export CXX=/usr/bin/g++-4.8
 else
