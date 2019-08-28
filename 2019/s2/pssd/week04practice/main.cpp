@@ -9,12 +9,8 @@ using namespace std;
 int main()
 {
 	vector<int> test32;
-	test32.push_back(8);
-	test32.push_back(5);
-	test32.push_back(10);
+	test32.push_back(606);
 	vector<int> test33;
-	test33.push_back(1);
-	test33.push_back(1);
 	test33.push_back(2);
 
 	MonstersValley2 test;
