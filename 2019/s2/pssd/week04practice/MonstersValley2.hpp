@@ -12,6 +12,8 @@ public:
     {
         int cost = 0;
         int power = 0;
+        freePower.clear();
+        powerCost.clear();
 
         if(dread.size() == 1 && dread[0] > 0)
         {
@@ -38,11 +40,11 @@ public:
                             }
                         }
 
-                        cout << "Best Power " << bestPowerCost << endl;
+                        //cout << "Best Power " << bestPowerCost << endl;
 
                         if (bestPowerCost > (float)dread[i]/(float)price[i])
                         {
-                            cout << "[1] Price: " << powerCost[index] << " | Power Gained: " << freePower[index] << " | Current Power: " << power << endl;
+                            //cout << "[1] Price: " << powerCost[index] << " | Power Gained: " << freePower[index] << " | Current Power: " << power << endl;
                             cost = cost + powerCost[index];
                             power = power + freePower[index];
                             powerCost.erase(powerCost.begin()+index);
@@ -51,13 +53,13 @@ public:
 
                             if (power + freePower[index] >= dread[i] && powerCost[index] < price[i])
                             {
-                                cout << "[2] Price: " << powerCost[index] << " | Power Gained: " << freePower[index] << " | Current Power: " << power << endl;
+                                //cout << "[2] Price: " << powerCost[index] << " | Power Gained: " << freePower[index] << " | Current Power: " << power << endl;
                                 cost = cost + powerCost[index];
                                 power = power + freePower[index];
                                 powerCost.erase(powerCost.begin()+index);
                                 freePower.erase(freePower.begin()+index);
                             } else {
-                                cout << "[3] Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
+                                //cout << "[3] Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
                                 cost = cost + price[i];
                                 power = power + dread[i];
                                 freePower.clear();
@@ -65,7 +67,7 @@ public:
                             }
 
                         } else {
-                            cout << "[4] Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
+                            //cout << "[4] Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
                             cost = cost + price[i];
                             power = power + dread[i];
                             freePower.clear();
@@ -75,13 +77,13 @@ public:
 
                 } else {
 
-                    cout << "Nothing Avaliable | Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
+                    //cout << "Nothing Avaliable | Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
                     cost = cost + price[i];
                     power = power + dread[i];
                 }
 
             } else {
-                cout << "Not Needed | Beat: " << dread[i] << " | Current Power: " << power << endl;
+                //cout << "Not Needed | Beat: " << dread[i] << " | Current Power: " << power << endl;
                 freePower.push_back(dread[i]);
                 powerCost.push_back(price[i]);
             }
