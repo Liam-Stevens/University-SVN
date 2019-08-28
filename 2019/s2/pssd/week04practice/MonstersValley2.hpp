@@ -7,11 +7,46 @@ class MonstersValley2
 private:
     vector<long> freePower;
     vector<long> powerCost;
+    long largest;
+
+    void largestElement(vector<int> dread)
+    {
+        largest = 0;
+        for (int i = 0; i < dread.size(); i++)
+        {
+            if(dread[i] > largest)
+            {
+                largest = dread[i];
+            }
+        }
+    }
+
+    bool powerCheck(int i, int index, long power, long cost, vector<int> dread, vector<int> price)
+    {
+
+        if(power+freePower[index] >= largest)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+
+        /*
+        if ((power + freePower[index] >= dread[i])&&(power + dread[i] < dread[i+1]))
+        {
+            return true;
+        } else {
+            return false;
+        }*/
+    }
+
 public:
     int minimumPrice(vector<int> dread, vector<int> price)
     {
         long cost = 0;
         long power = 0;
+        largestElement(dread);
         freePower.clear();
         powerCost.clear();
 
@@ -53,7 +88,7 @@ public:
                         {
                             if(i+1 != dread.size())
                             {
-                                if ((power + freePower[index] >= dread[i+1]) || ((power + freePower[index] >= dread[i])&&(power + dread[i] < dread[i+1])))
+                                if (powerCheck(i,index,power,cost,dread,price))
                                 {
                                     //cout << "[2] Price: " << powerCost[index] << " | Power Gained: " << freePower[index] << " | Current Power: " << power << endl;
                                     cost = cost + powerCost[index];
@@ -87,7 +122,7 @@ public:
                 }
 
             } else {
-                //cout << "Not Needed | Beat: " << dread[i] << " | Current Power: " << power << endl;
+                //cout << "Not Needed | Stored: " << dread[i] << " | Current Power: " << power << endl;
                 freePower.push_back(dread[i]);
                 powerCost.push_back(price[i]);
             }
