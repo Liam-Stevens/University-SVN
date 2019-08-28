@@ -6,6 +6,7 @@ all: test
 notest: tokeniser
 
 # C++ 11
+CXX=/usr/bin/g++
 CXXFLAGS=--std=c++11 -I. -Iincludes
 
 tokeniser.cpp: includes/tokeniser.h
