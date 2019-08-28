@@ -11,7 +11,7 @@ int main()
 	//vector<int> test32;
 	//test32.push_back(0);
 	RugSizes test;
-	cout << test.rugCount(30) << endl;
+	cout << test.rugCount(100000) << endl;
 
 
 	return 0;

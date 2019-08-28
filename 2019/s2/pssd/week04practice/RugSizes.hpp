@@ -33,7 +33,7 @@ public:
             int test = area/i;
             if(i % 2 == 0 && test % 2 == 0)
             {
-                if(i == test)
+                if(i == test && test*i == area)
                 {
                     sizes++;
                     //cout << i << " | " << test << endl;
