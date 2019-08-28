@@ -28,10 +28,10 @@ public:
         int sizes = 0;
         found.clear();
 
-        for (int i = 1; i <= area/2; i++)
+        for (int i = 1; i <= area/2+1; i++)
         {
             int test = area/i;
-            if(i % 2 == 0 && test % 2 == 0)
+            if(i % 2 == 0 && test % 2 == 0 && i > 1)
             {
                 if(i == test && test*i == area)
                 {
