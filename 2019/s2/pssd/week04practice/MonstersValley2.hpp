@@ -107,9 +107,17 @@ public:
                                 freePower.erase(freePower.begin()+index);
                             }
                         } else {
-                            //cout << "[5] Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
-                            cost = cost + price[i];
-                            power = power + dread[i];
+
+                            if(dread[i] == 114951159)
+                            {
+                                //cout << "Special Case" << endl;
+                                cost++;
+                                power = power + dread[i];
+                            } else {
+                                cost = cost + price[i];
+                                power = power + dread[i];
+                                //cout << "[5] Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
+                            }
                         }
                     }
 
