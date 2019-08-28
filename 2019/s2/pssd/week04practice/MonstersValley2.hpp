@@ -51,17 +51,31 @@ public:
                             freePower.erase(freePower.begin()+index);
                         } else if (power + freePower[index] >= dread[i] && powerCost[index] < price[i])
                         {
-                            //cout << "[2] Price: " << powerCost[index] << " | Power Gained: " << freePower[index] << " | Current Power: " << power << endl;
-                            cost = cost + powerCost[index];
-                            power = power + freePower[index];
-                            powerCost.erase(powerCost.begin()+index);
-                            freePower.erase(freePower.begin()+index);
+                            if(i+1 != dread.size())
+                            {
+                                if (power + freePower[index] >= dread[i+1])
+                                {
+                                    //cout << "[2] Price: " << powerCost[index] << " | Power Gained: " << freePower[index] << " | Current Power: " << power << endl;
+                                    cost = cost + powerCost[index];
+                                    power = power + freePower[index];
+                                    powerCost.erase(powerCost.begin()+index);
+                                    freePower.erase(freePower.begin()+index);
+                                } else {
+                                    //cout << "[3] Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
+                                    cost = cost + price[i];
+                                    power = power + dread[i];
+                                }
+                            } else {
+                                //cout << "[4] Price: " << powerCost[index] << " | Power Gained: " << freePower[index] << " | Current Power: " << power << endl;
+                                cost = cost + powerCost[index];
+                                power = power + freePower[index];
+                                powerCost.erase(powerCost.begin()+index);
+                                freePower.erase(freePower.begin()+index);
+                            }
                         } else {
-                            //cout << "[3] Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
+                            //cout << "[5] Price: " << price[i] << " | Power Gained: " << dread[i] << " | Current Power: " << power << endl;
                             cost = cost + price[i];
                             power = power + dread[i];
-                            //freePower.clear();
-                            //powerCost.clear();
                         }
                     }
 
