@@ -27,18 +27,14 @@ private:
         if(power+freePower[index] >= largest)
         {
             return true;
+        } else if (power+freePower[index]+dread[i+1] >= largest)
+        {
+            return true;
         } else
         {
             return false;
         }
 
-        /*
-        if ((power + freePower[index] >= dread[i])&&(power + dread[i] < dread[i+1]))
-        {
-            return true;
-        } else {
-            return false;
-        }*/
     }
 
 public:
