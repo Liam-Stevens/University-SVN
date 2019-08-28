@@ -53,7 +53,7 @@ public:
                         {
                             if(i+1 != dread.size())
                             {
-                                if (power + freePower[index] >= dread[i+1])
+                                if ((power + freePower[index] >= dread[i+1]) || ((power + freePower[index] >= dread[i])&&(power + dread[i] < dread[i+1])))
                                 {
                                     //cout << "[2] Price: " << powerCost[index] << " | Power Gained: " << freePower[index] << " | Current Power: " << power << endl;
                                     cost = cost + powerCost[index];
