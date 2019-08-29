@@ -1,4 +1,4 @@
-#include "UnsealTheSafe.hpp"
+#include "Multiples.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,8 +8,8 @@ using namespace std;
 
 int main()
 {
-	UnsealTheSafe test;
-	cout << test.countPasswords(3) << endl;
+	Multiples test;
+	cout << test.number(-75312, 407891, 14) << endl;
 
 
 	return 0;
