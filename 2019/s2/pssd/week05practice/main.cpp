@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
 	Multiples test;
-	cout << test.number(0, 14, 5) << endl;
+	cout << test.number(3,{0,1,2,2},{2,2,0,1}) << endl;
 
 
 	return 0;
