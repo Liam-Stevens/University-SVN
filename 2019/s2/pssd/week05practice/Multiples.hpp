@@ -8,7 +8,7 @@ class Multiples
 public:
     int number(int min, int max, int factor)
     {      
-        long num;
+        long num = 0;
 
         for (int i = min; i <= max; i++)
         {
@@ -17,7 +17,6 @@ public:
                 num++;
             }
         }
-
 
         return num;
     }
