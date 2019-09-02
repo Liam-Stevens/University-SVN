@@ -57,8 +57,8 @@ public:
         if(stalemate == true)
         {
             stalemate = false;
-            int maxVotes = 0;
-            int maxVoter = 0;
+            int maxVotes = -1;
+            int maxVoter = -1;
             vector<int> stalemates2;
 
             /*for (int i = 0; i < stalemates.size(); i++)
@@ -88,6 +88,12 @@ public:
 
             if(stalemate == true)
             {
+                /*for (int i = 0; i < stalemates.size(); i++)
+                {
+                    cout << stalemates2[i] << " {} ";
+                }
+                cout << endl;*/
+
                 //cout << "exit1" << endl;
                 return stalemates2[0];
             } else {
