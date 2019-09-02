@@ -1,4 +1,4 @@
-#include "Truckloads.hpp"
+#include "FracCount.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -18,8 +18,8 @@ int main()
 	test33.push_back(4);
 	test33.push_back(6);*/
 
-	Truckloads test;
-	cout << test.numTrucks(14,3) << endl;
+	FracCount test;
+	cout << test.position(999,1000) << endl;
 
 
 	return 0;
