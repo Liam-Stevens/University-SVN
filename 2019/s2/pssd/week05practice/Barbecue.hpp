@@ -13,6 +13,11 @@ public:
         vector<int> exile(n,0);
         vector<int> stalemates;
 
+        if (elements == 0)
+        {
+            return 0;
+        }
+
         for(int i = 0; i < elements; i++)
         {
             votes[voter[i]]++;
