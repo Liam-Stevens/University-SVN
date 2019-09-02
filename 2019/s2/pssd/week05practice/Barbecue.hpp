@@ -17,6 +17,7 @@ public:
             votes[voter[i]]++;
             exile[excluded[i]]++;
         }
+
         bool stalemate = false;
         int max = 0;
         for (int i = 0; i < elements; i++)
@@ -27,7 +28,7 @@ public:
                 max = exile[i];
             } else if (max == exile[i])
             {
-                stalemate == true;
+                stalemate = true;
             }
         }
 
