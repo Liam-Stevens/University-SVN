@@ -37,12 +37,14 @@ public:
 
         bool stalemate = false;
         int max = 0;
+        int winner = 0;
         for (int i = 0; i < exile.size(); i++)
         {
             if(max < exile[i])
             {
                 stalemate = false;
                 max = exile[i];
+                winner = i;
                 stalemates.clear();
                 stalemates.push_back(i);
             } else if (max == exile[i])
@@ -86,14 +88,17 @@ public:
 
             if(stalemate == true)
             {
+                //cout << "exit1" << endl;
                 return stalemates2[0];
             } else {
+                //cout << "exit2" << endl;
                 return maxVoter;
             }
 
 
         } else {
-            return max;
+            //cout << "exit3" << endl;
+            return winner;
         }
 
         return -1;
