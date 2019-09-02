@@ -76,7 +76,6 @@ public:
 
 
         } else {
-            cout << 3 << endl;
             return max;
         }
 
