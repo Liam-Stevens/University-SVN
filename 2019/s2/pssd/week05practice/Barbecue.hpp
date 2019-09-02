@@ -20,12 +20,13 @@ public:
 
         bool stalemate = false;
         int max = 0;
-        for (int i = 0; i < elements; i++)
+        for (int i = 0; i < exile.size(); i++)
         {
             if(max < exile[i])
             {
                 stalemate = false;
                 max = exile[i];
+
             } else if (max == exile[i])
             {
                 stalemate = true;
@@ -75,6 +76,7 @@ public:
 
 
         } else {
+            cout << 3 << endl;
             return max;
         }
 
