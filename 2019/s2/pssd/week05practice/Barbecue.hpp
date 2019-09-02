@@ -70,7 +70,7 @@ public:
                     stalemates2.push_back(stalemates[i]);
                 }
             }
-            for (int i = 0; i < votes.size(); i++)
+            for (int i = 0; i < stalemates.size(); i++)
             {
                 if (votes[stalemates[i]] == maxVotes && i != maxVoter)
                 {
