@@ -1,4 +1,4 @@
-END 21
-i 101
-LOOP 6
-sum 5050
+END 18
+i 3
+LOOP 4
+sum 3
