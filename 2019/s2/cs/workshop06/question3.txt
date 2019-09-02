@@ -1,4 +1,4 @@
 END 18
-i 3
+i 16
 LOOP 4
-sum 3
+sum 17
