@@ -1,8 +1,19 @@
-	@1
-	A=M
+// let x = 1;
+	@x
+	M=1
+// let y = 10;
 	@10
+	D=A
+	@y
+	M=D
+// let sum = x + y;
+	@sum
+	M=D
+	@x
 	D=M
-	D=D+A
+	@sum
+	M=M+D
+
 (END)
 	@END
 	0;JMP
