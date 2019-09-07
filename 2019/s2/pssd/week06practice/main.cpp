@@ -1,4 +1,4 @@
-#include "FewestFactors.hpp"
+#include "GoodHours.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,17 +8,18 @@ using namespace std;
 
 int main()
 {
-	vector<int> test32;
-	test32.push_back(4);
-	test32.push_back(7);
-	test32.push_back(4);
-/*
+	/*
+	vector<string> test32;
+	test32.push_back("1 100 100");
+	test32.push_back("100 1 100");
+	test32.push_back("100 100 1");
+
 	vector<int> test33;
 	test33.push_back(4);
 	test33.push_back(6);*/
 
-	FewestFactors test;
-	cout << test.number(test32) << endl;
+	GoodHours test;
+	cout << test.howMany("11:11","11:11") << endl;
 
 
 	return 0;
