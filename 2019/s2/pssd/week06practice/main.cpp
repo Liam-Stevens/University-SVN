@@ -1,4 +1,4 @@
-#include "CountExpressions.hpp"
+#include "NiceOrUgly.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -19,8 +19,8 @@ int main()
 	test33.push_back(4);
 	test33.push_back(6);*/
 
-	CountExpressions test;
-	cout << test.calcExpressions(7,8,16) << endl;
+	NiceOrUgly test;
+	cout << test.describe("HELLOW?RLD") << endl;
 
 
 	return 0;
