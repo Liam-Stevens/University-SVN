@@ -1,4 +1,4 @@
-#include "GoodHours.hpp"
+#include "BlackAndWhiteSolitaire.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -18,8 +18,8 @@ int main()
 	test33.push_back(4);
 	test33.push_back(6);*/
 
-	GoodHours test;
-	cout << test.howMany("11:11","11:11") << endl;
+	BlackAndWhiteSolitaire test;
+	cout << test.minimumTurns("BBWBWWBWBWWBBBWBWBWBBWBBW") << endl;
 
 
 	return 0;
