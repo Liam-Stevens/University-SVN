@@ -108,7 +108,10 @@ public:
             }
         }
 
-        if(allMarks > 0 || maybeVowel == true || maybeConsonant == true)
+        if (maybeVowel == true && maybeConsonant == true)
+        {
+            return "UGLY";
+        } else if(allMarks > 0 || maybeVowel == true || maybeConsonant == true)
         {
             return "42";
         } else if (defVowel == true || defConsonant == true)
