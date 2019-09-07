@@ -36,9 +36,18 @@ public:
         bool vowelAvaliable = false;
         bool consonantAvaliable = false;
         bool marked = false;
+        int marks = 0;
+        int allMarks = 0;
+        bool maybeVowel = false;
+        bool maybeConsonant = false;
 
         for (int i = 0; i < s.length(); i++)
         {
+            if (vowelAvaliable == false && consonantAvaliable == false)
+            {
+                marks = 0;
+            }
+
             if(checkVowel(s[i]))
             {
                 vowel++;
@@ -57,35 +66,42 @@ public:
                 }
             } else if (s[i] == '?')
             {
-                vowel++;
-                consonant++;
+                marks++;
                 vowelAvaliable = true;
                 consonantAvaliable = true;
             }
 
-            //cout << s[i] << " V: " << vowel << " C: " << consonant << " ?1 " << vowelAvaliable << " ?2 " << consonantAvaliable << endl;
+            //cout << s[i] << " V: " << vowel << " C: " << consonant << " ? " << marks << endl;
 
             if(vowel >= 3)
             {
                 defVowel = true;
-                if(vowelAvaliable == true)
-                {
-                    marked = true;
-                }
                 //cout << "FOUND VOWEL" << endl;
             }
             if(consonant >= 5)
             {
                 defConsonant = true;
-                if(consonantAvaliable == true)
-                {
-                    marked = true;
-                }
                 //cout << "FOUND CONSONANT" << endl;
+            }
+            if(consonant + marks >= 5 && consonantAvaliable == true)
+            {
+                maybeConsonant = true;
+            }
+            if(vowel + marks >= 3 && vowelAvaliable == true)
+            {
+                maybeVowel = true;
+            }
+            if(marks >= 3 && allMarks == 0)
+            {
+                allMarks = 1;
+            }
+            if(marks >= 5 && allMarks < 2)
+            {
+                allMarks = 2;
             }
         }
 
-        if(marked == true && (defVowel != true || defConsonant != true))
+        if(allMarks > 0 || maybeVowel == true || maybeConsonant == true)
         {
             return "42";
         } else if (defVowel == true || defConsonant == true)
