@@ -74,41 +74,41 @@ public:
                 consonantAvaliable = true;
             }
 
-            //cout << s[i] << " V: " << vowel << " C: " << consonant << " ?V " << vowelMarks << " ?C " << consonantMarks << endl;
+            cout << s[i] << " V: " << vowel << " C: " << consonant << " ?V " << vowelMarks << " ?C " << consonantMarks << endl;
 
             if(vowel >= 3)
             {
                 defVowel = true;
-                //cout << "FOUND VOWEL" << endl;
+                cout << "FOUND VOWEL" << endl;
             }
             if(consonant >= 5)
             {
                 defConsonant = true;
-                //cout << "FOUND CONSONANT" << endl;
+                cout << "FOUND CONSONANT" << endl;
             }
             if(consonant + consonantMarks >= 5 && consonantAvaliable == true)
             {
                 maybeConsonant = true;
-                //cout << "MAYBE CONSONANT" << endl;
+                cout << "MAYBE CONSONANT" << endl;
             }
             if(vowel + consonantMarks >= 3 && vowelAvaliable == true)
             {
                 maybeVowel = true;
-                //cout << "MAYBE VOWEL" << endl;
+                cout << "MAYBE VOWEL" << endl;
             }
             if(marks >= 3 && allMarks == 0)
             {
                 allMarks = 1;
-                //cout << "ALL ???" << endl;
+                cout << "ALL ???" << endl;
             }
             if(marks >= 5 && allMarks < 2)
             {
                 allMarks = 2;
-                //cout << "ALL ?????" << endl;
+                cout << "ALL ?????" << endl;
             }
         }
 
-        if (maybeVowel == true && maybeConsonant == true)
+        if (maybeVowel == true && maybeConsonant == true && allMarks == 0)
         {
             return "UGLY";
         } else if(allMarks > 0 || maybeVowel == true || maybeConsonant == true)
