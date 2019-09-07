@@ -85,7 +85,7 @@ public:
             }
         }
 
-        if(marked == true)
+        if(marked == true && (defVowel != true || defConsonant != true))
         {
             return "42";
         } else if (defVowel == true || defConsonant == true)

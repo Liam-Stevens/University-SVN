@@ -20,7 +20,7 @@ int main()
 	test33.push_back(6);*/
 
 	NiceOrUgly test;
-	cout << test.describe("HELLOW?RLD") << endl;
+	cout << test.describe("EE?FFFF") << endl;
 
 
 	return 0;
