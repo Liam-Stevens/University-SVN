@@ -37,17 +37,14 @@ public:
         bool consonantAvaliable = false;
         bool marked = false;
         int marks = 0;
+        int vowelMarks = 0;
+        int consonantMarks = 0;
         int allMarks = 0;
         bool maybeVowel = false;
         bool maybeConsonant = false;
 
         for (int i = 0; i < s.length(); i++)
         {
-            if (vowelAvaliable == false && consonantAvaliable == false)
-            {
-                marks = 0;
-            }
-
             if(checkVowel(s[i]))
             {
                 vowel++;
@@ -55,6 +52,8 @@ public:
                 {
                     consonant = 0;
                     consonantAvaliable = false;
+                    consonantMarks = 0;
+                    marks = 0;
                 }
             } else if (checkConsonent(s[i]))
             {
@@ -63,15 +62,19 @@ public:
                 {
                     vowel = 0;
                     vowelAvaliable = false;
+                    vowelMarks = 0;
+                    marks = 0;
                 }
             } else if (s[i] == '?')
             {
                 marks++;
+                vowelMarks++;
+                consonantMarks++;
                 vowelAvaliable = true;
                 consonantAvaliable = true;
             }
 
-            //cout << s[i] << " V: " << vowel << " C: " << consonant << " ? " << marks << endl;
+            //cout << s[i] << " V: " << vowel << " C: " << consonant << " ?V " << vowelMarks << " ?C " << consonantMarks << endl;
 
             if(vowel >= 3)
             {
@@ -83,21 +86,25 @@ public:
                 defConsonant = true;
                 //cout << "FOUND CONSONANT" << endl;
             }
-            if(consonant + marks >= 5 && consonantAvaliable == true)
+            if(consonant + consonantMarks >= 5 && consonantAvaliable == true)
             {
                 maybeConsonant = true;
+                //cout << "MAYBE CONSONANT" << endl;
             }
-            if(vowel + marks >= 3 && vowelAvaliable == true)
+            if(vowel + consonantMarks >= 3 && vowelAvaliable == true)
             {
                 maybeVowel = true;
+                //cout << "MAYBE VOWEL" << endl;
             }
             if(marks >= 3 && allMarks == 0)
             {
                 allMarks = 1;
+                //cout << "ALL ???" << endl;
             }
             if(marks >= 5 && allMarks < 2)
             {
                 allMarks = 2;
+                //cout << "ALL ?????" << endl;
             }
         }
 
