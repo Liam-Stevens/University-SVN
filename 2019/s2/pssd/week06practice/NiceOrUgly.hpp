@@ -154,6 +154,8 @@ public:
                 rowMarks = 0;
             } else if (s[i] == '?')
             {
+                consonant = 0;
+                vowel = 0;
                 vowelMarks++;
                 consonantMarks++;
                 rowMarks++;
