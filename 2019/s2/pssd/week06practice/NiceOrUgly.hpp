@@ -154,6 +154,8 @@ public:
                 rowMarks = 0;
             } else if (s[i] == '?')
             {
+                consonantMarks = consonant;
+                vowelMarks = vowel;
                 consonant = 0;
                 vowel = 0;
                 vowelMarks++;
@@ -187,7 +189,7 @@ public:
                 cout << "MAYBE CONSONANT" << endl;
             }
         }
-
+        cout << s << endl;
         if (ugly == true)
         {
             return "UGLY";

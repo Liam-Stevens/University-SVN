@@ -20,7 +20,7 @@ int main()
 	test33.push_back(6);*/
 
 	NiceOrUgly test;
-	cout << test.describe("A?Q?QQQQ?O?QQQ??A?QQQQ?E?QQQ??QQQQ?A?QQQ??I?QQQQ") << endl;
+	cout << test.describe("HELLOW?RLD") << endl;
 
 
 	return 0;
