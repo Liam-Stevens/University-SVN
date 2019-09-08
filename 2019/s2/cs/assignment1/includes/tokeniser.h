@@ -40,7 +40,7 @@ namespace Assignment_Tokeniser
     // * string ::= '"' instring* '"'
     //   - instring ::= ' '|'!'|'#'-'~'
     //
-    // * keyword ::= 'do'|'for'|'pointer'|'real'|'this' 
+    // * keyword ::= 'do'|'for'|'pointer'|'real'|'this'
     //   - keywords each have their own TokenKind
     //
     // * symbol ::= '@'|';'|':'|'!'|','|'.'|'=='|'<=>'|'}'|'{'|')'|'('|']'|'['|'/'
