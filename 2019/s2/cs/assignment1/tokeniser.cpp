@@ -72,6 +72,44 @@ namespace Assignment_Tokeniser
 
     ////////////////////////////////////////////////////////////////////////
 
+    //Identifiers
+    Token parse_identifier(TokenKind kind,string spelling)
+    {
+        nextch() ;
+
+        // append characters to spelling until we read past the end of the identifier
+        while ( isalnum(ch) || isdigit(ch) || ch == '_' || ch == '$' || ch == '.' )
+        {
+            spelling += ch ;
+            nextch() ;
+        }
+
+
+        return new_token(kind,spelling,start_line,start_column);
+    }
+
+    //Complete integer or start of a float
+    Token parse_zero(TokenKind kind, string spelling)
+    {
+        nextch();
+
+        return new_token(kind,spelling,start_line,start_column);
+    }
+
+    Token parse_integer(TokenKind kind, string spelling)
+    {
+        nextch();
+
+        while ( isdigit(ch) )
+        {
+            spelling += ch;
+            nextch();
+        }
+
+        return new_token(kind,spelling,start_line,start_column) ;
+    }
+
+
     // called when we find end of input or we an error
     Token parse_eoi()
     {
@@ -96,6 +134,7 @@ namespace Assignment_Tokeniser
         {
             start_line = line_num ;                 // remember current position in case we find a token
             start_column = column_num ;
+            spelling = ch;
 
             switch(ch)                              // ch is always the next char to read
             {
@@ -107,6 +146,16 @@ namespace Assignment_Tokeniser
                                                     // call a parse_*(kind,spelling) function to complete and return each kind of token
                                                     // this should follow the style used in the workshops
                                                     // but remember that the token grammar is different in this assignment
+            //Identifiers
+            case 'a'...'z':         return parse_identifier(tk_identifier,spelling);
+            case 'A'...'Z':         return parse_identifier(tk_identifier,spelling);
+            case '_':               return parse_identifier(tk_identifier,spelling);
+
+            //Digits
+            case '0':              return parse_zero(tk_integer,spelling);
+            case '1'...'9':        return parse_integer(tk_integer,spelling);
+
+
             default:
                 return parse_eoi() ;                // the next character cannot start a token, this is an error, return an EOI token
             }
