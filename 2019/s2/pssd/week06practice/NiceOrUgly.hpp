@@ -31,17 +31,11 @@ public:
     {
         int vowel = 0;
         int consonant = 0;
-        bool defVowel = false;
-        bool defConsonant = false;
-        bool vowelAvaliable = false;
-        bool consonantAvaliable = false;
-        bool marked = false;
-        int marks = 0;
+        bool ugly = false;
+        bool both = false;
         int vowelMarks = 0;
         int consonantMarks = 0;
-        int allMarks = 0;
-        bool maybeVowel = false;
-        bool maybeConsonant = false;
+        int rowMarks = 0;
 
         for (int i = 0; i < s.length(); i++)
         {
@@ -51,9 +45,8 @@ public:
                 if(consonant > 0)
                 {
                     consonant = 0;
-                    consonantAvaliable = false;
                     consonantMarks = 0;
-                    marks = 0;
+                    rowMarks = 0;
                 }
             } else if (checkConsonent(s[i]))
             {
@@ -61,62 +54,45 @@ public:
                 if(vowel > 0)
                 {
                     vowel = 0;
-                    vowelAvaliable = false;
                     vowelMarks = 0;
-                    marks = 0;
+                    rowMarks = 0;
                 }
             } else if (s[i] == '?')
             {
-                marks++;
                 vowelMarks++;
                 consonantMarks++;
-                vowelAvaliable = true;
-                consonantAvaliable = true;
+                rowMarks++;
             }
 
-            //cout << s[i] << " V: " << vowel << " C: " << consonant << " ?V " << vowelMarks << " ?C " << consonantMarks << endl;
+            //cout << s[i] << " V: " << vowel << " C: " << consonant << " ?V " << vowelMarks << " ?C " << consonantMarks << " ?T " << rowMarks << endl;
 
-            if(vowel >= 3)
+            if (vowel >= 3)
             {
-                defVowel = true;
+                ugly = true;
                 //cout << "FOUND VOWEL" << endl;
-            }
-            if(consonant >= 5)
+                break;
+            } else if (consonant >= 5)
             {
-                defConsonant = true;
+                ugly = true;
                 //cout << "FOUND CONSONANT" << endl;
-            }
-            if(consonant + consonantMarks >= 5 && consonantAvaliable == true)
+                break;
+            } else if (rowMarks >= 3)
             {
-                maybeConsonant = true;
-                //cout << "MAYBE CONSONANT" << endl;
-            }
-            if(vowel + consonantMarks >= 3 && vowelAvaliable == true)
+                both = true;
+            } else if (vowel + vowelMarks >= 3)
             {
-                maybeVowel = true;
-                //cout << "MAYBE VOWEL" << endl;
-            }
-            if(marks >= 3 && allMarks == 0)
+                both = true;
+            } else if (consonant + consonantMarks >= 5)
             {
-                allMarks = 1;
-                //cout << "ALL ???" << endl;
-            }
-            if(marks >= 5 && allMarks < 2)
-            {
-                allMarks = 2;
-                //cout << "ALL ?????" << endl;
+                both = true;
             }
         }
 
-        if (maybeVowel == true && maybeConsonant == true && allMarks == 0)
+        if (ugly == true)
         {
             return "UGLY";
-        } else if(allMarks > 0 || maybeVowel == true || maybeConsonant == true)
-        {
+        } else if (both == true) {
             return "42";
-        } else if (defVowel == true || defConsonant == true)
-        {
-            return "UGLY";
         } else
         {
             return "NICE";
