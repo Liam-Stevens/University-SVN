@@ -42,21 +42,15 @@ public:
             if(checkVowel(s[i]))
             {
                 vowel++;
-                if(consonant > 0)
-                {
-                    consonant = 0;
-                    consonantMarks = 0;
-                    rowMarks = 0;
-                }
+                consonant = 0;
+                consonantMarks = 0;
+                rowMarks = 0;
             } else if (checkConsonent(s[i]))
             {
                 consonant++;
-                if(vowel > 0)
-                {
-                    vowel = 0;
-                    vowelMarks = 0;
-                    rowMarks = 0;
-                }
+                vowel = 0;
+                vowelMarks = 0;
+                rowMarks = 0;
             } else if (s[i] == '?')
             {
                 vowelMarks++;
@@ -69,12 +63,10 @@ public:
             if (vowel >= 3)
             {
                 ugly = true;
-                //cout << "FOUND VOWEL" << endl;
                 break;
             } else if (consonant >= 5)
             {
                 ugly = true;
-                //cout << "FOUND CONSONANT" << endl;
                 break;
             } else if (rowMarks >= 3)
             {
