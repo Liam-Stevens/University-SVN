@@ -60,7 +60,7 @@ private:
 
 
             } else {
-                //cout << "Checked" << endl;
+                cout << "Checked" << endl;
                 if( (s[num] == '?' && checkConsonent(s[num+1]) && checkConsonent(s[num+2]) && checkConsonent(s[num+3]) && s[num+4] == '?' && checkVowel(s[num+5]) && checkVowel(s[num+6]))
                 || (s[num] == '?' && checkVowel(s[num+1]) && s[num+2] == '?' && checkConsonent(s[num+3]) && checkConsonent(s[num+4]) && checkConsonent(s[num+5]) && checkConsonent(s[num+6])) )
                 {
@@ -103,7 +103,7 @@ private:
             {
                 checker = checkPattern(s,i,recheck);
                 recheck = false;
-                //cout << "Letter: " << s[i] << " i: " << i << " value: " << checker << endl;
+                cout << "Letter: " << s[i] << " i: " << i << " value: " << checker << endl;
                 if (checker == -1)
                 {
                     return true;
