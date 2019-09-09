@@ -72,6 +72,16 @@ namespace Assignment_Tokeniser
 
     ////////////////////////////////////////////////////////////////////////
 
+    // called when we find end of input or we an error
+    Token parse_eoi()
+    {
+        // simulate end of input in case this is handling a bad token rather than a real end of input
+        ch = EOF ;
+
+        // return an eoi token
+        return new_token(tk_eoi,"",start_line,start_column) ;
+    }
+
     //Identifiers
     Token parse_identifier(TokenKind kind,string spelling)
     {
@@ -88,14 +98,104 @@ namespace Assignment_Tokeniser
         return new_token(kind,spelling,start_line,start_column);
     }
 
+    Token parse_exponent(TokenKind kind, string spelling)
+    {
+        nextch();
+
+        if (ch == '+' || ch == '-')
+        {
+            spelling += ch;
+            nextch();
+        } else {
+            spelling += '+';
+        }
+
+        if (ch == '0')
+        {
+            spelling += ch;
+            nextch();
+        } else if (isdigit(ch)) {
+
+            while ( isdigit(ch) )
+            {
+                spelling += ch;
+                nextch();
+            }
+
+        } else {
+            return parse_eoi();
+        }
+
+        if (spelling[spelling.length()-1] == '+' || spelling[spelling.length()-1] == '-')
+        {
+            spelling += '0';
+        }
+
+        return new_token(kind,spelling,start_line,start_column);
+    }
+
+    //Floating point numbers
+    Token parse_float(TokenKind kind, string spelling, bool leading)
+    {
+        nextch();
+        if(leading == false)
+        {
+            if(isdigit(ch) == false)
+            {
+                kind = tk_stop;
+            } else {
+                spelling = "0.";
+            }
+        }
+
+        while ( isdigit(ch) || ch == 'e' || ch == 'E')
+        {
+            if (ch == 'e' || ch == 'E')
+            {
+                if(spelling[spelling.length()-1] == '.')
+                {
+                    spelling += '0';
+                }
+                spelling += 'e';
+                return parse_exponent(kind,spelling);
+            }
+
+            spelling += ch;
+
+            nextch();
+        }
+
+        if (spelling[spelling.length()-1] == '.')
+        {
+            spelling += '0';
+        }
+
+        spelling = spelling + 'e' + '+' + '0';
+
+        return new_token(kind,spelling,start_line,start_column);
+    }
+
     //Complete integer or start of a float
     Token parse_zero(TokenKind kind, string spelling)
     {
         nextch();
 
+        if (ch == '.')
+        {
+            spelling += ch;
+            return parse_float(tk_float,spelling,true);
+        }
+
+        if (ch == 'e' || ch == 'E')
+        {
+            spelling += 'e';
+            return parse_exponent(tk_float,spelling);
+        }
+
         return new_token(kind,spelling,start_line,start_column);
     }
 
+    //All integers
     Token parse_integer(TokenKind kind, string spelling)
     {
         nextch();
@@ -106,9 +206,22 @@ namespace Assignment_Tokeniser
             nextch();
         }
 
+        if (ch == '.')
+        {
+            spelling += ch;
+            return parse_float(tk_float,spelling,true);
+        }
+
+        if (ch == 'e' || ch == 'E')
+        {
+            spelling += 'e';
+            return parse_exponent(tk_float,spelling);
+        }
+
         return new_token(kind,spelling,start_line,start_column);
     }
 
+    //Single Character Symbols
     Token parse_single_char_symbol(TokenKind kind,string spelling)
     {
         nextch();
@@ -140,9 +253,10 @@ namespace Assignment_Tokeniser
             return new_token(kind,spelling,start_line,start_column);
         }
 
-        return next_token();
+        return parse_eoi();
     }
 
+    //Determine if a comment character
     bool comment_range(char check)
     {
         switch(check)
@@ -152,6 +266,7 @@ namespace Assignment_Tokeniser
         }
     }
 
+    //EOL and ADHOC comments
     Token parse_comment(TokenKind kind,string spelling)
     {
         nextch();
@@ -212,15 +327,6 @@ namespace Assignment_Tokeniser
     }
 
 
-    // called when we find end of input or we an error
-    Token parse_eoi()
-    {
-        // simulate end of input in case this is handling a bad token rather than a real end of input
-        ch = EOF ;
-
-        // return an eoi token
-        return new_token(tk_eoi,"",start_line,start_column) ;
-    }
 
     // return the next token object by reading more of the input
     Token next_token()
@@ -256,6 +362,7 @@ namespace Assignment_Tokeniser
             //Digits
             case '0':               return parse_zero(tk_integer,spelling);
             case '1'...'9':         return parse_integer(tk_integer,spelling);
+            case '.':               return parse_float(tk_float,spelling,false);
 
             //Single Character Symbols
             case '@':               return parse_single_char_symbol(tk_at,spelling);
@@ -263,7 +370,6 @@ namespace Assignment_Tokeniser
             case ':':               return parse_single_char_symbol(tk_colon,spelling);
             case '!':               return parse_single_char_symbol(tk_not,spelling);
             case ',':               return parse_single_char_symbol(tk_comma,spelling);
-            case '.':               return parse_single_char_symbol(tk_stop,spelling);
             case '{':               return parse_single_char_symbol(tk_lcb,spelling);
             case '}':               return parse_single_char_symbol(tk_rcb,spelling);
             case '(':               return parse_single_char_symbol(tk_lrb,spelling);
@@ -272,7 +378,7 @@ namespace Assignment_Tokeniser
             case ']':               return parse_single_char_symbol(tk_rsb,spelling);
 
             //Multiple Character Symbols
-            //case '=':              return parse_multiple_char_symbol(tk_eq,spelling);
+            case '=':              return parse_multiple_char_symbol(tk_eq,spelling);
             case '<':              return parse_multiple_char_symbol(tk_spaceship,spelling);
 
             //Parse Comments
