@@ -130,9 +130,14 @@ namespace Assignment_Tokeniser
             {
                 spelling += ch ;
                 nextch();
-                return new_token(tk_spaceship,spelling,start_line,start_column);
+                return new_token(kind,spelling,start_line,start_column);
             }
 
+        } else if (spelling == "=" && ch == '=')
+        {
+            spelling += ch;
+            nextch();
+            return new_token(kind,spelling,start_line,start_column);
         }
 
         return next_token();
@@ -259,12 +264,12 @@ namespace Assignment_Tokeniser
             case '!':               return parse_single_char_symbol(tk_not,spelling);
             case ',':               return parse_single_char_symbol(tk_comma,spelling);
             case '.':               return parse_single_char_symbol(tk_stop,spelling);
-            case '}':               return parse_single_char_symbol(tk_lcb,spelling);
-            case '{':               return parse_single_char_symbol(tk_rcb,spelling);
-            case ')':               return parse_single_char_symbol(tk_lrb,spelling);
-            case '(':               return parse_single_char_symbol(tk_rrb,spelling);
-            case ']':               return parse_single_char_symbol(tk_lsb,spelling);
-            case '[':               return parse_single_char_symbol(tk_rsb,spelling);
+            case '{':               return parse_single_char_symbol(tk_lcb,spelling);
+            case '}':               return parse_single_char_symbol(tk_rcb,spelling);
+            case '(':               return parse_single_char_symbol(tk_lrb,spelling);
+            case ')':               return parse_single_char_symbol(tk_rrb,spelling);
+            case '[':               return parse_single_char_symbol(tk_lsb,spelling);
+            case ']':               return parse_single_char_symbol(tk_rsb,spelling);
 
             //Multiple Character Symbols
             //case '=':              return parse_multiple_char_symbol(tk_eq,spelling);
