@@ -106,7 +106,104 @@ namespace Assignment_Tokeniser
             nextch();
         }
 
-        return new_token(kind,spelling,start_line,start_column) ;
+        return new_token(kind,spelling,start_line,start_column);
+    }
+
+    Token parse_single_char_symbol(TokenKind kind,string spelling)
+    {
+        nextch();
+
+        return new_token(kind,spelling,start_line,start_column);
+    }
+
+    //If there is a character included in the multiple character symbols
+    Token parse_multiple_char_symbol(TokenKind kind,string spelling)
+    {
+        nextch();
+
+        if(spelling == "<" && ch == '=')
+        {
+            spelling += ch ;
+            nextch();
+
+            if (ch == '>')
+            {
+                spelling += ch ;
+                nextch();
+                return new_token(tk_spaceship,spelling,start_line,start_column);
+            }
+
+        }
+
+        return next_token();
+    }
+
+    bool comment_range(char check)
+    {
+        switch(check)
+        {
+            case ' '...'~':     return true;
+            default:            return false;
+        }
+    }
+
+    Token parse_comment(TokenKind kind,string spelling)
+    {
+        nextch();
+        if (ch == '/' || ch == '*')
+        {
+            spelling = "";
+            if (ch == '*')
+            {
+                //Adhoc Comment
+                kind = tk_adhoc_comment;
+                nextch();
+                while (true)
+                {
+                    if (comment_range(ch))
+                    {
+                        if (ch == '*')
+                        {
+                            nextch();
+                            if (ch == '/')
+                            {
+                                nextch();
+                                break;
+                            } else {
+                                spelling += '*';
+                                spelling += ch;
+                            }
+                        } else {
+                            spelling += ch;
+                        }
+                    } else if (ch == '\n')
+                    {
+
+                    }
+                    nextch();
+                }
+
+            } else {
+                //End of Line Comment
+                kind = tk_eol_comment;
+                nextch();
+                while (true)
+                {
+                    if (comment_range(ch))
+                    {
+                        spelling += ch;
+                    } else if (ch == '\n')
+                    {
+                        nextch();
+                        break;
+                    }
+                    nextch();
+                }
+            }
+
+        }
+
+        return new_token(kind,spelling,start_line,start_column);
     }
 
 
@@ -147,13 +244,34 @@ namespace Assignment_Tokeniser
                                                     // this should follow the style used in the workshops
                                                     // but remember that the token grammar is different in this assignment
             //Identifiers
-            case 'a'...'z':         return parse_identifier(tk_identifier,spelling);
-            case 'A'...'Z':         return parse_identifier(tk_identifier,spelling);
+            case 'a'...'z':
+            case 'A'...'Z':
             case '_':               return parse_identifier(tk_identifier,spelling);
 
             //Digits
-            case '0':              return parse_zero(tk_integer,spelling);
-            case '1'...'9':        return parse_integer(tk_integer,spelling);
+            case '0':               return parse_zero(tk_integer,spelling);
+            case '1'...'9':         return parse_integer(tk_integer,spelling);
+
+            //Single Character Symbols
+            case '@':               return parse_single_char_symbol(tk_at,spelling);
+            case ';':               return parse_single_char_symbol(tk_semi,spelling);
+            case ':':               return parse_single_char_symbol(tk_colon,spelling);
+            case '!':               return parse_single_char_symbol(tk_not,spelling);
+            case ',':               return parse_single_char_symbol(tk_comma,spelling);
+            case '.':               return parse_single_char_symbol(tk_stop,spelling);
+            case '}':               return parse_single_char_symbol(tk_lcb,spelling);
+            case '{':               return parse_single_char_symbol(tk_rcb,spelling);
+            case ')':               return parse_single_char_symbol(tk_lrb,spelling);
+            case '(':               return parse_single_char_symbol(tk_rrb,spelling);
+            case ']':               return parse_single_char_symbol(tk_lsb,spelling);
+            case '[':               return parse_single_char_symbol(tk_rsb,spelling);
+
+            //Multiple Character Symbols
+            //case '=':              return parse_multiple_char_symbol(tk_eq,spelling);
+            case '<':              return parse_multiple_char_symbol(tk_spaceship,spelling);
+
+            //Parse Comments
+            case '/':               return parse_comment(tk_div,spelling);
 
 
             default:
