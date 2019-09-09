@@ -221,6 +221,37 @@ namespace Assignment_Tokeniser
         return new_token(kind,spelling,start_line,start_column);
     }
 
+    bool validate_string(char check)
+    {
+        switch(check)
+        {
+            case ' ':
+            case '!':
+            case '#'...'~':     return true;
+            default:            return false;
+        }
+    }
+
+    //Strings
+    Token parse_string(TokenKind kind,string spelling)
+    {
+        nextch();
+
+        while (ch != '"')
+        {
+            if(validate_string(ch))
+            {
+                spelling += ch;
+                nextch();
+            } else {
+                return parse_eoi();
+            }
+        }
+        nextch();
+
+        return new_token(kind,spelling,start_line,start_column);
+    }
+
     //Single Character Symbols
     Token parse_single_char_symbol(TokenKind kind,string spelling)
     {
@@ -273,6 +304,7 @@ namespace Assignment_Tokeniser
         if (ch == '/' || ch == '*')
         {
             spelling = "";
+            cout << "HELP: " << ch << endl;
             if (ch == '*')
             {
                 //Adhoc Comment
@@ -354,6 +386,13 @@ namespace Assignment_Tokeniser
                                                     // call a parse_*(kind,spelling) function to complete and return each kind of token
                                                     // this should follow the style used in the workshops
                                                     // but remember that the token grammar is different in this assignment
+
+            case '\r':
+            case '\t':
+                cout << "SPECIAL CHARACTER" << endl;
+                nextch();
+                break;
+
             //Identifiers
             case 'a'...'z':
             case 'A'...'Z':
@@ -383,6 +422,9 @@ namespace Assignment_Tokeniser
 
             //Parse Comments
             case '/':               return parse_comment(tk_div,spelling);
+
+            //Parse Strings
+            case '"':               return parse_string(tk_string,"");
 
 
             default:
