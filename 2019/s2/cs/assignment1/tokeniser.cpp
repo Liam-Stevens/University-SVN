@@ -15,16 +15,59 @@ namespace Assignment_Tokeniser
     // is the token of the given kind or does it belong to the given grouping?
     bool token_is_in(Token token,TokenKind kind_or_grouping)
     {
-        TokenKind kind = token_kind(token) ;
+        //TokenKind kind = token_kind(token) ;
 
         // check identity first
-        if ( kind == kind_or_grouping ) return true ;
+        if ( token == kind_or_grouping ) return true ;
 
         // this is best written as nested switch statements
         switch(kind_or_grouping)
         {
-        default:
-            return false ;
+            case tk_number:
+                switch(token)
+                {
+                    case tk_integer:
+                    case tk_float:
+                        return true;
+                    default:
+                        return false;
+                }
+            case tk_keyword:
+                switch(token)
+                {
+                    case tk_do:
+                    case tk_for:
+                    case tk_pointer:
+                    case tk_real:
+                    case tk_this:
+                        return true;
+                    default:
+                        return false;
+                }
+            case tk_symbol:
+                switch(token)
+                {
+                    case tk_at:
+                    case tk_semi:
+                    case tk_colon:
+                    case tk_not:
+                    case tk_comma:
+                    case tk_stop:
+                    case tk_eq:
+                    case tk_spaceship:
+                    case tk_lcb:
+                    case tk_rcb:
+                    case tk_lrb:
+                    case tk_rrb:
+                    case tk_lsb:
+                    case tk_rsb:
+                    case tk_div:
+                        return true;
+                    default:
+                        return false;
+                }
+            default:
+                return false;
         }
     }
 
@@ -68,6 +111,14 @@ namespace Assignment_Tokeniser
 
                                     // additional code will be required here to handle preprocessing of '\t' and '\r'
                                     // you should also consider building a line by line copy of the input for use by token_context()
+        if ( ch == '\t' )
+        {
+            int increment = column_num%4;
+            column_num = column_num + 4 - increment;
+        }
+
+
+
     }
 
     ////////////////////////////////////////////////////////////////////////
@@ -94,10 +145,18 @@ namespace Assignment_Tokeniser
             nextch() ;
         }
 
+        //Find if it is a keyword
+        kind = string_to_token_kind(spelling);
+
+        if ( !token_is_in(kind,tk_keyword) )
+        {
+            kind = tk_identifier;
+        }
 
         return new_token(kind,spelling,start_line,start_column);
     }
 
+    //The exponent in a float
     Token parse_exponent(TokenKind kind, string spelling)
     {
         nextch();
@@ -143,6 +202,7 @@ namespace Assignment_Tokeniser
             if(isdigit(ch) == false)
             {
                 kind = tk_stop;
+                return new_token(kind,spelling,start_line,start_column);
             } else {
                 spelling = "0.";
             }
@@ -304,7 +364,7 @@ namespace Assignment_Tokeniser
         if (ch == '/' || ch == '*')
         {
             spelling = "";
-            cout << "HELP: " << ch << endl;
+
             if (ch == '*')
             {
                 //Adhoc Comment
@@ -389,7 +449,7 @@ namespace Assignment_Tokeniser
 
             case '\r':
             case '\t':
-                cout << "SPECIAL CHARACTER" << endl;
+                //cout << "SPECIAL CHARACTER" << endl;
                 nextch();
                 break;
 
