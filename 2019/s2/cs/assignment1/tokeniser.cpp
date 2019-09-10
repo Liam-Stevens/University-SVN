@@ -100,14 +100,16 @@ namespace Assignment_Tokeniser
     {
         if ( ch == EOF ) return ;
 
+        char lastChar = ch;
+
         if ( ch == '\n' )           // if last ch was newline ...
         {
             line_num++ ;            // increment line number
             column_num = 0 ;        // reset column number
         }
 
-        ch = read_char() ;          // read the next character, probably from stdin but this could change during testing
-        column_num++ ;              // increment the column number
+        ch = read_char();           // read the next character, probably from stdin but this could change during testing
+        column_num++;               // increment the column number
 
                                     // additional code will be required here to handle preprocessing of '\t' and '\r'
                                     // you should also consider building a line by line copy of the input for use by token_context()
@@ -115,6 +117,16 @@ namespace Assignment_Tokeniser
         {
             int increment = column_num%4;
             column_num = column_num + 4 - increment;
+            ch = ' ';
+        }
+
+        if ( ch == '\r' )
+        {
+            ch = read_char();
+            if (ch != '\n')
+            {
+                ch = '\n';
+            }
         }
 
 
@@ -390,7 +402,7 @@ namespace Assignment_Tokeniser
                         }
                     } else if (ch == '\n')
                     {
-
+                        spelling += ch;
                     }
                     nextch();
                 }
@@ -448,8 +460,11 @@ namespace Assignment_Tokeniser
                                                     // but remember that the token grammar is different in this assignment
 
             case '\r':
+                cout << "RETURN" << endl;
+                nextch();
+                break;
             case '\t':
-                //cout << "SPECIAL CHARACTER" << endl;
+                cout << "TAB" << endl;
                 nextch();
                 break;
 
