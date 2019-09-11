@@ -3,6 +3,7 @@
 #include "tokeniser.h"
 #include <iostream>
 #include <ctype.h>
+#include <vector>
 
 // to shorten the code
 using namespace std ;
@@ -11,20 +12,18 @@ using namespace std ;
 
 namespace Assignment_Tokeniser
 {
-
     // is the token of the given kind or does it belong to the given grouping?
-    bool token_is_in(Token token,TokenKind kind_or_grouping)
+    bool token_kind_is_in(TokenKind kind,TokenKind kind_or_grouping)
     {
-        //TokenKind kind = token_kind(token) ;
 
         // check identity first
-        if ( token == kind_or_grouping ) return true ;
+        if ( kind == kind_or_grouping ) return true ;
 
         // this is best written as nested switch statements
         switch(kind_or_grouping)
         {
             case tk_number:
-                switch(token)
+                switch(kind)
                 {
                     case tk_integer:
                     case tk_float:
@@ -33,7 +32,7 @@ namespace Assignment_Tokeniser
                         return false;
                 }
             case tk_keyword:
-                switch(token)
+                switch(kind)
                 {
                     case tk_do:
                     case tk_for:
@@ -45,7 +44,7 @@ namespace Assignment_Tokeniser
                         return false;
                 }
             case tk_symbol:
-                switch(token)
+                switch(kind)
                 {
                     case tk_at:
                     case tk_semi:
@@ -71,6 +70,13 @@ namespace Assignment_Tokeniser
         }
     }
 
+    bool token_is_in(Token token,TokenKind kind_or_grouping)
+    {
+        TokenKind kind = token_kind(token) ;
+
+        return token_kind_is_in(kind,kind_or_grouping);
+    }
+
     // the current input character, initiliased to ' ' which we ignore
     // the eof marker can be confused with a legal character but not one accepted by our tokeniser
     static char ch = ' ' ;
@@ -83,6 +89,10 @@ namespace Assignment_Tokeniser
     static int start_line = 0 ;
     static int start_column = 0 ;
 
+    static vector<string> input_line(1,"");
+
+    int context_token_num = 0;
+
     // generate a context string for the given token
     // it shows the line before the token,
     // the line containing the token up to the end of the token, and
@@ -91,7 +101,33 @@ namespace Assignment_Tokeniser
     // if a token extends over more than one line, only the part of the token on the first line is included
     string token_context(Token token)
     {
-        return "" ;
+        //string spelling = token_spelling(token);
+        //int token_length = spelling.length();
+        int found_line = token_line(token);
+        int found_column = token_column(token);
+
+        //Print all lines before the current line
+        for (int i = 0; i < found_line-1; i++)
+        {
+            cout << "   " << i+1 << ": " << input_line[i];
+        }
+
+        //Print current lines
+        cout << "   " << found_line << ": ";
+        for (int i = 0; i < found_column; i++)
+        {
+            cout << input_line[found_line-1][i];
+        }
+        cout << endl;
+
+        //Print arrow
+        for (int i = 0; i < found_column+5; i++)
+        {
+            cout << ' ';
+        }
+        cout << '^' << endl;
+
+        return "";
     }
 
     // read next character if not at the end of input
@@ -106,6 +142,7 @@ namespace Assignment_Tokeniser
         {
             line_num++ ;            // increment line number
             column_num = 0 ;        // reset column number
+            input_line.push_back("");
         }
 
         ch = read_char();           // read the next character, probably from stdin but this could change during testing
@@ -118,6 +155,11 @@ namespace Assignment_Tokeniser
             int increment = column_num%4;
             column_num = column_num + 4 - increment;
             ch = ' ';
+
+            for (int i = increment; i < 4; i++)
+            {
+                input_line[line_num-1] += ch;
+            }
         }
 
         if ( ch == '\r' )
@@ -129,7 +171,7 @@ namespace Assignment_Tokeniser
             }
         }
 
-
+        input_line[line_num-1] += ch;
 
     }
 
@@ -160,7 +202,7 @@ namespace Assignment_Tokeniser
         //Find if it is a keyword
         kind = string_to_token_kind(spelling);
 
-        if ( !token_is_in(kind,tk_keyword) )
+        if ( !token_kind_is_in(kind,tk_keyword) )
         {
             kind = tk_identifier;
         }
@@ -403,6 +445,8 @@ namespace Assignment_Tokeniser
                     } else if (ch == '\n')
                     {
                         spelling += ch;
+                    } else {
+                        parse_eoi();
                     }
                     nextch();
                 }
@@ -458,16 +502,6 @@ namespace Assignment_Tokeniser
                                                     // call a parse_*(kind,spelling) function to complete and return each kind of token
                                                     // this should follow the style used in the workshops
                                                     // but remember that the token grammar is different in this assignment
-
-            case '\r':
-                cout << "RETURN" << endl;
-                nextch();
-                break;
-            case '\t':
-                cout << "TAB" << endl;
-                nextch();
-                break;
-
             //Identifiers
             case 'a'...'z':
             case 'A'...'Z':
