@@ -101,22 +101,45 @@ namespace Assignment_Tokeniser
     // if a token extends over more than one line, only the part of the token on the first line is included
     string token_context(Token token)
     {
-        //string spelling = token_spelling(token);
-        //int token_length = spelling.length();
+        string spelling = token_spelling(token);
+        int token_length = spelling.length();
         int found_line = token_line(token);
         int found_column = token_column(token);
 
         //Print all lines before the current line
-        for (int i = 0; i < found_line-1; i++)
+        if (found_line > 1)
         {
-            cout << "   " << i+1 << ": " << input_line[i];
+            cout << "   " << found_line-1 << ": " << input_line[found_line-2];
         }
 
         //Print current lines
         cout << "   " << found_line << ": ";
-        for (int i = 0; i < found_column; i++)
+        if (token_kind(token) == tk_eol_comment || token_kind(token) == tk_adhoc_comment)
         {
-            cout << input_line[found_line-1][i];
+            //COMMENT PRINT
+            for (int i = 0; i < input_line[found_line-1].length(); i++)
+            {
+                if (token_kind(token) == tk_eol_comment && input_line[found_line-1][i] == '\n')
+                {
+                    break;
+                }
+                cout << input_line[found_line-1][i];
+            }
+
+        } else {
+            //If it is not a special token
+            for (int i = 0; i < found_column + token_length - 1; i++)
+            {
+                if ( i >= found_column)
+                {
+                    if (input_line[found_line-1][i] != spelling[i - found_column + 1])
+                    {
+                        //cout << endl << "CONFLICT: " << input_line[found_line-1][i] << " | " << spelling[i - found_column + 1] << endl;
+                        break;
+                    }
+                }
+                cout << input_line[found_line-1][i];
+            }
         }
         cout << endl;
 
