@@ -101,6 +101,8 @@ namespace Assignment_Tokeniser
     // if a token extends over more than one line, only the part of the token on the first line is included
     string token_context(Token token)
     {
+        string full_context = "";
+
         string spelling = token_spelling(token);
         int token_length = spelling.length();
         int found_line = token_line(token);
@@ -109,11 +111,18 @@ namespace Assignment_Tokeniser
         //Print all lines before the current line
         if (found_line > 1)
         {
-            cout << "   " << found_line-1 << ": " << input_line[found_line-2];
+            full_context.append("   ");
+            full_context.append(to_string(found_line-1));
+            full_context.append(": ");
+            full_context.append(input_line[found_line-2]);
+            //cout << "   " << found_line-1 << ": " << input_line[found_line-2];
         }
 
         //Print current lines
-        cout << "   " << found_line << ": ";
+        full_context.append("   ");
+        full_context.append(to_string(found_line));
+        full_context.append(": ");
+        //cout << "   " << found_line << ": ";
         if (token_kind(token) == tk_eol_comment || token_kind(token) == tk_adhoc_comment)
         {
             //COMMENT PRINT
@@ -123,7 +132,8 @@ namespace Assignment_Tokeniser
                 {
                     break;
                 }
-                cout << input_line[found_line-1][i];
+                full_context += input_line[found_line-1][i];
+                //cout << input_line[found_line-1][i];
             }
 
         } else {
@@ -138,19 +148,24 @@ namespace Assignment_Tokeniser
                         break;
                     }
                 }
-                cout << input_line[found_line-1][i];
+                full_context += input_line[found_line-1][i];
+                //cout << input_line[found_line-1][i];
             }
         }
-        cout << endl;
+        full_context += '\n';
+        //cout << endl;
 
         //Print arrow
         for (int i = 0; i < found_column+5; i++)
         {
-            cout << ' ';
+            full_context += ' ';
+            //cout << ' ';
         }
-        cout << '^' << endl;
+        full_context += '^';
+        full_context += '\n';
+        //cout << '^' << endl;
 
-        return "";
+        return full_context;
     }
 
     // read next character if not at the end of input
