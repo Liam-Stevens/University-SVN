@@ -20,7 +20,7 @@ int main()
 	test33.push_back(6);*/
 
 	MinimalDifference test;
-	cout << test.findNumber(1987,9123,1) << endl;
+	cout << test.findNumber(1,1,999) << endl;
 
 
 	return 0;

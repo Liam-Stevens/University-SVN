@@ -23,8 +23,8 @@ public:
     {
         C = digitSum(C);
 
-        int minDiff = B - A;
-        int currentNum = 0;
+        int minDiff = (B - A) + 1;
+        int currentNum = 1;
 
         for(int i = A; i <= B; i++)
         {
