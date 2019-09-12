@@ -164,6 +164,11 @@ namespace Assignment_Tokeniser
                 //cout << input_line[found_line-1][i];
             }
 
+            if (token_kind(token) == tk_eol_comment)
+            {
+                full_context += '\n';
+            }
+
         } else {
             //If it is not a special token
             for (int i = 0; i < found_column + token_length - 1; i++)
@@ -179,8 +184,9 @@ namespace Assignment_Tokeniser
                 full_context += input_line[found_line-1][i];
                 //cout << input_line[found_line-1][i];
             }
+            full_context += '\n';
         }
-        full_context += '\n';
+
         //cout << endl;
 
         //Print arrow
