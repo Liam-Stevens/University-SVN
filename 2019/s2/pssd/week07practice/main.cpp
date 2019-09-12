@@ -1,4 +1,4 @@
-#include "LotteryTicket.hpp"
+#include "MinimalDifference.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -19,8 +19,8 @@ int main()
 	test33.push_back(4);
 	test33.push_back(6);*/
 
-	LotteryTicket test;
-	cout << test.buy(2,1,5,10,50) << endl;
+	MinimalDifference test;
+	cout << test.findNumber(1987,9123,1) << endl;
 
 
 	return 0;
