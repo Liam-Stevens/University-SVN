@@ -24,7 +24,7 @@ public:
         C = digitSum(C);
 
         int minDiff = (B - A) + 1;
-        int currentNum = 1;
+        int currentNum = B;
 
         for(int i = A; i <= B; i++)
         {
