@@ -99,6 +99,25 @@ namespace Assignment_Tokeniser
     // a line with a ^ marking the token's position
     // the lines are prefixed by line numbers, right justified in four spaces, followed by ': '
     // if a token extends over more than one line, only the part of the token on the first line is included
+
+    //Determines the number of digits in a number in order to pad that many zeroes
+    int numOfDigits(int num)
+    {
+        if (num == 0)
+        {
+            return 1;
+        } else {
+            int digits = 0;
+            while(num > 0)
+            {
+                num = num / 10;
+                digits++;
+            }
+            return digits;
+        }
+    }
+
+    //Makes a string for context
     string token_context(Token token)
     {
         string full_context = "";
@@ -111,7 +130,11 @@ namespace Assignment_Tokeniser
         //Print all lines before the current line
         if (found_line > 1)
         {
-            full_context.append("   ");
+            //full_context.append("   ");
+            for (int i = 0; i < 4-numOfDigits(found_line-1); i++)
+            {
+                full_context += ' ';
+            }
             full_context.append(to_string(found_line-1));
             full_context.append(": ");
             full_context.append(input_line[found_line-2]);
@@ -119,7 +142,12 @@ namespace Assignment_Tokeniser
         }
 
         //Print current lines
-        full_context.append("   ");
+        //full_context.append("   ");
+        for (int i = 0; i < 4-numOfDigits(found_line); i++)
+        {
+            full_context += ' ';
+        }
+
         full_context.append(to_string(found_line));
         full_context.append(": ");
         //cout << "   " << found_line << ": ";
