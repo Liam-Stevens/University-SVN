@@ -3,155 +3,98 @@
 #include <vector>
 using namespace std;
 
-class CountExpressions
+class LotteryTicket
 {
 private:
-    int num1;
-    int num2;
-    int comparison;
+    int bills[4];
 
-    int doOperation(int x, int y, int operation)
+    int sumVector(vector<int> picked)
     {
-        if(operation == '*')
+        int sum = 0;
+        for (int i = 0; i < picked.size(); i++)
         {
-            return x * y;
-        } else if (operation == '+')
-        {
-            return x + y;
-        } else if (operation == '-')
-        {
-            return x - y;
+            sum = sum + bills[picked[i]];
         }
+        return sum;
     }
 
-    int evaluateExpression(vector<int> numbers, vector<char> operators)
+    bool contains(int num, vector<int> picked)
     {
-        int num = numbers[0];
-        num = doOperation(num,numbers[1],operators[0]);
-        num = doOperation(num,numbers[2],operators[1]);
-        num = doOperation(num,numbers[3],operators[2]);
+        for (int i = 0; i < picked.size(); i++)
+        {
+            if(num == picked[i])
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
-
-        if (num == comparison)
+    int calculate(int price, vector<int> picked)
+    {
+        if(sumVector(picked) == price) {
+            return 0;
+        } else if (sumVector(picked) > price) {
+            return 1;
+        } else if (picked.size() == 4 && sumVector(picked) != price)
         {
             return 1;
-        } else {
-            return 0;
         }
-    }
 
-    int generateNumbers(vector<int> numbers, vector<char> operators)
-    {
-        if(numbers.size() == 4)
-        {
-            return evaluateExpression(numbers, operators);
-        } else if (numbers.size() == 0)
-        {
-            numbers.push_back(num1);
-            int tmp1 = generateNumbers(numbers, operators);
-            numbers[0] = num2;
-            int tmp2 = generateNumbers(numbers, operators);
+        int tmp[4] = {1,1,1,1};
 
-            return tmp1 + tmp2;
-        } else if (numbers.size() == 1)
+        picked.push_back(-1);
+        if (contains(0,picked) == false)
         {
-            numbers.push_back(num1);
-            int tmp1 = generateNumbers(numbers, operators);
-            numbers[1] = num2;
-            int tmp2 = generateNumbers(numbers, operators);
+            picked[picked.size()-1] = 0;
+            tmp[0] = calculate(price,picked);
+        }
 
-            return tmp1 + tmp2;
-        } else if (numbers.size() == 2)
+        if (contains(1,picked) == false)
         {
-            if ((numbers[0] == num1 && numbers[1] == num2) || (numbers[1] == num1 && numbers[0] == num2))
-            {
-                numbers.push_back(num1);
-                int tmp1 = generateNumbers(numbers, operators);
-                numbers[2] = num2;
-                int tmp2 = generateNumbers(numbers, operators);
+            picked[picked.size()-1] = 1;
+            tmp[1] = calculate(price,picked);
+        }
 
-                return tmp1 + tmp2;
-            } else if (numbers[0] == num1 && numbers[1] == num1)
-            {
-                numbers.push_back(num2);
-                return generateNumbers(numbers, operators);
-            }  else if (numbers[0] == num2 && numbers[1] == num2)
-            {
-                numbers.push_back(num1);
-                return generateNumbers(numbers, operators);
-            }
-        } else if (numbers.size() == 3)
+        if (contains(2,picked) == false)
         {
-            if((numbers[0] == num1 && numbers[1] == num2) || (numbers[0] == num2 && numbers[1] == num1))
+            picked[picked.size()-1] = 2;
+            tmp[2] = calculate(price,picked);
+        }
+
+        if (contains(3,picked) == false)
+        {
+            picked[picked.size()-1] = 3;
+            tmp[3] = calculate(price,picked);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (tmp[i] == 0)
             {
-                if(numbers[2] == num1)
-                {
-                    numbers.push_back(num2);
-                    return generateNumbers(numbers, operators);
-                } else {
-                    numbers.push_back(num1);
-                    return generateNumbers(numbers, operators);
-                }
-            } else if (numbers[2] == num1)
-            {
-                numbers.push_back(num1);
-                return generateNumbers(numbers, operators);
-            } else if (numbers[2] == num2)
-            {
-                numbers.push_back(num2);
-                return generateNumbers(numbers, operators);
+                return 0;
             }
         }
-    }
 
-    int generateOperators(vector<char> current)
-    {
-        if(current.size() == 3)
-        {
-            vector<int> numbers;
-            return generateNumbers(numbers,current);
-        } else if(current.size() == 0)
-        {
-            current.push_back('*');
-            int tmp1 = generateOperators(current);
-            current[0] = '+';
-            int tmp2 = generateOperators(current);
-            current[0] = '-';
-            int tmp3 = generateOperators(current);
-
-            return tmp1 + tmp2 + tmp3;
-        } else if(current.size() == 1)
-        {
-            current.push_back('*');
-            int tmp1 = generateOperators(current);
-            current[1] = '+';
-            int tmp2 = generateOperators(current);
-            current[1] = '-';
-            int tmp3 = generateOperators(current);
-
-            return tmp1 + tmp2 + tmp3;
-        } else if(current.size() == 2)
-        {
-            current.push_back('*');
-            int tmp1 = generateOperators(current);
-            current[2] = '+';
-            int tmp2 = generateOperators(current);
-            current[2] = '-';
-            int tmp3 = generateOperators(current);
-
-            return tmp1 + tmp2 + tmp3;
-        }
+        return 1;
     }
 
 public:
-    int calcExpressions(int x, int y, int val)
+    string buy(int price, int b1, int b2, int b3, int b4)
     {
-        num1 = x;
-        num2 = y;
-        comparison = val;
+        bills[0] = b1;
+        bills[1] = b2;
+        bills[2] = b3;
+        bills[3] = b4;
 
-        vector<char> nothing;
+        vector<int> choices;
+        int results = calculate(price, choices);
 
-        return generateOperators(nothing);
+        if (results == 0)
+        {
+            return "POSSIBLE";
+        } else {
+            return "IMPOSSIBLE";
+        }
     }
 };
