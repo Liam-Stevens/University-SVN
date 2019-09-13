@@ -3,6 +3,10 @@
 # it assumes tests are in the directory containing this script
 # it assumes that the executable is in the parent directory
 
+# set output and errors to buffering, disable error contexts
+export CSTOOLS_IOBUFFER_OUTPUT=iob_buffer
+export CSTOOLS_IOBUFFER_ERRORS=iob_buffer:iob_no_context
+# kill off traces and logs
 export CSTOOLS_IOBUFFER_TRACES=iob_disable
 export CSTOOLS_IOBUFFER_LOGS=iob_disable
 

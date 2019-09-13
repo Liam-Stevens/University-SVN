@@ -127,10 +127,9 @@ namespace Assignment_Tokeniser
         int found_line = token_line(token);
         int found_column = token_column(token);
 
-        //Print all lines before the current line
+        //Append the line before the current line
         if (found_line > 1)
         {
-            //full_context.append("   ");
             for (int i = 0; i < 4-numOfDigits(found_line-1); i++)
             {
                 full_context += ' ';
@@ -138,11 +137,9 @@ namespace Assignment_Tokeniser
             full_context.append(to_string(found_line-1));
             full_context.append(": ");
             full_context.append(input_line[found_line-2]);
-            //cout << "   " << found_line-1 << ": " << input_line[found_line-2];
         }
 
         //Print current lines
-        //full_context.append("   ");
         for (int i = 0; i < 4-numOfDigits(found_line); i++)
         {
             full_context += ' ';
@@ -150,7 +147,7 @@ namespace Assignment_Tokeniser
 
         full_context.append(to_string(found_line));
         full_context.append(": ");
-        //cout << "   " << found_line << ": ";
+
         if (token_kind(token) == tk_eol_comment || token_kind(token) == tk_adhoc_comment)
         {
             //COMMENT PRINT
@@ -161,9 +158,9 @@ namespace Assignment_Tokeniser
                     break;
                 }
                 full_context += input_line[found_line-1][i];
-                //cout << input_line[found_line-1][i];
             }
 
+            //Attach end of line on end of line comment
             if (token_kind(token) == tk_eol_comment)
             {
                 full_context += '\n';
@@ -175,29 +172,25 @@ namespace Assignment_Tokeniser
             {
                 if ( i >= found_column)
                 {
+                    //Stops output of characters if spelling is difference to line
                     if (input_line[found_line-1][i] != spelling[i - found_column + 1])
                     {
-                        //cout << endl << "CONFLICT: " << input_line[found_line-1][i] << " | " << spelling[i - found_column + 1] << endl;
                         break;
                     }
                 }
+                //Appends Character
                 full_context += input_line[found_line-1][i];
-                //cout << input_line[found_line-1][i];
             }
             full_context += '\n';
         }
-
-        //cout << endl;
 
         //Print arrow
         for (int i = 0; i < found_column+5; i++)
         {
             full_context += ' ';
-            //cout << ' ';
         }
         full_context += '^';
         full_context += '\n';
-        //cout << '^' << endl;
 
         return full_context;
     }
@@ -222,6 +215,7 @@ namespace Assignment_Tokeniser
 
                                     // additional code will be required here to handle preprocessing of '\t' and '\r'
                                     // you should also consider building a line by line copy of the input for use by token_context()
+        //Handle Tab Characters
         if ( ch == '\t' )
         {
             int increment = column_num%4;
@@ -234,6 +228,7 @@ namespace Assignment_Tokeniser
             }
         }
 
+        //Handle the Carriage Character
         if ( ch == '\r' )
         {
             ch = read_char();
@@ -243,6 +238,7 @@ namespace Assignment_Tokeniser
             }
         }
 
+        //Record entire line
         input_line[line_num-1] += ch;
 
     }
@@ -287,6 +283,7 @@ namespace Assignment_Tokeniser
     {
         nextch();
 
+        //Check for sign following exponent
         if (ch == '+' || ch == '-')
         {
             spelling += ch;
@@ -295,6 +292,7 @@ namespace Assignment_Tokeniser
             spelling += '+';
         }
 
+        //Handle Numbers following exponent
         if (ch == '0')
         {
             spelling += ch;
@@ -311,6 +309,7 @@ namespace Assignment_Tokeniser
             return parse_eoi();
         }
 
+        //If no numbers following sign, attach zero
         if (spelling[spelling.length()-1] == '+' || spelling[spelling.length()-1] == '-')
         {
             spelling += '0';
@@ -323,8 +322,11 @@ namespace Assignment_Tokeniser
     Token parse_float(TokenKind kind, string spelling, bool leading)
     {
         nextch();
+
+        //If called from next_token
         if(leading == false)
         {
+            //Find if a sole period
             if(isdigit(ch) == false)
             {
                 kind = tk_stop;
@@ -334,6 +336,7 @@ namespace Assignment_Tokeniser
             }
         }
 
+        //Continue until exponent is found or end of float
         while ( isdigit(ch) || ch == 'e' || ch == 'E')
         {
             if (ch == 'e' || ch == 'E')
@@ -351,6 +354,7 @@ namespace Assignment_Tokeniser
             nextch();
         }
 
+        //Append zero if no numbers following decimal point
         if (spelling[spelling.length()-1] == '.')
         {
             spelling += '0';
@@ -366,12 +370,14 @@ namespace Assignment_Tokeniser
     {
         nextch();
 
+        //Check if a float
         if (ch == '.')
         {
             spelling += ch;
             return parse_float(tk_float,spelling,true);
         }
 
+        //Check if an exponent
         if (ch == 'e' || ch == 'E')
         {
             spelling += 'e';
@@ -386,18 +392,21 @@ namespace Assignment_Tokeniser
     {
         nextch();
 
+        //Continue until numbers end
         while ( isdigit(ch) )
         {
             spelling += ch;
             nextch();
         }
 
+        //Check if float
         if (ch == '.')
         {
             spelling += ch;
             return parse_float(tk_float,spelling,true);
         }
 
+        //Check if exponent
         if (ch == 'e' || ch == 'E')
         {
             spelling += 'e';
@@ -409,6 +418,7 @@ namespace Assignment_Tokeniser
 
     bool validate_string(char check)
     {
+        //Characters valid in a string
         switch(check)
         {
             case ' ':
@@ -423,6 +433,7 @@ namespace Assignment_Tokeniser
     {
         nextch();
 
+        //Append characters until " or invalid string
         while (ch != '"')
         {
             if(validate_string(ch))
@@ -451,11 +462,13 @@ namespace Assignment_Tokeniser
     {
         nextch();
 
+        //Validate spaceship or equals
         if(spelling == "<" && ch == '=')
         {
             spelling += ch ;
             nextch();
 
+            //Check for ending character
             if (ch == '>')
             {
                 spelling += ch ;
@@ -476,6 +489,7 @@ namespace Assignment_Tokeniser
     //Determine if a comment character
     bool comment_range(char check)
     {
+        //Characters valid in a comment
         switch(check)
         {
             case ' '...'~':     return true;
@@ -496,6 +510,7 @@ namespace Assignment_Tokeniser
                 //Adhoc Comment
                 kind = tk_adhoc_comment;
                 nextch();
+                //Add characters that are valid to an adhoc comment
                 while (true)
                 {
                     if (comment_range(ch))
@@ -503,6 +518,7 @@ namespace Assignment_Tokeniser
                         if (ch == '*')
                         {
                             nextch();
+                            //Stops adding characters if it finds */
                             if (ch == '/')
                             {
                                 nextch();
@@ -527,6 +543,7 @@ namespace Assignment_Tokeniser
                 //End of Line Comment
                 kind = tk_eol_comment;
                 nextch();
+                //Appends characters in the comment validitity
                 while (true)
                 {
                     if (comment_range(ch))

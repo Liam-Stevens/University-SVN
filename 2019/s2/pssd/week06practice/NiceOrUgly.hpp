@@ -120,7 +120,7 @@ private:
                 //cout << "Letter: " << s[i] << " i: " << i << " value: " << checker << endl;
                 if (checker == -1)
                 {
-                    cout << "FOUND PATTERN" << endl;
+                    //cout << "FOUND PATTERN" << endl;
                     return true;
                 } else if (checker >= 1)
                 {
@@ -181,26 +181,26 @@ public:
 
             if (vowel >= 3)
             {
-                cout << "FOUND VOWEL" << endl;
+                //cout << "FOUND VOWEL" << endl;
                 ugly = true;
                 break;
             } else if (consonant >= 5)
             {
-                cout << "FOUND CONSONANT" << endl;
+                //cout << "FOUND CONSONANT" << endl;
                 ugly = true;
                 break;
             } else if (rowMarks >= 3 && both != true)
             {
                 both = true;
-                cout << "FOUND ???" << endl;
+                //cout << "FOUND ???" << endl;
             } else if (vowel + vowelMarks >= 3 && both != true)
             {
                 both = true;
-                cout << "MAYBE VOWEL" << endl;
+                //cout << "MAYBE VOWEL" << endl;
             } else if (consonant + consonantMarks >= 5 && both != true)
             {
                 both = true;
-                cout << "MAYBE CONSONANT" << endl;
+                //cout << "MAYBE CONSONANT" << endl;
             }
         }
         cout << s << endl;
