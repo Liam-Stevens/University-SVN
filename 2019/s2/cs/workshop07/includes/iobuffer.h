@@ -28,7 +28,9 @@ namespace CS_IO_Buffers
         iob_immediate,      // print buffer, future write_to_* calls are immmediately followed by a print_* call
 
                             // this option only applies to errors
-        iob_buffer_why      // future write_to_errors calls are buffered, fatal_error calls erase_errors but prints it's message
+        iob_buffer_why,     // future write_to_errors calls are buffered, fatal_error calls erase_errors but prints it's message
+        iob_context,        // fatal_error will call construct_error_context() if the error message is not ""
+        iob_no_context      // fatal_error will not call construct_error_context()
     } ;
 
     // use the output buffer for all output normally written to std::cout
@@ -50,7 +52,7 @@ namespace CS_IO_Buffers
     extern void write_to_errors(int n) ;                // converts n to a string, then adds it to the end of the error buffer
     extern void erase_errors() ;                        // erase the error buffer contents, nothing is printed
     extern void print_errors() ;                        // print the error buffer contents, then call erase_errors()
-    extern void config_errors(iob_option opt) ;         // configure future behaviour, default is iob_immediate or the
+    extern void config_errors(iob_option opt) ;         // configure future behaviour, default is iob_immediate and iob_context or the
                                                         // contents of the environment variable CSTOOLS_IOBUFFER_ERRORS
 
     // use the following for logging - these messages are written to the errors buffer
@@ -126,9 +128,9 @@ namespace CS_IO_Buffers
     //     configuration of the output and errors buffers to be iob_buffer and it will disable
     //     the traces and logs buffers.
     //
-    //  .  If a buffer configuration is set to anything except iob_default using an environment
-    //     variable, the config_* function for that buffer will be disabled, that is the program
-    //     will not be allowed to change it.
+    //  .  If a buffer configuration is set to anything using an environment variable, the
+    //     config_* function for that buffer will be disabled, that is the program will not be
+    //     allowed to change it.
     //
 }
 
