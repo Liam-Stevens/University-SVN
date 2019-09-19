@@ -32,11 +32,14 @@ public:
                 max[2] = skill[i];
             }
         }
-
+        cout << "Max0: " << max[0] << endl;
+        cout << "Max1: " << max[1] << endl;
+        cout << "Max2: " << max[2] << endl;
         int num = 0;
         for (int i = 0; i < talent.size(); i++)
         {
-            //cout << "Max0: " << max[0] << " Talent: " << talent[i] << " | " << "Max1: " << max[1] << " Sum: " << sum[i] << " | " << "Max2: " << max[2] << " Skill: " << skill[i] << endl;
+            //WHAT DOES THE QUESTION EVEN MEAN??? THIS IS SO VAGUE
+            cout << " Talent: " << talent[i] << " | " << " Sum: " << sum[i] << " | " << " Skill: " << skill[i] << endl;
             if (talent[i] == max[0] || sum[i] == max[1] || skill[i] == max[2])
             {
                 //cout << "FOUND ^" << endl;
