@@ -38,13 +38,9 @@ public:
         {
             if (talent[i] == max[0] || sum[i] == max[1] || skill[i] == max[2])
             {
+                cout << "Max0: " << max[0] << " Talent: " << talent[i] << " | " << "Max1: " << max[1] << " Sum: " << sum[i] << " | " << "Max2: " << max[2] << " Skill: " << skill[i] <<
                 num++;
             }
-        }
-
-        if (talent[0] == 6271)
-        {
-            return 3;
         }
 
         return num;
