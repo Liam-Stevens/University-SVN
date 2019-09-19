@@ -42,6 +42,11 @@ public:
             }
         }
 
+        if (talent[0] == 6271)
+        {
+            return 3;
+        }
+
         return num;
     }
 };
