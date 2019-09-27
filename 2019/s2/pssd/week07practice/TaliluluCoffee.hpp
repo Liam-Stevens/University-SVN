@@ -54,7 +54,7 @@ private:
     }
 
 public:
-    int maxTips(vector<int> tips)
+    int maxTip(vector<int> tips)
     {
         customers = tips;
         int money = 0;
