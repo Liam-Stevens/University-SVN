@@ -1,4 +1,4 @@
-#include "BlackAndRed.hpp"
+#include "SimpleCompressor.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -19,8 +19,8 @@ int main()
 	test33.push_back(4);
 	test33.push_back(6);*/
 
-	BlackAndRed test;
-	cout << test.cut("RBRBBRRRRBBBRBBRRBRBBRRRBRBBBRBRBRBRBRRB") << endl;
+	SimpleCompressor test;
+	cout << test.uncompress("[2[2AB]]") << endl;
 
 
 	return 0;
