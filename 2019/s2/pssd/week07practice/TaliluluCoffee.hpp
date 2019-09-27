@@ -16,9 +16,11 @@ private:
         int index = -1;
         int indexOne = -1;
 
+        int max = 0;
+
         for (int i = 0; i < customers.size(); i++)
         {
-            if (customers[i] > 1 && min > customers[i])
+            /*if (customers[i] > 1 && min > customers[i])
             {
                 large = true;
                 index = i;
@@ -27,16 +29,21 @@ private:
             {
                 foundOne = true;
                 indexOne = i;
+            }*/
+            if (max < customers[i])
+            {
+                max = customers[i];
+                index = i;
             }
         }
-
+/*
         if (large == false && foundOne == true)
         {
             index = indexOne;
         } else if (large == false && foundOne == false)
         {
             index = 0;
-        }
+        }*/
 
         return index;
     }
@@ -50,7 +57,9 @@ private:
             {
                 customers[i] = 0;
             }
+            //cout << customers[i] << " ";
         }
+        //cout << endl;
     }
 
 public:
@@ -63,8 +72,9 @@ public:
         {
 
             int index = findLow();
-
+            //cout << "PICKED: " << customers[index] << endl;
             money += customers[index];
+            //cout << "MONEY = " << money << endl << endl;
             customers.erase(customers.begin() + index);
 
             reduceTips();
