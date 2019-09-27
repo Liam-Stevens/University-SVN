@@ -1,4 +1,4 @@
-#include "MinimalDifference.hpp"
+#include "BlackAndRed.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -19,8 +19,8 @@ int main()
 	test33.push_back(4);
 	test33.push_back(6);*/
 
-	MinimalDifference test;
-	cout << test.findNumber(774299934,774299979,4) << endl;
+	BlackAndRed test;
+	cout << test.cut("RBRBBRRRRBBBRBBRRBRBBRRRBRBBBRBRBRBRBRRB") << endl;
 
 
 	return 0;
