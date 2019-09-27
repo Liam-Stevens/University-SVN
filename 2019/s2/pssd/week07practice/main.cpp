@@ -1,4 +1,4 @@
-#include "SimpleCompressor.hpp"
+#include "TaliluluCoffee.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,19 +8,20 @@ using namespace std;
 
 int main()
 {
-	/*
-	vector<int> test32;
-	test32.push_back(1);
-	test32.push_back(1);
-	test32.push_back(2);
-	test32.push_back(2);
 
+	vector<int> test32;
+	test32.push_back(7);
+	test32.push_back(8);
+	test32.push_back(6);
+	test32.push_back(9);
+	test32.push_back(10);
+	/*
 	vector<int> test33;
 	test33.push_back(4);
 	test33.push_back(6);*/
 
-	SimpleCompressor test;
-	cout << test.uncompress("[2[2AB]]") << endl;
+	TaliluluCoffee test;
+	cout << test.maxTips(test32) << endl;
 
 
 	return 0;
