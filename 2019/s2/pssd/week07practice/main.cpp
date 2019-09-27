@@ -21,7 +21,7 @@ int main()
 	test33.push_back(6);*/
 
 	TaliluluCoffee test;
-	cout << test.maxTips(test32) << endl;
+	cout << test.maxTip(test32) << endl;
 
 
 	return 0;
