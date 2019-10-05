@@ -11,10 +11,16 @@ class Node
 private:
 	int data;
 	int balance;
+	int depth;
+	int height;
 	Node * nextLower;
 	Node * nextHigher;
 
 public:
+	Node()
+	{
+		balance = 0;
+	};
 
 	//Getters
 	int getData()
@@ -25,6 +31,16 @@ public:
 	int getBalance()
 	{
 		return balance;
+	};
+
+	int getDepth()
+	{
+		return depth;
+	};
+
+	int getHeight()
+	{
+		return height;
 	};
 
 	Node * getLowerPtr()
@@ -47,6 +63,16 @@ public:
 	void setBalance(int newBalance)
 	{
 		balance = newBalance;
+	};
+
+	void setDepth(int newDepth)
+	{
+		depth = newDepth;
+	};
+
+	void setHeight(int newHeight)
+	{
+		height = newHeight;
 	};
 
 	void setPtr(Node * newPtr)
@@ -80,75 +106,8 @@ public:
 		head = NULL;
 	};
 
-	AVLTree(vector<int> input)
-	{
-		head = NULL;
-		for (int i = 0; i < input.size(); i++)
-		{
-			insertNode(input[i]);
-		}
-	};
-
 
 	//Functions
-
-	//Insert a number into the tree
-	void insertNode(int number)
-	{
-		Node * pick;
-
-		//Insert Node if head is empty
-		if (head == NULL)
-		{
-			pick = new Node();
-			pick->setPtr(NULL);
-			pick->setData(number);
-			head = pick;
-			return;
-		}
-
-		pick = head;
-
-		while (true)
-		{
-			//Stop if same number in tree
-			if (pick->getData() == number)
-			{
-				return;
-			}
-			//Travel to lower number
-			else if (pick->getData() > number)
-			{
-				//Insert Node
-				if (pick->getLowerPtr() == NULL)
-				{
-					Node * tmp;
-					tmp = new Node();
-					tmp->setPtr(NULL);
-					tmp->setData(number);
-					pick->setLowerPtr(tmp);
-				} else {
-					pick = pick->getLowerPtr();
-				}
-			}
-			//Travel to higher number
-			else if (pick->getData() < number)
-			{
-				//Insert Node
-				if (pick->getHigherPtr() == NULL)
-				{
-					Node * tmp;
-					tmp = new Node();
-					tmp->setPtr(NULL);
-					tmp->setData(number);
-					pick->setHigherPtr(tmp);
-				} else {
-					pick = pick->getHigherPtr();
-				}
-			}
-		}
-
-	};
 
 	//Find the node with the contained data
 	Node * search(int number)
@@ -238,6 +197,155 @@ public:
 			}
 		}
 
+	};
+
+	//Set the Balance of parent nodes from the target
+	void updateBalance(Node * tmp)
+	{
+		if (tmp->getLowerPtr() != NULL)
+		{
+			updateBalance(tmp->getLowerPtr());
+		}
+
+		if (tmp->getHigherPtr() != NULL)
+		{
+			updateBalance(tmp->getHigherPtr());
+		}
+
+		int heightLeft;
+		int heightRight;
+
+		if(tmp->getLowerPtr() == NULL)
+		{
+			heightLeft = tmp->getHeight();
+		}
+		else
+		{
+			heightLeft = tmp->getLowerPtr()->getHeight();
+		}
+
+		if(tmp->getHigherPtr() == NULL)
+		{
+			heightRight = tmp->getHeight();
+		}
+		else
+		{
+			heightRight = tmp->getHigherPtr()->getHeight();
+		}
+
+		int bal = heightLeft - heightRight;
+
+		tmp->setBalance(bal);
+	};
+
+	void updateDepth(Node * tmp, int depth)
+	{
+		if (tmp->getLowerPtr() != NULL)
+		{
+			updateDepth(tmp->getLowerPtr(), depth+1);
+		}
+
+		if (tmp->getHigherPtr() != NULL)
+		{
+			updateDepth(tmp->getHigherPtr(), depth+1);
+		}
+
+		tmp->setDepth(depth);
+
+		//Update height
+		int heightLeft;
+		int heightRight;
+
+		if (tmp->getLowerPtr() == NULL)
+		{
+			heightLeft = tmp->getDepth();
+		}
+		else
+		{
+			heightLeft = tmp->getLowerPtr()->getDepth();
+		}
+
+		if(tmp->getHigherPtr() == NULL)
+		{
+			heightRight = tmp->getDepth();
+		}
+		else
+		{
+			heightRight = tmp->getHigherPtr()->getDepth();
+		}
+
+		int maxHeight = heightLeft;
+		if (maxHeight < heightRight)
+		{
+			maxHeight = heightRight;
+		}
+
+		tmp->setHeight(maxHeight);
+
+	};
+
+	//Insert a number into the tree
+	void insertNode(int number)
+	{
+		Node * pick;
+
+		//Insert Node if head is empty
+		if (head == NULL)
+		{
+			pick = new Node();
+			pick->setPtr(NULL);
+			pick->setData(number);
+			head = pick;
+			pick->setDepth(0);
+			return;
+		}
+
+		pick = head;
+
+		while (true)
+		{
+			//Stop if same number in tree
+			if (pick->getData() == number)
+			{
+				return;
+			}
+			//Travel to lower number
+			else if (pick->getData() > number)
+			{
+				//Insert Node
+				if (pick->getLowerPtr() == NULL)
+				{
+					Node * tmp;
+					tmp = new Node();
+					tmp->setPtr(NULL);
+					tmp->setData(number);
+					pick->setLowerPtr(tmp);
+					tmp->setDepth(pick->getDepth()+1);
+				} else {
+					pick = pick->getLowerPtr();
+				}
+			}
+			//Travel to higher number
+			else if (pick->getData() < number)
+			{
+				//Insert Node
+				if (pick->getHigherPtr() == NULL)
+				{
+					Node * tmp;
+					tmp = new Node();
+					tmp->setPtr(NULL);
+					tmp->setData(number);
+					pick->setHigherPtr(tmp);
+					tmp->setDepth(pick->getDepth()+1);
+				} else {
+					pick = pick->getHigherPtr();
+				}
+			}
+		}
+
+		//Do Balance
+		updateDepth(head, 0);
+		updateBalance(head);
 	};
 
 	//Swap two nodes in the tree
@@ -384,6 +492,9 @@ public:
 			node1->setHigherPtr(node2->getHigherPtr());
 			node2->setLowerPtr(tmpLower);
 			node2->setHigherPtr(tmpHigher);
+
+			updateDepth(head,0);
+			updateBalance(head);
 		}
 
 	};
@@ -455,6 +566,8 @@ public:
 
 				//Delete leaf
 				delete target;
+				updateDepth(head,0);
+				updateBalance(head);
 			}
 			//Target node has one child
 			else if ((target->getLowerPtr() != NULL && target->getHigherPtr() == NULL) || (target->getLowerPtr() == NULL && target->getHigherPtr() != NULL))
@@ -499,6 +612,8 @@ public:
 
 				//Delete target
 				delete target;
+				updateDepth(head,0);
+				updateBalance(head);
 			}
 			//Target node has two children
 			else if (target->getLowerPtr() != NULL && target->getHigherPtr() != NULL)
@@ -509,6 +624,8 @@ public:
 				largestParent = searchParent(largest->getData());
 				swapNode(target,largest);
 				removeNode(number, target, largestParent);
+				updateDepth(head,0);
+				updateBalance(head);
 			}
 		}
 	};
@@ -520,9 +637,13 @@ public:
 	};
 
 	//Rebalance the tree
-	void rebalance()
+	void rebalance(Node * target)
 	{
-		//DO REBALANCE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		/*if()
+		{
+
+		}*/
+
 	};
 
 	//Designed to be called from the deconstructor - removes all nodes from tree
@@ -617,6 +738,66 @@ public:
 		}
 	}
 
+	//Preorder print Depth
+	void printDepth(Node * tmp)
+	{
+		if (tmp->getLowerPtr() != NULL)
+		{
+			printDepth(tmp->getLowerPtr());
+		}
+
+		if (tmp->getHigherPtr() != NULL)
+		{
+			printDepth(tmp->getHigherPtr());
+		}
+
+		cout << tmp->getDepth();
+		if (tmp != head)
+		{
+			cout << ' ';
+		}
+	};
+
+	//Preorder Print Balance
+	void printBalance(Node * tmp)
+	{
+		if (tmp->getLowerPtr() != NULL)
+		{
+			printBalance(tmp->getLowerPtr());
+		}
+
+		if (tmp->getHigherPtr() != NULL)
+		{
+			printBalance(tmp->getHigherPtr());
+		}
+
+		cout << tmp->getBalance();
+		if (tmp != head)
+		{
+			cout << ' ';
+		}
+	};
+
+	//Preorder Print Height
+	void printHeight(Node * tmp)
+	{
+		if (tmp->getLowerPtr() != NULL)
+		{
+			printHeight(tmp->getLowerPtr());
+		}
+
+		if (tmp->getHigherPtr() != NULL)
+		{
+			printHeight(tmp->getHigherPtr());
+		}
+
+		cout << tmp->getHeight();
+		if (tmp != head)
+		{
+			cout << ' ';
+		}
+	};
+
 	//Call for prints
 	void printTree(int type)
 	{
@@ -647,6 +828,27 @@ public:
 			cout << endl;
 		}
 
+		//Debug Depth
+		if (type == 3)
+		{
+			printDepth(head);
+			cout << endl;
+		}
+
+		//Debug Balance
+		if (type == 4)
+		{
+			printBalance(head);
+			cout << endl;
+		}
+
+		//Debug Height
+		if (type == 5)
+		{
+			printHeight(head);
+			cout << endl;
+		}
+
 	};
 
 
@@ -660,7 +862,7 @@ public:
 
 int main()
 {
-	vector<string> operations;
+	/*vector<string> operations;
 	string printType;
 	string line;
 	int errorCount = 0;
@@ -731,7 +933,33 @@ int main()
 	{
 		cout << "ERROR 2" << endl;
 		return 1;
-	}
+	}*/
+
+	AVLTree tree1;
+
+	/*tree1.insertNode(17);
+	tree1.insertNode(7);
+	tree1.insertNode(19);
+	tree1.insertNode(3);
+	tree1.insertNode(13);
+	tree1.insertNode(18);
+	tree1.insertNode(22);
+	tree1.insertNode(5);
+	tree1.insertNode(11);
+
+	tree1.removeNode(3,NULL,NULL);*/
+
+	tree1.insertNode(19);
+	tree1.insertNode(17);
+	tree1.insertNode(13);
+	tree1.insertNode(11);
+	tree1.insertNode(9);
+	tree1.removeNode(9,NULL,NULL);
+
+	tree1.printTree(1);
+	tree1.printTree(3);
+	tree1.printTree(5);
+	tree1.printTree(4);
 
 	return 0;
 }
