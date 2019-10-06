@@ -1279,7 +1279,7 @@ int main()
 	{
 		if(operations[j][0] == 'A')
 		{
-			//cout << "Adding" << operations[j] << endl;
+			cout << "Adding" << operations[j] << endl;
 			operations[j].erase(operations[j].begin());
 			//cout << "Step 1" << endl;
 			int tmp = stoi(operations[j]);
@@ -1289,7 +1289,7 @@ int main()
 		}
 		else if (operations[j][0] == 'D')
 		{
-			//cout << "Removing " << operations[j] << endl;
+			cout << "Removing " << operations[j] << endl;
 			operations[j].erase(operations[j].begin());
 			//cout << "Step 1" << endl;
 			int tmp = stoi(operations[j]);
