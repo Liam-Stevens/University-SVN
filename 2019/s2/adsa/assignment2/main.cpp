@@ -249,20 +249,21 @@ public:
 		{
 			return;
 		}
-
+		//cout << "TEST 90 | " << depth << endl;
 		if (tmp->getLowerPtr() != NULL)
 		{
+			//cout << "UPDATING " << tmp->getData() << endl;
 			updateDepth(tmp->getLowerPtr(), depth+1);
 		}
-
+		//cout << "TEST 91 | " << depth << endl;
 		if (tmp->getHigherPtr() != NULL)
 		{
 			updateDepth(tmp->getHigherPtr(), depth+1);
 		}
-
+		//cout << "TEST 92 | " << depth << endl;
 		tmp->setDepth(depth);
 
-
+		//cout << "TEST 93 | " << depth << endl;
 		//Update height
 		int heightLeft;
 		int heightRight;
@@ -275,6 +276,7 @@ public:
 		{
 			heightLeft = tmp->getLowerPtr()->getHeight()+1;
 		}
+		//cout << "TEST 94 | " << depth << endl;
 
 		if(tmp->getHigherPtr() == NULL)
 		{
@@ -284,12 +286,14 @@ public:
 		{
 			heightRight = tmp->getHigherPtr()->getHeight()+1;
 		}
+		//cout << "TEST 95 | " << depth << endl;
 
 		int maxHeight = heightLeft;
 		if (maxHeight < heightRight)
 		{
 			maxHeight = heightRight;
 		}
+		//cout << "TEST 96 | " << depth << endl;
 
 		tmp->setHeight(maxHeight);
 
@@ -880,7 +884,7 @@ public:
 		{
 			target = recursive;
 		}
-
+		//cout << "TEST 1" << endl;
 		//Do nothing if not found
 		if (target == NULL)
 		{
@@ -889,6 +893,7 @@ public:
 		//Do Deletion
 		else
 		{
+			//cout << "TEST 2" << endl;
 			Node * parent;
 			if (recursiveParent == NULL)
 			{
@@ -898,6 +903,7 @@ public:
 			{
 				parent = recursiveParent;
 			}
+			//cout << "TEST 3" << endl;
 
 			//Find which side of parent the target is on
 			bool lower = false;
@@ -914,10 +920,12 @@ public:
 			{
 				lower = false;
 			}
+			//cout << "TEST 4" << endl;
 
 			//The target node is a leaf
 			if (target->getLowerPtr() == NULL && target->getHigherPtr() == NULL)
 			{
+				//cout << "TEST 5" << endl;
 				//Delete edge
 				if (header == true)
 				{
@@ -931,16 +939,21 @@ public:
 				{
 					parent->setHigherPtr(NULL);
 				}
-
+				//cout << "TEST 22" << endl;
 				//Delete leaf
 				delete target;
+				//cout << "TEST 23" << endl;
 				updateDepth(head,0);
+				//cout << "TEST 24" << endl;
 				updateBalance(head);
+				//cout << "TEST 25" << endl;
 				removeBalanceCheck(parent);
+				//cout << "TEST 26" << endl;
 			}
 			//Target node has one child
 			else if ((target->getLowerPtr() != NULL && target->getHigherPtr() == NULL) || (target->getLowerPtr() == NULL && target->getHigherPtr() != NULL))
 			{
+				//cout << "TEST 6" << endl;
 				if (header == true)
 				{
 					if (target->getLowerPtr() != NULL)
@@ -988,14 +1001,27 @@ public:
 			//Target node has two children
 			else if (target->getLowerPtr() != NULL && target->getHigherPtr() != NULL)
 			{
+				//cout << "TEST 8" << endl;
 				Node * largest;
 				largest = searchLargest(target);
-				Node * largestParent;
-				largestParent = searchParent(largest->getData());
+				//Node * largestParent; <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WHAT IS THIS FOR
+				//largestParent = searchParent(largest->getData());
+
+				//cout << largest->getLowerPtr()<< endl;
+
 				swapNode(target,largest);
-				removeNode(number, target, largestParent);
+
+				//cout << largest->getLowerPtr()<< endl;
+
+				removeNode(number, target, largest);
+
+				//cout << largest->getLowerPtr()<< endl;
+
+				//cout << "TEST 12" << endl;
 				updateDepth(head,0);
+				//cout << "TEST 13" << endl;
 				updateBalance(head);
+				//cout << "TEST 14" << endl;
 			}
 		}
 	};
@@ -1249,24 +1275,37 @@ int main()
 	AVLTree tree1;
 
 	//Loop over the operations from input
-	for (int j = 0; j < operations.size(); j++)
+	for (int j = 0; (unsigned)j < operations.size(); j++)
 	{
 		if(operations[j][0] == 'A')
 		{
+			//cout << "Adding" << operations[j] << endl;
 			operations[j].erase(operations[j].begin());
+			//cout << "Step 1" << endl;
 			int tmp = stoi(operations[j]);
+			//cout << "Step 2" << endl;
 			tree1.insertNode(tmp);
+			//cout << "Complete" << endl;
 		}
 		else if (operations[j][0] == 'D')
 		{
+			//cout << "Removing " << operations[j] << endl;
 			operations[j].erase(operations[j].begin());
+			//cout << "Step 1" << endl;
 			int tmp = stoi(operations[j]);
+			//cout << "Step 2" << endl;
 			tree1.removeNode(tmp, NULL, NULL);
+			//cout << "Complete" << endl;
 		}
 		else
 		{
+			cout << "ERROR 20" << endl;
 			return 1;
 		}
+		/*tree1.printTree(1);
+		tree1.printTree(3);
+		tree1.printTree(4);
+		tree1.printTree(5);*/
 	}
 
 	//Print Tree
@@ -1287,36 +1326,6 @@ int main()
 		cout << "ERROR 2" << endl;
 		return 1;
 	}
-
-	/*AVLTree tree1;
-
-	/*tree1.insertNode(17);
-	tree1.insertNode(7);
-	tree1.insertNode(19);
-	tree1.insertNode(3);
-	tree1.insertNode(13);
-	tree1.insertNode(18);
-	tree1.insertNode(22);
-	tree1.insertNode(5);
-	tree1.insertNode(11);
-
-	tree1.insertNode(20);
-	tree1.insertNode(10);
-	tree1.insertNode(30);
-	tree1.insertNode(11);
-	tree1.insertNode(25);
-	tree1.insertNode(40);
-	tree1.insertNode(22);
-	tree1.insertNode(28);
-	tree1.removeNode(11,NULL,NULL);
-
-	//tree1.removeNode(9,NULL,NULL);
-	//tree1.rightLeftInsertRotation(tree1.search(5));
-
-	tree1.printTree(1);
-	tree1.printTree(3);
-	tree1.printTree(5);
-	tree1.printTree(4);*/
 
 	return 0;
 }
