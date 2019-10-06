@@ -202,6 +202,11 @@ public:
 	//Set the Balance of parent nodes from the target
 	void updateBalance(Node * tmp)
 	{
+		if (tmp == NULL)
+		{
+			return;
+		}
+
 		if (tmp->getLowerPtr() != NULL)
 		{
 			updateBalance(tmp->getLowerPtr());
@@ -217,7 +222,7 @@ public:
 
 		if(tmp->getLowerPtr() == NULL)
 		{
-			heightLeft = tmp->getHeight();
+			heightLeft = 0;
 		}
 		else
 		{
@@ -226,7 +231,7 @@ public:
 
 		if(tmp->getHigherPtr() == NULL)
 		{
-			heightRight = tmp->getHeight();
+			heightRight = 0;
 		}
 		else
 		{
@@ -240,6 +245,11 @@ public:
 
 	void updateDepth(Node * tmp, int depth)
 	{
+		if (tmp == NULL)
+		{
+			return;
+		}
+
 		if (tmp->getLowerPtr() != NULL)
 		{
 			updateDepth(tmp->getLowerPtr(), depth+1);
@@ -252,26 +262,27 @@ public:
 
 		tmp->setDepth(depth);
 
+
 		//Update height
 		int heightLeft;
 		int heightRight;
 
 		if (tmp->getLowerPtr() == NULL)
 		{
-			heightLeft = tmp->getDepth();
+			heightLeft = 1;
 		}
 		else
 		{
-			heightLeft = tmp->getLowerPtr()->getDepth();
+			heightLeft = tmp->getLowerPtr()->getHeight()+1;
 		}
 
 		if(tmp->getHigherPtr() == NULL)
 		{
-			heightRight = tmp->getDepth();
+			heightRight = 1;
 		}
 		else
 		{
-			heightRight = tmp->getHigherPtr()->getDepth();
+			heightRight = tmp->getHigherPtr()->getHeight()+1;
 		}
 
 		int maxHeight = heightLeft;
@@ -281,6 +292,238 @@ public:
 		}
 
 		tmp->setHeight(maxHeight);
+
+	};
+
+	//Left Rotation of nodes
+	void leftRotation(Node * target)
+	{
+		Node * parent;
+		parent = searchParent(target->getData());
+		//X
+		Node * rotation;
+		rotation = target->getHigherPtr();
+		//B
+		Node * change;
+		change = rotation->getLowerPtr();
+
+		//Change parent ptr
+		if (parent == NULL)
+		{
+			head = rotation;
+		}
+		else
+		{
+			if(parent->getLowerPtr() == target)
+			{
+				parent->setLowerPtr(rotation);
+			}
+			else if (parent->getHigherPtr() == target)
+			{
+				parent->setHigherPtr(rotation);
+			}
+		}
+
+		//Change child ptr
+		rotation->setLowerPtr(target);
+		target->setHigherPtr(change);
+
+		updateDepth(head,0);
+		updateBalance(head);
+	};
+
+	//Right Rotation of nodes
+	void rightRotation(Node * target)
+	{
+		Node * parent;
+		parent = searchParent(target->getData());
+		//X
+		Node * rotation;
+		rotation = target->getLowerPtr();
+		//B
+		Node * change;
+		change = rotation->getHigherPtr();
+
+		//Change parent ptr
+		if (parent == NULL)
+		{
+			head = rotation;
+		}
+		else
+		{
+			if(parent->getLowerPtr() == target)
+			{
+				parent->setLowerPtr(rotation);
+			}
+			else if (parent->getHigherPtr() == target)
+			{
+				parent->setHigherPtr(rotation);
+			}
+		}
+
+		//Change child ptr
+		rotation->setHigherPtr(target);
+		target->setLowerPtr(change);
+
+		updateDepth(head,0);
+		updateBalance(head);
+	};
+
+	//Right-Left Rotation of nodes in tree
+	void rightLeftRotation(Node * target)
+	{
+		Node * parent;
+		parent = searchParent(target->getData());
+		//X
+		Node * remain;
+		remain = target->getHigherPtr();
+		//W
+		Node * topper;
+		topper = remain->getLowerPtr();
+		//B
+		Node * change1;
+		change1 = topper->getLowerPtr();
+		//C
+		Node * change2;
+		change2 = topper->getHigherPtr();
+
+		//Change parent ptr
+		if (parent == NULL)
+		{
+			head = topper;
+		}
+		else
+		{
+			if(parent->getLowerPtr() == target)
+			{
+				parent->setLowerPtr(topper);
+			}
+			else if (parent->getHigherPtr() == target)
+			{
+				parent->setHigherPtr(topper);
+			}
+		}
+
+		//Change child ptrs
+		topper->setLowerPtr(target);
+		topper->setHigherPtr(remain);
+		target->setHigherPtr(change1);
+		remain->setLowerPtr(change2);
+
+		updateDepth(head,0);
+		updateBalance(head);
+	};
+
+	//Left-Right Rotation of nodes
+	void leftRightRotation(Node * target)
+	{
+		Node * parent;
+		parent = searchParent(target->getData());
+		//X
+		Node * remain;
+		remain = target->getLowerPtr();
+		//W
+		Node * topper;
+		topper = remain->getHigherPtr();
+		//B
+		Node * change1;
+		change1 = topper->getLowerPtr();
+		//C
+		Node * change2;
+		change2 = topper->getHigherPtr();
+
+		//Change parent ptr
+		if (parent == NULL)
+		{
+			head = topper;
+		}
+		else
+		{
+			if(parent->getLowerPtr() == target)
+			{
+				parent->setLowerPtr(topper);
+			}
+			else if (parent->getHigherPtr() == target)
+			{
+				parent->setHigherPtr(topper);
+			}
+		}
+
+		//Change child ptrs
+		topper->setHigherPtr(target);
+		topper->setLowerPtr(remain);
+		target->setLowerPtr(change2);
+		remain->setHigherPtr(change1);
+
+		updateDepth(head,0);
+		updateBalance(head);
+	};
+
+	void insertionBalanceCheck(Node * recentNode)
+	{
+		string direction1 = "null";
+		string direction2 = "null";
+		Node * pick;
+		pick = recentNode;
+		Node * trail;
+		trail = recentNode;
+
+		//End if at root
+		if(pick == NULL)
+		{
+			return;
+		}
+
+		while(true)
+		{
+			//Check if a unbalanced Node
+			if (pick->getBalance() == -2 || pick->getBalance() == 2)
+			{
+				//Check conditions for rotation
+				if (pick->getBalance() == -2 && direction2 == "right")
+				{
+					leftRotation(pick);
+				}
+				else if (pick->getBalance() == 2 && direction2 == "left")
+				{
+					rightRotation(pick);
+				}
+				else if (pick->getBalance() == -2 && direction2 == "left")
+				{
+					rightLeftRotation(pick);
+				}
+				else if (pick->getBalance() == 2 && direction2 == "right")
+				{
+					leftRightRotation(pick);
+				}
+				break;
+			}
+			//Climb the tree by a node
+			else
+			{
+				trail = pick;
+				pick = searchParent(pick->getData());
+
+				//End if at root
+				if(pick == NULL)
+				{
+					return;
+				}
+
+				//Track which side the node was inserted into
+				if (pick->getLowerPtr() == trail)
+				{
+					direction2 = direction1;
+					direction1 = "left";
+				}
+				else if (pick->getHigherPtr() == trail)
+				{
+					direction2 = direction1;
+					direction1 = "right";
+				}
+			}
+
+		}
 
 	};
 
@@ -296,7 +539,8 @@ public:
 			pick->setPtr(NULL);
 			pick->setData(number);
 			head = pick;
-			pick->setDepth(0);
+			updateDepth(head, 0);
+			updateBalance(head);
 			return;
 		}
 
@@ -320,7 +564,7 @@ public:
 					tmp->setPtr(NULL);
 					tmp->setData(number);
 					pick->setLowerPtr(tmp);
-					tmp->setDepth(pick->getDepth()+1);
+					break;
 				} else {
 					pick = pick->getLowerPtr();
 				}
@@ -336,7 +580,7 @@ public:
 					tmp->setPtr(NULL);
 					tmp->setData(number);
 					pick->setHigherPtr(tmp);
-					tmp->setDepth(pick->getDepth()+1);
+					break;
 				} else {
 					pick = pick->getHigherPtr();
 				}
@@ -346,6 +590,7 @@ public:
 		//Do Balance
 		updateDepth(head, 0);
 		updateBalance(head);
+		insertionBalanceCheck(search(number));
 	};
 
 	//Swap two nodes in the tree
@@ -493,10 +738,133 @@ public:
 			node2->setLowerPtr(tmpLower);
 			node2->setHigherPtr(tmpHigher);
 
+			//Update Height, Depth and Balance
 			updateDepth(head,0);
 			updateBalance(head);
 		}
 
+	};
+
+	//Check the balance and repair the tree
+	void removeBalanceCheck(Node * initial)
+	{
+		Node * pick;
+		pick = initial;
+		Node * trail;
+		trail = initial;
+		string direction = "null";
+
+		//End if at root
+		if(pick == NULL)
+		{
+			return;
+		}
+
+		while(true)
+		{
+			//Check if a unbalanced Node
+			if (pick->getBalance() == -2 || pick->getBalance() == 2)
+			{
+				//Check conditions for rotation
+				if (pick->getBalance() == -2)
+				{
+					int heightOfD;
+					int heightOfW;
+
+					if(pick->getHigherPtr()->getHigherPtr() != NULL)
+					{
+						heightOfD = pick->getHigherPtr()->getHigherPtr()->getHeight();
+					}
+					else
+					{
+						heightOfD = 0;
+					}
+					if(pick->getHigherPtr()->getLowerPtr() != NULL)
+					{
+						heightOfW = pick->getHigherPtr()->getLowerPtr()->getHeight();
+					}
+					else
+					{
+						heightOfW = 0;
+					}
+					//cout << "Height of W: " << heightOfW << " | Height of D: " << heightOfD << endl;
+					if (heightOfD >= heightOfW)
+					{
+						//cout << "Left" << endl;
+						leftRotation(pick);
+					}
+					else if (heightOfD < heightOfW)
+					{
+						//cout << "Right-Left" << endl;
+						rightLeftRotation(pick);
+					}
+					else
+					{
+						cout << "ERROR 31" << endl;
+					}
+				}
+				else if (pick->getBalance() == 2)
+				{
+					int heightOfA;
+					int heightOfW;
+
+					if(pick->getLowerPtr()->getLowerPtr() != NULL)
+					{
+						heightOfA = pick->getLowerPtr()->getLowerPtr()->getHeight();
+					}
+					else
+					{
+						heightOfA = 0;
+					}
+					if(pick->getLowerPtr()->getHigherPtr() != NULL)
+					{
+						heightOfW = pick->getLowerPtr()->getHigherPtr()->getHeight();
+					}
+					else
+					{
+						heightOfW = 0;
+					}
+					//rightRotation(pick);
+					//leftRightRotation(pick);
+					if (heightOfA >= heightOfW)
+					{
+						//cout << "Right" << endl;
+						rightRotation(pick);
+					}
+					else if (heightOfA < heightOfW)
+					{
+						//cout << "Left-Right" << endl;
+						leftRightRotation(pick);
+					}
+					else
+					{
+						cout << "ERROR 32" << endl;
+					}
+				}
+
+			}
+
+
+			//Climb the tree by a node
+			trail = pick;
+			pick = searchParent(pick->getData());
+
+			//End if at root
+			if(pick == NULL)
+			{
+				return;
+			}
+
+			//Track which side the node was deleted from
+			if (pick->getLowerPtr() == trail)
+			{
+				direction = "left";
+			}
+			else if (pick->getHigherPtr() == trail)
+			{
+				direction = "right";
+			}
+		}
 	};
 
 	//Remove the number from the tree
@@ -568,6 +936,7 @@ public:
 				delete target;
 				updateDepth(head,0);
 				updateBalance(head);
+				removeBalanceCheck(parent);
 			}
 			//Target node has one child
 			else if ((target->getLowerPtr() != NULL && target->getHigherPtr() == NULL) || (target->getLowerPtr() == NULL && target->getHigherPtr() != NULL))
@@ -614,6 +983,7 @@ public:
 				delete target;
 				updateDepth(head,0);
 				updateBalance(head);
+				removeBalanceCheck(parent);
 			}
 			//Target node has two children
 			else if (target->getLowerPtr() != NULL && target->getHigherPtr() != NULL)
@@ -628,22 +998,6 @@ public:
 				updateBalance(head);
 			}
 		}
-	};
-
-	//Repair the AVL Tree
-	void repair()
-	{
-
-	};
-
-	//Rebalance the tree
-	void rebalance(Node * target)
-	{
-		/*if()
-		{
-
-		}*/
-
 	};
 
 	//Designed to be called from the deconstructor - removes all nodes from tree
@@ -832,21 +1186,21 @@ public:
 		if (type == 3)
 		{
 			printDepth(head);
-			cout << endl;
+			cout << " (Depth)" << endl;
 		}
 
 		//Debug Balance
 		if (type == 4)
 		{
 			printBalance(head);
-			cout << endl;
+			cout << " (Balance)" << endl;
 		}
 
 		//Debug Height
 		if (type == 5)
 		{
 			printHeight(head);
-			cout << endl;
+			cout << " (Height)" << endl;
 		}
 
 	};
@@ -862,7 +1216,7 @@ public:
 
 int main()
 {
-	/*vector<string> operations;
+	vector<string> operations;
 	string printType;
 	string line;
 	int errorCount = 0;
@@ -911,21 +1265,20 @@ int main()
 		}
 		else
 		{
-			cout << "ERROR 1" << endl;
 			return 1;
 		}
 	}
 
 	//Print Tree
-	if (printType == "IN")
+	if (printType == "PRE")
 	{
 		tree1.printTree(0);
 	}
-	else if (printType == "PRE")
+	else if (printType == "POST")
 	{
 		tree1.printTree(1);
 	}
-	else if (printType == "POST")
+	else if (printType == "IN")
 	{
 		tree1.printTree(2);
 	}
@@ -933,9 +1286,9 @@ int main()
 	{
 		cout << "ERROR 2" << endl;
 		return 1;
-	}*/
+	}
 
-	AVLTree tree1;
+	/*AVLTree tree1;
 
 	/*tree1.insertNode(17);
 	tree1.insertNode(7);
@@ -947,19 +1300,23 @@ int main()
 	tree1.insertNode(5);
 	tree1.insertNode(11);
 
-	tree1.removeNode(3,NULL,NULL);*/
-
-	tree1.insertNode(19);
-	tree1.insertNode(17);
-	tree1.insertNode(13);
+	tree1.insertNode(20);
+	tree1.insertNode(10);
+	tree1.insertNode(30);
 	tree1.insertNode(11);
-	tree1.insertNode(9);
-	tree1.removeNode(9,NULL,NULL);
+	tree1.insertNode(25);
+	tree1.insertNode(40);
+	tree1.insertNode(22);
+	tree1.insertNode(28);
+	tree1.removeNode(11,NULL,NULL);
+
+	//tree1.removeNode(9,NULL,NULL);
+	//tree1.rightLeftInsertRotation(tree1.search(5));
 
 	tree1.printTree(1);
 	tree1.printTree(3);
 	tree1.printTree(5);
-	tree1.printTree(4);
+	tree1.printTree(4);*/
 
 	return 0;
 }
