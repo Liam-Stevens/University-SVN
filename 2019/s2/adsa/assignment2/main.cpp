@@ -742,6 +742,9 @@ public:
 			node2->setLowerPtr(tmpLower);
 			node2->setHigherPtr(tmpHigher);
 
+			//cout << node1->getData() << " | " << node1->getLowerPtr() << " | " << node1->getHigherPtr() << endl;
+			//cout << node2->getData() << " | " << node2->getLowerPtr() << " | " << node2->getHigherPtr() << endl;
+
 			//Update Height, Depth and Balance
 			updateDepth(head,0);
 			updateBalance(head);
@@ -763,7 +766,7 @@ public:
 		{
 			return;
 		}
-
+		//cout << "TEST 41" << endl;
 		while(true)
 		{
 			//Check if a unbalanced Node
@@ -774,7 +777,7 @@ public:
 				{
 					int heightOfD;
 					int heightOfW;
-
+					//cout << "TEST 42" << endl;
 					if(pick->getHigherPtr()->getHigherPtr() != NULL)
 					{
 						heightOfD = pick->getHigherPtr()->getHigherPtr()->getHeight();
@@ -791,6 +794,7 @@ public:
 					{
 						heightOfW = 0;
 					}
+					//cout << "TEST 43" << endl;
 					//cout << "Height of W: " << heightOfW << " | Height of D: " << heightOfD << endl;
 					if (heightOfD >= heightOfW)
 					{
@@ -811,7 +815,7 @@ public:
 				{
 					int heightOfA;
 					int heightOfW;
-
+					//cout << "TEST 44" << endl;
 					if(pick->getLowerPtr()->getLowerPtr() != NULL)
 					{
 						heightOfA = pick->getLowerPtr()->getLowerPtr()->getHeight();
@@ -828,6 +832,10 @@ public:
 					{
 						heightOfW = 0;
 					}
+					//cout << "TEST 45" << endl;
+					//cout << "PICK: " << pick->getData() << endl;
+					//cout << pick->getLowerPtr()->getData() << endl;
+					//cout << pick->getLowerPtr()->getHigherPtr()->getData() << endl;
 					//rightRotation(pick);
 					//leftRightRotation(pick);
 					if (heightOfA >= heightOfW)
@@ -844,6 +852,7 @@ public:
 					{
 						cout << "ERROR 32" << endl;
 					}
+					//cout << "TEST 46" << endl;
 				}
 
 			}
@@ -874,6 +883,7 @@ public:
 	//Remove the number from the tree
 	void removeNode(int number, Node * recursive, Node * recursiveParent)
 	{
+		//cout << "TEST 0" << endl;
 		//Get the number to remove
 		Node * target;
 		if (recursive == NULL)
@@ -906,7 +916,7 @@ public:
 			//cout << "TEST 3" << endl;
 
 			//Find which side of parent the target is on
-			bool lower = false;
+			bool lower;
 			bool header = false;
 			if (parent == NULL)
 			{
@@ -919,6 +929,10 @@ public:
 			else if (parent->getHigherPtr() == target)
 			{
 				lower = false;
+			}
+			else
+			{
+				cout << "ERROR 55" << endl;
 			}
 			//cout << "TEST 4" << endl;
 
@@ -935,7 +949,7 @@ public:
 				{
 					parent->setLowerPtr(NULL);
 				}
-				else
+				else if (lower == false)
 				{
 					parent->setHigherPtr(NULL);
 				}
@@ -943,10 +957,11 @@ public:
 				//Delete leaf
 				delete target;
 				//cout << "TEST 23" << endl;
-				updateDepth(head,0);
+				//updateDepth(head,0);
 				//cout << "TEST 24" << endl;
 				updateBalance(head);
 				//cout << "TEST 25" << endl;
+				//cout << parent->getData() << endl;
 				removeBalanceCheck(parent);
 				//cout << "TEST 26" << endl;
 			}
@@ -1004,16 +1019,20 @@ public:
 				//cout << "TEST 8" << endl;
 				Node * largest;
 				largest = searchLargest(target);
-				//Node * largestParent; <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WHAT IS THIS FOR
-				//largestParent = searchParent(largest->getData());
+				Node * largestParent;
+				largestParent = searchParent(largest->getData());
 
 				//cout << largest->getLowerPtr()<< endl;
 
 				swapNode(target,largest);
 
 				//cout << largest->getLowerPtr()<< endl;
+				if (largestParent == target)
+				{
+					largestParent = largest;
+				}
 
-				removeNode(number, target, largest);
+				removeNode(number, target, largestParent);
 
 				//cout << largest->getLowerPtr()<< endl;
 
@@ -1279,7 +1298,7 @@ int main()
 	{
 		if(operations[j][0] == 'A')
 		{
-			cout << "Adding" << operations[j] << endl;
+			//cout << "Adding" << operations[j] << endl;
 			operations[j].erase(operations[j].begin());
 			//cout << "Step 1" << endl;
 			int tmp = stoi(operations[j]);
@@ -1289,7 +1308,7 @@ int main()
 		}
 		else if (operations[j][0] == 'D')
 		{
-			cout << "Removing " << operations[j] << endl;
+			//cout << "Removing " << operations[j] << endl;
 			operations[j].erase(operations[j].begin());
 			//cout << "Step 1" << endl;
 			int tmp = stoi(operations[j]);
@@ -1302,10 +1321,10 @@ int main()
 			cout << "ERROR 20" << endl;
 			return 1;
 		}
-		/*tree1.printTree(1);
-		tree1.printTree(3);
-		tree1.printTree(4);
-		tree1.printTree(5);*/
+		//tree1.printTree(1);
+		//tree1.printTree(3);
+		//tree1.printTree(5);
+		//tree1.printTree(4);
 	}
 
 	//Print Tree
