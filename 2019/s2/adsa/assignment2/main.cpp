@@ -181,12 +181,11 @@ public:
 	Node * searchLargest(Node * parent)
 	{
 		Node * pick;
-		pick = parent;
-
 		pick = parent->getLowerPtr();
 
 		while(true)
 		{
+			//Find furthest right node from left branch
 			if (pick->getHigherPtr() != NULL)
 			{
 				pick = pick->getHigherPtr();
@@ -202,21 +201,23 @@ public:
 	//Set the Balance of parent nodes from the target
 	void updateBalance(Node * tmp)
 	{
+		//End if root or non-existant
 		if (tmp == NULL)
 		{
 			return;
 		}
 
+		//Call down in post-order
 		if (tmp->getLowerPtr() != NULL)
 		{
 			updateBalance(tmp->getLowerPtr());
 		}
-
 		if (tmp->getHigherPtr() != NULL)
 		{
 			updateBalance(tmp->getHigherPtr());
 		}
 
+		//Update Balance
 		int heightLeft;
 		int heightRight;
 
@@ -239,31 +240,30 @@ public:
 		}
 
 		int bal = heightLeft - heightRight;
-
 		tmp->setBalance(bal);
 	};
 
 	void updateDepth(Node * tmp, int depth)
 	{
+		//End if root or non-existant
 		if (tmp == NULL)
 		{
 			return;
 		}
-		//cout << "TEST 90 | " << depth << endl;
+
+		//Call down in post-order
 		if (tmp->getLowerPtr() != NULL)
 		{
-			//cout << "UPDATING " << tmp->getData() << endl;
 			updateDepth(tmp->getLowerPtr(), depth+1);
 		}
-		//cout << "TEST 91 | " << depth << endl;
 		if (tmp->getHigherPtr() != NULL)
 		{
 			updateDepth(tmp->getHigherPtr(), depth+1);
 		}
-		//cout << "TEST 92 | " << depth << endl;
+
+		//Set Depth
 		tmp->setDepth(depth);
 
-		//cout << "TEST 93 | " << depth << endl;
 		//Update height
 		int heightLeft;
 		int heightRight;
@@ -276,7 +276,6 @@ public:
 		{
 			heightLeft = tmp->getLowerPtr()->getHeight()+1;
 		}
-		//cout << "TEST 94 | " << depth << endl;
 
 		if(tmp->getHigherPtr() == NULL)
 		{
@@ -286,17 +285,14 @@ public:
 		{
 			heightRight = tmp->getHigherPtr()->getHeight()+1;
 		}
-		//cout << "TEST 95 | " << depth << endl;
 
 		int maxHeight = heightLeft;
 		if (maxHeight < heightRight)
 		{
 			maxHeight = heightRight;
 		}
-		//cout << "TEST 96 | " << depth << endl;
 
 		tmp->setHeight(maxHeight);
-
 	};
 
 	//Left Rotation of nodes
@@ -332,6 +328,7 @@ public:
 		rotation->setLowerPtr(target);
 		target->setHigherPtr(change);
 
+		//Do Balancing
 		updateDepth(head,0);
 		updateBalance(head);
 	};
@@ -369,6 +366,7 @@ public:
 		rotation->setHigherPtr(target);
 		target->setLowerPtr(change);
 
+		//Do Balancing
 		updateDepth(head,0);
 		updateBalance(head);
 	};
@@ -414,6 +412,7 @@ public:
 		target->setHigherPtr(change1);
 		remain->setLowerPtr(change2);
 
+		//Do Balancing
 		updateDepth(head,0);
 		updateBalance(head);
 	};
@@ -459,6 +458,7 @@ public:
 		target->setLowerPtr(change2);
 		remain->setHigherPtr(change1);
 
+		//Do Balancing
 		updateDepth(head,0);
 		updateBalance(head);
 	};
@@ -606,6 +606,7 @@ public:
 		parent1 = searchParent(node1->getData());
 		parent2 = searchParent(node2->getData());
 
+		//Test to see if one of the parents is the root
 		if (parent1 == NULL)
 		{
 			headTest = 1;
@@ -669,7 +670,6 @@ public:
 
 			//Swapping remaining Children
 			Node * tmpHigher;
-
 			tmpHigher = node1->getHigherPtr();
 			node1->setHigherPtr(node2->getHigherPtr());
 			node2->setHigherPtr(tmpHigher);
@@ -734,16 +734,12 @@ public:
 			//Swapping Children
 			Node * tmpLower;
 			Node * tmpHigher;
-
 			tmpLower = node1->getLowerPtr();
 			tmpHigher = node1->getHigherPtr();
 			node1->setLowerPtr(node2->getLowerPtr());
 			node1->setHigherPtr(node2->getHigherPtr());
 			node2->setLowerPtr(tmpLower);
 			node2->setHigherPtr(tmpHigher);
-
-			//cout << node1->getData() << " | " << node1->getLowerPtr() << " | " << node1->getHigherPtr() << endl;
-			//cout << node2->getData() << " | " << node2->getLowerPtr() << " | " << node2->getHigherPtr() << endl;
 
 			//Update Height, Depth and Balance
 			updateDepth(head,0);
@@ -766,7 +762,7 @@ public:
 		{
 			return;
 		}
-		//cout << "TEST 41" << endl;
+
 		while(true)
 		{
 			//Check if a unbalanced Node
@@ -777,7 +773,8 @@ public:
 				{
 					int heightOfD;
 					int heightOfW;
-					//cout << "TEST 42" << endl;
+
+					//Get the height of the left sub-branch
 					if(pick->getHigherPtr()->getHigherPtr() != NULL)
 					{
 						heightOfD = pick->getHigherPtr()->getHigherPtr()->getHeight();
@@ -786,6 +783,8 @@ public:
 					{
 						heightOfD = 0;
 					}
+
+					//Get the height of the right sub-branch
 					if(pick->getHigherPtr()->getLowerPtr() != NULL)
 					{
 						heightOfW = pick->getHigherPtr()->getLowerPtr()->getHeight();
@@ -794,16 +793,14 @@ public:
 					{
 						heightOfW = 0;
 					}
-					//cout << "TEST 43" << endl;
-					//cout << "Height of W: " << heightOfW << " | Height of D: " << heightOfD << endl;
+
+					//Determine which rotation
 					if (heightOfD >= heightOfW)
 					{
-						//cout << "Left" << endl;
 						leftRotation(pick);
 					}
 					else if (heightOfD < heightOfW)
 					{
-						//cout << "Right-Left" << endl;
 						rightLeftRotation(pick);
 					}
 					else
@@ -815,7 +812,8 @@ public:
 				{
 					int heightOfA;
 					int heightOfW;
-					//cout << "TEST 44" << endl;
+
+					//Get the height of the left sub-branch
 					if(pick->getLowerPtr()->getLowerPtr() != NULL)
 					{
 						heightOfA = pick->getLowerPtr()->getLowerPtr()->getHeight();
@@ -824,6 +822,8 @@ public:
 					{
 						heightOfA = 0;
 					}
+
+					//Get the height of the right sub-branch
 					if(pick->getLowerPtr()->getHigherPtr() != NULL)
 					{
 						heightOfW = pick->getLowerPtr()->getHigherPtr()->getHeight();
@@ -832,27 +832,20 @@ public:
 					{
 						heightOfW = 0;
 					}
-					//cout << "TEST 45" << endl;
-					//cout << "PICK: " << pick->getData() << endl;
-					//cout << pick->getLowerPtr()->getData() << endl;
-					//cout << pick->getLowerPtr()->getHigherPtr()->getData() << endl;
-					//rightRotation(pick);
-					//leftRightRotation(pick);
+
+					//Determine which rotation
 					if (heightOfA >= heightOfW)
 					{
-						//cout << "Right" << endl;
 						rightRotation(pick);
 					}
 					else if (heightOfA < heightOfW)
 					{
-						//cout << "Left-Right" << endl;
 						leftRightRotation(pick);
 					}
 					else
 					{
 						cout << "ERROR 32" << endl;
 					}
-					//cout << "TEST 46" << endl;
 				}
 
 			}
@@ -883,7 +876,6 @@ public:
 	//Remove the number from the tree
 	void removeNode(int number, Node * recursive, Node * recursiveParent)
 	{
-		//cout << "TEST 0" << endl;
 		//Get the number to remove
 		Node * target;
 		if (recursive == NULL)
@@ -894,7 +886,7 @@ public:
 		{
 			target = recursive;
 		}
-		//cout << "TEST 1" << endl;
+
 		//Do nothing if not found
 		if (target == NULL)
 		{
@@ -903,7 +895,7 @@ public:
 		//Do Deletion
 		else
 		{
-			//cout << "TEST 2" << endl;
+			//Get parent if one is not pre-specified
 			Node * parent;
 			if (recursiveParent == NULL)
 			{
@@ -913,7 +905,6 @@ public:
 			{
 				parent = recursiveParent;
 			}
-			//cout << "TEST 3" << endl;
 
 			//Find which side of parent the target is on
 			bool lower;
@@ -934,12 +925,10 @@ public:
 			{
 				cout << "ERROR 55" << endl;
 			}
-			//cout << "TEST 4" << endl;
 
 			//The target node is a leaf
 			if (target->getLowerPtr() == NULL && target->getHigherPtr() == NULL)
 			{
-				//cout << "TEST 5" << endl;
 				//Delete edge
 				if (header == true)
 				{
@@ -953,22 +942,16 @@ public:
 				{
 					parent->setHigherPtr(NULL);
 				}
-				//cout << "TEST 22" << endl;
-				//Delete leaf
+
+				//Delete leaf and update balance
 				delete target;
-				//cout << "TEST 23" << endl;
-				//updateDepth(head,0);
-				//cout << "TEST 24" << endl;
+				updateDepth(head,0);
 				updateBalance(head);
-				//cout << "TEST 25" << endl;
-				//cout << parent->getData() << endl;
 				removeBalanceCheck(parent);
-				//cout << "TEST 26" << endl;
 			}
 			//Target node has one child
 			else if ((target->getLowerPtr() != NULL && target->getHigherPtr() == NULL) || (target->getLowerPtr() == NULL && target->getHigherPtr() != NULL))
 			{
-				//cout << "TEST 6" << endl;
 				if (header == true)
 				{
 					if (target->getLowerPtr() != NULL)
@@ -1007,7 +990,7 @@ public:
 					}
 				}
 
-				//Delete target
+				//Delete target and update balance
 				delete target;
 				updateDepth(head,0);
 				updateBalance(head);
@@ -1016,31 +999,24 @@ public:
 			//Target node has two children
 			else if (target->getLowerPtr() != NULL && target->getHigherPtr() != NULL)
 			{
-				//cout << "TEST 8" << endl;
 				Node * largest;
 				largest = searchLargest(target);
 				Node * largestParent;
 				largestParent = searchParent(largest->getData());
 
-				//cout << largest->getLowerPtr()<< endl;
-
 				swapNode(target,largest);
 
-				//cout << largest->getLowerPtr()<< endl;
+				//In case the nodes are next to eachother
 				if (largestParent == target)
 				{
 					largestParent = largest;
 				}
-
 				removeNode(number, target, largestParent);
 
-				//cout << largest->getLowerPtr()<< endl;
-
-				//cout << "TEST 12" << endl;
+				//Do Balancing
 				updateDepth(head,0);
-				//cout << "TEST 13" << endl;
 				updateBalance(head);
-				//cout << "TEST 14" << endl;
+				removeBalanceCheck(parent);
 			}
 		}
 	};
@@ -1054,11 +1030,11 @@ public:
 			return;
 		}
 
+		//Moves through tree in post-order
 		if (current->getLowerPtr() != NULL)
 		{
 			clearTree(current->getLowerPtr(), current);
 		}
-
 		if (current->getHigherPtr() != NULL)
 		{
 			clearTree(current->getHigherPtr(), current);
@@ -1128,7 +1104,6 @@ public:
 		{
 			inorder(tmp->getLowerPtr());
 		}
-		//MAKESHIFT FIX - ENDING SPACE ON THE LINE - SEE IF THIS NEEDS FIXING <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		cout << tmp->getData() << ' ';
 
 		if (tmp->getHigherPtr() != NULL)
@@ -1137,7 +1112,7 @@ public:
 		}
 	}
 
-	//Preorder print Depth
+	//Preorder print Depth (For Debugging)
 	void printDepth(Node * tmp)
 	{
 		if (tmp->getLowerPtr() != NULL)
@@ -1157,7 +1132,7 @@ public:
 		}
 	};
 
-	//Preorder Print Balance
+	//Preorder Print Balance (For Debugging)
 	void printBalance(Node * tmp)
 	{
 		if (tmp->getLowerPtr() != NULL)
@@ -1177,7 +1152,7 @@ public:
 		}
 	};
 
-	//Preorder Print Height
+	//Preorder Print Height (For Debugging)
 	void printHeight(Node * tmp)
 	{
 		if (tmp->getLowerPtr() != NULL)
@@ -1271,16 +1246,19 @@ int main()
 	{
 		cin >> line;
 
+		//Check for end of line
 		if (line == "IN" || line == "PRE" || line == "POST")
 		{
 			printType = line;
 			break;
 		}
+		//Push back operation
 		else
 		{
 			operations.push_back(line);
 		}
 
+		//End loop if too large
 		if (errorCount > 102)
 		{
 			cout << "ERROR 0" << endl;
@@ -1296,35 +1274,25 @@ int main()
 	//Loop over the operations from input
 	for (int j = 0; (unsigned)j < operations.size(); j++)
 	{
+		//Add to tree
 		if(operations[j][0] == 'A')
 		{
-			//cout << "Adding" << operations[j] << endl;
 			operations[j].erase(operations[j].begin());
-			//cout << "Step 1" << endl;
 			int tmp = stoi(operations[j]);
-			//cout << "Step 2" << endl;
 			tree1.insertNode(tmp);
-			//cout << "Complete" << endl;
 		}
+		//Remove from tree
 		else if (operations[j][0] == 'D')
 		{
-			//cout << "Removing " << operations[j] << endl;
 			operations[j].erase(operations[j].begin());
-			//cout << "Step 1" << endl;
 			int tmp = stoi(operations[j]);
-			//cout << "Step 2" << endl;
 			tree1.removeNode(tmp, NULL, NULL);
-			//cout << "Complete" << endl;
 		}
 		else
 		{
 			cout << "ERROR 20" << endl;
 			return 1;
 		}
-		//tree1.printTree(1);
-		//tree1.printTree(3);
-		//tree1.printTree(5);
-		//tree1.printTree(4);
 	}
 
 	//Print Tree
