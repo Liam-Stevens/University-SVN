@@ -99,6 +99,16 @@ static void translate_vm_operator(ast vm_op)
     // careful use of helper functions you can define above will keep your code simple
     // ...
 
+    // vm_operator ::= 'add' | 'and' | 'eq' | 'gt' | 'lt' | 'neg' | 'not' | 'or' | 'sub' | 'return'
+    if (the_op == "add")
+    {
+        output_assembler("@SP");
+        output_assembler("AM=M-1");
+        output_assembler("D=M");
+        output_assembler("A=A-1");
+        output_assembler("M=D+M");
+    }
+
 
     /************         AND HERE          **************/
 
@@ -145,7 +155,11 @@ static void translate_vm_func(ast func)
     // use the output_assembler() function to implement this VM command in Hack Assembler
     // careful use of helper functions you can define above will keep your code simple
     // ...
-
+    if ( command == "function" )
+    {
+        output_assembler("// "+command+" "+label+" "+to_string(number));
+        output_assembler("("+label+")");
+    }
 
     /************         AND HERE          **************/
 

@@ -35,7 +35,7 @@ complete_fullpath()
     fullpath="${fullpath}/lib/${architecture}/${command}"
 
     # check that it is executable
-    if [ ! -x "${fullpath}" ] ; then  
+    if [ ! -x "${fullpath}" ] ; then
         echo "Cannot find the architecture specific version of ${original}"
         echo "Have you run make?"
         exit -1
