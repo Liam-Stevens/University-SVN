@@ -31,6 +31,19 @@ static void translate_vm_stack(ast stack) ;
 
 /************   PUT YOUR HELPER FUNCTIONS HERE   **************/
 
+//Pushes a constant to the stack
+static void push_zero()
+{
+    output_assembler("@SP");
+    output_assembler("AM=M+1");
+    output_assembler("A=A-1");
+    output_assembler("M=0");
+}
+
+static void temp_function()
+{
+
+}
 
 
 /************      END OF HELPER FUNCTIONS       **************/
@@ -99,7 +112,6 @@ static void translate_vm_operator(ast vm_op)
     // careful use of helper functions you can define above will keep your code simple
     // ...
 
-    // vm_operator ::= 'add' | 'and' | 'eq' | 'gt' | 'lt' | 'neg' | 'not' | 'or' | 'sub' | 'return'
     if (the_op == "add")
     {
         output_assembler("@SP");
@@ -108,6 +120,53 @@ static void translate_vm_operator(ast vm_op)
         output_assembler("A=A-1");
         output_assembler("M=D+M");
     }
+
+    if (the_op == "and")
+    {
+
+    }
+
+    if (the_op == "eq")
+    {
+
+    }
+
+    if (the_op == "gt")
+    {
+
+    }
+
+    if (the_op == "lt")
+    {
+
+    }
+
+    if (the_op == "neg")
+    {
+
+    }
+
+    if (the_op == "not")
+    {
+
+    }
+
+    if (the_op == "or")
+    {
+
+    }
+
+    if (the_op == "sub")
+    {
+
+    }
+
+    if (the_op == "return")
+    {
+
+    }
+
+
 
 
     /************         AND HERE          **************/
@@ -157,8 +216,12 @@ static void translate_vm_func(ast func)
     // ...
     if ( command == "function" )
     {
-        output_assembler("// "+command+" "+label+" "+to_string(number));
+        //output_assembler("// "+command+" "+label+" "+to_string(number));
         output_assembler("("+label+")");
+        for (int i = 0; i < number; i++)
+        {
+            push_zero();
+        }
     }
 
     /************         AND HERE          **************/
@@ -184,6 +247,21 @@ static void translate_vm_stack(ast stack)
     // careful use of helper functions you can define above will keep your code simple
     // ...
 
+    output_assembler("// "+command+" "+segment+" "+to_string(number));
+    if (command == "push")
+    {
+        if (segment == "constant")
+        {
+            output_assembler("@"+to_string(number));
+            output_assembler("D=A");
+            output_assembler("@SP");
+            output_assembler("AM=M+1");
+            output_assembler("A=A-1");
+            output_assembler("M=D");
+        }
+
+
+    }
 
     /************         AND HERE          **************/
 
