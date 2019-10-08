@@ -123,7 +123,11 @@ static void translate_vm_operator(ast vm_op)
 
     if (the_op == "and")
     {
-
+        output_assembler("@SP");
+        output_assembler("AM=M-1");
+        output_assembler("D=M");
+        output_assembler("A=A-1");
+        output_assembler("M=D&M");
     }
 
     if (the_op == "eq")
@@ -152,12 +156,18 @@ static void translate_vm_operator(ast vm_op)
 
     if (the_op == "not")
     {
-
+        output_assembler("@SP");
+        output_assembler("A=M-1");
+        output_assembler("M=!M");
     }
 
     if (the_op == "or")
     {
-
+        output_assembler("@SP");
+        output_assembler("AM=M-1");
+        output_assembler("D=M");
+        output_assembler("A=A-1");
+        output_assembler("M=D|M");
     }
 
     if (the_op == "sub")
@@ -263,6 +273,15 @@ static void translate_vm_stack(ast stack)
         {
             output_assembler("@"+to_string(number));
             output_assembler("D=A");
+            output_assembler("@SP");
+            output_assembler("AM=M+1");
+            output_assembler("A=A-1");
+            output_assembler("M=D");
+        }
+        if (segment == "static")
+        {
+            output_assembler("@"+to_string(16+number));
+            output_assembler("D=M");
             output_assembler("@SP");
             output_assembler("AM=M+1");
             output_assembler("A=A-1");
