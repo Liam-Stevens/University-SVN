@@ -295,7 +295,11 @@ static void translate_vm_stack(ast stack)
     {
         if (segment == "pointer")
         {
-
+            output_assembler("@SP");
+            output_assembler("AM=M-1");
+            output_assembler("D=M");
+            output_assembler("@"+to_string(3+number));
+            output_assembler("M=D");
         }
 
     }
