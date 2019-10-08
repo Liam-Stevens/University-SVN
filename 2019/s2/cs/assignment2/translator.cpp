@@ -143,7 +143,11 @@ static void translate_vm_operator(ast vm_op)
 
     if (the_op == "neg")
     {
-
+        output_assembler("@0");
+        output_assembler("D=A");
+        output_assembler("@SP");
+        output_assembler("A=M-1");
+        output_assembler("M=D-M");
     }
 
     if (the_op == "not")
@@ -158,6 +162,11 @@ static void translate_vm_operator(ast vm_op)
 
     if (the_op == "sub")
     {
+        output_assembler("@SP");
+        output_assembler("AM=M-1");
+        output_assembler("D=M");
+        output_assembler("A=A-1");
+        output_assembler("M=M-D");
 
     }
 
@@ -260,6 +269,15 @@ static void translate_vm_stack(ast stack)
             output_assembler("M=D");
         }
 
+
+    }
+
+    if (command == "pop")
+    {
+        if (segment == "pointer")
+        {
+
+        }
 
     }
 
