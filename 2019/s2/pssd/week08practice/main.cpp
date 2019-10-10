@@ -18,7 +18,7 @@ int main()
 	test33.push_back(6);*/
 
 	StrangeComputer test;
-	cout << test.setMemory("111000111") << endl;
+	cout << test.setMemory("0011") << endl;
 
 
 	return 0;
