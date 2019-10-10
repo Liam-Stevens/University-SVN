@@ -6,19 +6,21 @@ using namespace std;
 class StrangeComputer
 {
 private:
-    string computer;
+    int consec;
 
 public:
     int setMemory(string mem)
     {
-        int consec = 0;
+        consec = 0;
         int flips = 0;
 
         for (int i = 0; i < mem.length(); i++)
         {
-            if (mem[i] != consec)
+            cout << "Consec: " << consec << " | Mem: " << mem[i] << endl;
+            if (mem[i] - 48 != consec)
             {
-                consec = mem[i];
+                cout << "FLIP" << endl;
+                consec = mem[i] - 48;
                 flips++;
             }
         }
