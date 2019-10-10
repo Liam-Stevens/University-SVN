@@ -1,4 +1,4 @@
-#include "Thimbles.hpp"
+#include "StrangeComputer.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -9,16 +9,16 @@ using namespace std;
 int main()
 {
 
-	vector<string> test32;
+	/*vector<string> test32;
 	test32.push_back("1-2");
 	test32.push_back("3-1");
-	/*
+
 	vector<int> test33;
 	test33.push_back(4);
 	test33.push_back(6);*/
 
-	Thimbles test;
-	cout << test.thimbleWithBall(test32) << endl;
+	StrangeComputer test;
+	cout << test.setMemory("111000111") << endl;
 
 
 	return 0;
