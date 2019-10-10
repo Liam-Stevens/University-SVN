@@ -416,6 +416,42 @@ static void translate_vm_stack(ast stack)
             output_assembler("M=D");
         }
 
+        if (segment == "this")
+        {
+            output_assembler("@"+to_string(number));
+            output_assembler("D=A");
+            output_assembler("@THIS");
+            output_assembler("A=D+M");
+            output_assembler("D=M");
+            output_assembler("@SP");
+            output_assembler("AM=M+1");
+            output_assembler("A=A-1");
+            output_assembler("M=D");
+        }
+
+        if (segment == "that")
+        {
+            output_assembler("@"+to_string(number));
+            output_assembler("D=A");
+            output_assembler("@THAT");
+            output_assembler("A=D+M");
+            output_assembler("D=M");
+            output_assembler("@SP");
+            output_assembler("AM=M+1");
+            output_assembler("A=A-1");
+            output_assembler("M=D");
+        }
+
+        if (segment == "pointer")
+        {
+            output_assembler("@"+to_string(3+number));
+            output_assembler("D=M");
+            output_assembler("@SP");
+            output_assembler("AM=M+1");
+            output_assembler("A=A-1");
+            output_assembler("M=D");
+        }
+
     }
 
     if (command == "pop")
