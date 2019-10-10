@@ -30,6 +30,16 @@ static void translate_vm_stack(ast stack) ;
 ////////////////////////////////////////////////////////////////
 
 /************   PUT YOUR HELPER FUNCTIONS HERE   **************/
+int gtCalls;
+int ltCalls;
+int eqCalls;
+
+static void set_numbers()
+{
+    gtCalls = 0;
+    ltCalls = 0;
+    eqCalls = 0;
+}
 
 //Pushes a constant to the stack
 static void push_zero()
@@ -132,17 +142,80 @@ static void translate_vm_operator(ast vm_op)
 
     if (the_op == "eq")
     {
-
+        int tmp = eqCalls;
+        output_assembler("@SP");
+        output_assembler("AM=M-1");
+        output_assembler("D=M");
+        output_assembler("A=A-1");
+        output_assembler("D=M-D");
+        output_assembler("@Coverage.ff5$EQ_"+to_string(tmp));
+        output_assembler("D;JNE");
+        output_assembler("@1");
+        output_assembler("D=A");
+        output_assembler("D=D-A");
+        output_assembler("D=D-A");
+        output_assembler("@Coverage.ff5$EQ_"+to_string(tmp+1));
+        output_assembler("0;JMP");
+        output_assembler("(Coverage.ff5$EQ_"+to_string(tmp)+")");
+        output_assembler("@0");
+        output_assembler("D=A");
+        output_assembler("(Coverage.ff5$EQ_"+to_string(tmp+1)+")");
+        output_assembler("@SP");
+        output_assembler("A=M-1");
+        output_assembler("M=D");
+        eqCalls = eqCalls + 2;
     }
 
     if (the_op == "gt")
     {
-
+        int tmp = gtCalls;
+        output_assembler("@SP");
+        output_assembler("AM=M-1");
+        output_assembler("D=M");
+        output_assembler("A=A-1");
+        output_assembler("D=M-D");
+        output_assembler("@Coverage.main$GT_"+to_string(tmp));
+        output_assembler("D;JLT");
+        output_assembler("@1");
+        output_assembler("D=A");
+        output_assembler("D=D-A");
+        output_assembler("D=D-A");
+        output_assembler("@Coverage.main$GT_"+to_string(tmp+1));
+        output_assembler("0;JMP");
+        output_assembler("(Coverage.main$GT_"+to_string(tmp)+")");
+        output_assembler("@0");
+        output_assembler("D=A");
+        output_assembler("(Coverage.main$GT_"+to_string(tmp+1)+")");
+        output_assembler("@SP");
+        output_assembler("A=M-1");
+        output_assembler("M=D");
+        gtCalls = gtCalls + 2;
     }
 
     if (the_op == "lt")
     {
-
+        int tmp = ltCalls;
+        output_assembler("@SP");
+        output_assembler("AM=M-1");
+        output_assembler("D=M");
+        output_assembler("A=A-1");
+        output_assembler("D=M-D");
+        output_assembler("@Coverage.main$LT_"+to_string(tmp));
+        output_assembler("D;JGT");
+        output_assembler("@1");
+        output_assembler("D=A");
+        output_assembler("D=D-A");
+        output_assembler("D=D-A");
+        output_assembler("@Coverage.main$LT_"+to_string(tmp+1));
+        output_assembler("0;JMP");
+        output_assembler("(Coverage.main$LT_"+to_string(tmp)+")");
+        output_assembler("@0");
+        output_assembler("D=A");
+        output_assembler("(Coverage.main$LT_"+to_string(tmp+1)+")");
+        output_assembler("@SP");
+        output_assembler("A=M-1");
+        output_assembler("M=D");
+        ltCalls = ltCalls + 2;
     }
 
     if (the_op == "neg")
@@ -210,6 +283,27 @@ static void translate_vm_jump(ast jump)
     // careful use of helper functions you can define above will keep your code simple
     // ...
 
+    //output_assembler("// "+command+" "+label);
+    if (command == "label")
+    {
+        output_assembler("(Coverage.main$"+label+")");
+    }
+
+    if (command == "goto")
+    {
+        output_assembler("@Coverage.main$"+label);
+        output_assembler("0;JMP");
+    }
+
+    if (command == "if-goto")
+    {
+        output_assembler("@SP");
+        output_assembler("AM=M-1");
+        output_assembler("D=M");
+        output_assembler("@Coverage.main$"+label);
+        output_assembler("D;JNE");
+    }
+
 
     /************         AND HERE          **************/
 
@@ -233,14 +327,20 @@ static void translate_vm_func(ast func)
     // use the output_assembler() function to implement this VM command in Hack Assembler
     // careful use of helper functions you can define above will keep your code simple
     // ...
+
+    //output_assembler("// "+command+" "+label+" "+to_string(number));
     if ( command == "function" )
     {
-        //output_assembler("// "+command+" "+label+" "+to_string(number));
         output_assembler("("+label+")");
         for (int i = 0; i < number; i++)
         {
             push_zero();
         }
+    }
+
+    if (command == "call")
+    {
+
     }
 
     /************         AND HERE          **************/
@@ -288,6 +388,31 @@ static void translate_vm_stack(ast stack)
             output_assembler("M=D");
         }
 
+        if (segment == "local")
+        {
+            output_assembler("@"+to_string(number));
+            output_assembler("D=A");
+            output_assembler("@LCL");
+            output_assembler("A=D+M");
+            output_assembler("D=M");
+            output_assembler("@SP");
+            output_assembler("AM=M+1");
+            output_assembler("A=A-1");
+            output_assembler("M=D");
+        }
+
+        if (segment == "argument")
+        {
+            output_assembler("@"+to_string(number));
+            output_assembler("D=A");
+            output_assembler("@ARG");
+            output_assembler("A=D+M");
+            output_assembler("D=M");
+            output_assembler("@SP");
+            output_assembler("AM=M+1");
+            output_assembler("A=A-1");
+            output_assembler("M=D");
+        }
 
     }
 
@@ -302,6 +427,21 @@ static void translate_vm_stack(ast stack)
             output_assembler("M=D");
         }
 
+        if (segment == "local")
+        {
+
+        }
+
+        if (segment == "argument")
+        {
+
+        }
+
+        if (segment == "temp")
+        {
+
+        }
+
     }
 
     /************         AND HERE          **************/
@@ -313,6 +453,8 @@ static void translate_vm_stack(ast stack)
 // main program
 int main(int argc,char **argv)
 {
+    set_numbers();
+
     // parse abstract syntax tree and pass to the translator
     translate_vm_class(ast_parse_xml()) ;
 
