@@ -1,4 +1,4 @@
-#include "StrangeComputer.hpp"
+#include "FracCount.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -17,8 +17,8 @@ int main()
 	test33.push_back(4);
 	test33.push_back(6);*/
 
-	StrangeComputer test;
-	cout << test.setMemory("0011") << endl;
+	FracCount test;
+	cout << test.position(999,1000) << endl;
 
 
 	return 0;
