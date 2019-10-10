@@ -33,6 +33,7 @@ static void translate_vm_stack(ast stack) ;
 int gtCalls;
 int ltCalls;
 int eqCalls;
+string className;
 
 static void set_numbers()
 {
@@ -148,18 +149,18 @@ static void translate_vm_operator(ast vm_op)
         output_assembler("D=M");
         output_assembler("A=A-1");
         output_assembler("D=M-D");
-        output_assembler("@Coverage.ff5$EQ_"+to_string(tmp));
+        output_assembler("@"+className+"$EQ_"+to_string(tmp));
         output_assembler("D;JNE");
         output_assembler("@1");
         output_assembler("D=A");
         output_assembler("D=D-A");
         output_assembler("D=D-A");
-        output_assembler("@Coverage.ff5$EQ_"+to_string(tmp+1));
+        output_assembler("@"+className+"$EQ_"+to_string(tmp+1));
         output_assembler("0;JMP");
-        output_assembler("(Coverage.ff5$EQ_"+to_string(tmp)+")");
+        output_assembler("("+className+"$EQ_"+to_string(tmp)+")");
         output_assembler("@0");
         output_assembler("D=A");
-        output_assembler("(Coverage.ff5$EQ_"+to_string(tmp+1)+")");
+        output_assembler("("+className+"$EQ_"+to_string(tmp+1)+")");
         output_assembler("@SP");
         output_assembler("A=M-1");
         output_assembler("M=D");
@@ -174,18 +175,18 @@ static void translate_vm_operator(ast vm_op)
         output_assembler("D=M");
         output_assembler("A=A-1");
         output_assembler("D=M-D");
-        output_assembler("@Coverage.main$GT_"+to_string(tmp));
+        output_assembler("@"+className+"$GT_"+to_string(tmp));
         output_assembler("D;JLT");
         output_assembler("@1");
         output_assembler("D=A");
         output_assembler("D=D-A");
         output_assembler("D=D-A");
-        output_assembler("@Coverage.main$GT_"+to_string(tmp+1));
+        output_assembler("@"+className+"$GT_"+to_string(tmp+1));
         output_assembler("0;JMP");
-        output_assembler("(Coverage.main$GT_"+to_string(tmp)+")");
+        output_assembler("("+className+"$GT_"+to_string(tmp)+")");
         output_assembler("@0");
         output_assembler("D=A");
-        output_assembler("(Coverage.main$GT_"+to_string(tmp+1)+")");
+        output_assembler("("+className+"$GT_"+to_string(tmp+1)+")");
         output_assembler("@SP");
         output_assembler("A=M-1");
         output_assembler("M=D");
@@ -200,18 +201,18 @@ static void translate_vm_operator(ast vm_op)
         output_assembler("D=M");
         output_assembler("A=A-1");
         output_assembler("D=M-D");
-        output_assembler("@Coverage.main$LT_"+to_string(tmp));
+        output_assembler("@"+className+"$LT_"+to_string(tmp));
         output_assembler("D;JGT");
         output_assembler("@1");
         output_assembler("D=A");
         output_assembler("D=D-A");
         output_assembler("D=D-A");
-        output_assembler("@Coverage.main$LT_"+to_string(tmp+1));
+        output_assembler("@"+className+"$LT_"+to_string(tmp+1));
         output_assembler("0;JMP");
-        output_assembler("(Coverage.main$LT_"+to_string(tmp)+")");
+        output_assembler("("+className+"$LT_"+to_string(tmp)+")");
         output_assembler("@0");
         output_assembler("D=A");
-        output_assembler("(Coverage.main$LT_"+to_string(tmp+1)+")");
+        output_assembler("("+className+"$LT_"+to_string(tmp+1)+")");
         output_assembler("@SP");
         output_assembler("A=M-1");
         output_assembler("M=D");
@@ -286,12 +287,12 @@ static void translate_vm_jump(ast jump)
     //output_assembler("// "+command+" "+label);
     if (command == "label")
     {
-        output_assembler("(Coverage.main$"+label+")");
+        output_assembler("("+className+"$"+label+")");
     }
 
     if (command == "goto")
     {
-        output_assembler("@Coverage.main$"+label);
+        output_assembler("@"+className+"$"+label);
         output_assembler("0;JMP");
     }
 
@@ -300,7 +301,7 @@ static void translate_vm_jump(ast jump)
         output_assembler("@SP");
         output_assembler("AM=M-1");
         output_assembler("D=M");
-        output_assembler("@Coverage.main$"+label);
+        output_assembler("@"+className+"$"+label);
         output_assembler("D;JNE");
     }
 
@@ -336,6 +337,7 @@ static void translate_vm_func(ast func)
         {
             push_zero();
         }
+        className = label;
     }
 
     if (command == "call")
