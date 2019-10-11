@@ -467,17 +467,67 @@ static void translate_vm_stack(ast stack)
 
         if (segment == "local")
         {
-
+            output_assembler("@SP");
+            output_assembler("AM=M-1");
+            output_assembler("D=M");
+            output_assembler("@LCL");
+            output_assembler("A=M");
+            for (int i = 0; i < number; i++)
+            {
+                output_assembler("A=A+1");
+            }
+            output_assembler("M=D");
         }
 
         if (segment == "argument")
         {
+            output_assembler("@SP");
+            output_assembler("AM=M-1");
+            output_assembler("D=M");
+            output_assembler("@ARG");
+            output_assembler("A=M");
+            for (int i = 0; i < number; i++)
+            {
+                output_assembler("A=A+1");
+            }
+            output_assembler("M=D");
+        }
 
+        if (segment == "this")
+        {
+            output_assembler("@SP");
+            output_assembler("AM=M-1");
+            output_assembler("D=M");
+            output_assembler("@THIS");
+            output_assembler("A=M");
+            for (int i = 0; i < number; i++)
+            {
+                output_assembler("A=A+1");
+            }
+            output_assembler("M=D");
+        }
+
+        if (segment == "that")
+        {
+            output_assembler("@SP");
+            output_assembler("AM=M-1");
+            output_assembler("D=M");
+            output_assembler("@THAT");
+            output_assembler("A=M");
+            for (int i = 0; i < number; i++)
+            {
+                output_assembler("A=A+1");
+            }
+            output_assembler("M=D");
         }
 
         if (segment == "temp")
         {
-
+            output_assembler("@SP");
+            output_assembler("AM=M-1");
+            output_assembler("D=M");
+            output_assembler("@"+to_string(5+number));
+            output_assembler("M=D");
         }
 
     }
