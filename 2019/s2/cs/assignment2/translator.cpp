@@ -70,6 +70,18 @@ static void do_pop()
     output_assembler("D=M");
 }
 
+//Easy push function - breaks lt when used???
+static void push_into(string location, int stack)
+{
+    output_assembler("@"+to_string(stack));
+    output_assembler("D=A");
+    output_assembler(location);
+    output_assembler("A=D+M");
+    output_assembler("D=M");
+    do_push();
+}
+
+//Easy pop function
 static void pop_into(string location, int offset)
 {
     do_pop();
@@ -80,6 +92,14 @@ static void pop_into(string location, int offset)
         output_assembler("A=A+1");
     }
     output_assembler("M=D");
+}
+
+static void move_back(int number)
+{
+    for (int i = 0; i < number; i++)
+    {
+        output_assembler("A=A-1");
+    }
 }
 
 
@@ -282,7 +302,60 @@ static void translate_vm_operator(ast vm_op)
 
     if (the_op == "return")
     {
-
+        //frame = LCL
+        output_assembler("@LCL");
+        output_assembler("D=M");
+        output_assembler("@13");
+        output_assembler("M=D");
+        //retAddr = frame-5
+        output_assembler("@LCL");
+        output_assembler("A=M");
+        move_back(5);
+        output_assembler("D=M");
+        output_assembler("@14");
+        output_assembler("M=D");
+        //ARG = pop
+        output_assembler("@SP");
+        output_assembler("A=M-1");
+        output_assembler("D=M");
+        output_assembler("@ARG");
+        output_assembler("A=M");
+        output_assembler("M=D");
+        //SP = ARG+1
+        output_assembler("D=A");
+        output_assembler("@SP");
+        output_assembler("M=D+1");
+        //THAT = frame-1
+        output_assembler("@13");
+        output_assembler("A=M-1");
+        output_assembler("D=M");
+        output_assembler("@THAT");
+        output_assembler("M=D");
+        //THIS = frame-2
+        output_assembler("@13");
+        output_assembler("A=M-1");
+        output_assembler("A=A-1");
+        output_assembler("D=M");
+        output_assembler("@THIS");
+        output_assembler("M=D");
+        //ARG = frame-3
+        output_assembler("@13");
+        output_assembler("A=M-1");
+        move_back(2);
+        output_assembler("D=M");
+        output_assembler("@ARG");
+        output_assembler("M=D");
+        //LCL = frame-4
+        output_assembler("@13");
+        output_assembler("A=M-1");
+        move_back(3);
+        output_assembler("D=M");
+        output_assembler("@LCL");
+        output_assembler("M=D");
+        //goto retAddr
+        output_assembler("@14");
+        output_assembler("A=M");
+        output_assembler("0;JMP");
     }
 
 
