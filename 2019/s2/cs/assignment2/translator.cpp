@@ -452,6 +452,16 @@ static void translate_vm_stack(ast stack)
             output_assembler("M=D");
         }
 
+        if (segment == "temp")
+        {
+            output_assembler("@"+to_string(5+number));
+            output_assembler("D=M");
+            output_assembler("@SP");
+            output_assembler("AM=M+1");
+            output_assembler("A=A-1");
+            output_assembler("M=D");
+        }
+
     }
 
     if (command == "pop")
@@ -527,6 +537,15 @@ static void translate_vm_stack(ast stack)
             output_assembler("AM=M-1");
             output_assembler("D=M");
             output_assembler("@"+to_string(5+number));
+            output_assembler("M=D");
+        }
+
+        if (segment == "static")
+        {
+            output_assembler("@SP");
+            output_assembler("AM=M-1");
+            output_assembler("D=M");
+            output_assembler("@"+to_string(16+number));
             output_assembler("M=D");
         }
 
