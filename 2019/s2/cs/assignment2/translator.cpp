@@ -72,7 +72,7 @@ static void do_pop()
     output_assembler("D=M");
 }
 
-//Easy push function - breaks lt when used???
+//Easy push function - this code breaks lt when used???
 static void push_into(string location, int stack)
 {
     output_assembler("@"+to_string(stack));
@@ -96,6 +96,7 @@ static void pop_into(string location, int offset)
     output_assembler("M=D");
 }
 
+//Used for moving the where I am looking the on stack back easily
 static void move_back(int number)
 {
     for (int i = 0; i < number; i++)
@@ -171,6 +172,7 @@ static void translate_vm_operator(ast vm_op)
     // careful use of helper functions you can define above will keep your code simple
     // ...
 
+    //Add operator
     if (the_op == "add")
     {
         output_assembler("@SP");
@@ -180,6 +182,7 @@ static void translate_vm_operator(ast vm_op)
         output_assembler("M=D+M");
     }
 
+    //And operator
     if (the_op == "and")
     {
         output_assembler("@SP");
@@ -189,6 +192,7 @@ static void translate_vm_operator(ast vm_op)
         output_assembler("M=D&M");
     }
 
+    //Equals operator
     if (the_op == "eq")
     {
         int tmp = eqCalls;
@@ -215,6 +219,7 @@ static void translate_vm_operator(ast vm_op)
         eqCalls = eqCalls + 2;
     }
 
+    //Greater Than operator
     if (the_op == "gt")
     {
         int tmp = gtCalls;
@@ -241,6 +246,7 @@ static void translate_vm_operator(ast vm_op)
         gtCalls = gtCalls + 2;
     }
 
+    //Less Than Operator
     if (the_op == "lt")
     {
         int tmp = ltCalls;
@@ -267,6 +273,7 @@ static void translate_vm_operator(ast vm_op)
         ltCalls = ltCalls + 2;
     }
 
+    //Negate Operator
     if (the_op == "neg")
     {
         output_assembler("@0");
@@ -276,6 +283,7 @@ static void translate_vm_operator(ast vm_op)
         output_assembler("M=D-M");
     }
 
+    //Not Operator
     if (the_op == "not")
     {
         output_assembler("@SP");
@@ -283,6 +291,7 @@ static void translate_vm_operator(ast vm_op)
         output_assembler("M=!M");
     }
 
+    //Or Operator
     if (the_op == "or")
     {
         output_assembler("@SP");
@@ -292,6 +301,7 @@ static void translate_vm_operator(ast vm_op)
         output_assembler("M=D|M");
     }
 
+    //Subtraction Operator
     if (the_op == "sub")
     {
         output_assembler("@SP");
@@ -302,6 +312,7 @@ static void translate_vm_operator(ast vm_op)
 
     }
 
+    //Return function
     if (the_op == "return")
     {
         //frame = LCL
@@ -360,9 +371,6 @@ static void translate_vm_operator(ast vm_op)
         output_assembler("0;JMP");
     }
 
-
-
-
     /************         AND HERE          **************/
 
     // tell the output system that we have just finished trying to implement a VM command
@@ -385,18 +393,20 @@ static void translate_vm_jump(ast jump)
     // careful use of helper functions you can define above will keep your code simple
     // ...
 
-    //output_assembler("// "+command+" "+label);
+    //Add a label
     if (command == "label")
     {
         output_assembler("("+className+"$"+label+")");
     }
 
+    //Goto Command
     if (command == "goto")
     {
         output_assembler("@"+className+"$"+label);
         output_assembler("0;JMP");
     }
 
+    //If-Goto Command
     if (command == "if-goto")
     {
         output_assembler("@SP");
@@ -405,7 +415,6 @@ static void translate_vm_jump(ast jump)
         output_assembler("@"+className+"$"+label);
         output_assembler("D;JNE");
     }
-
 
     /************         AND HERE          **************/
 
@@ -430,7 +439,7 @@ static void translate_vm_func(ast func)
     // careful use of helper functions you can define above will keep your code simple
     // ...
 
-    //output_assembler("// "+command+" "+label+" "+to_string(number));
+    //Function declaration
     if ( command == "function" )
     {
         output_assembler("("+label+")");
@@ -441,6 +450,7 @@ static void translate_vm_func(ast func)
         className = label;
     }
 
+    //Call function
     if (command == "call")
     {
         //push retAddr
@@ -506,15 +516,18 @@ static void translate_vm_stack(ast stack)
     // careful use of helper functions you can define above will keep your code simple
     // ...
 
-    output_assembler("// "+command+" "+segment+" "+to_string(number));
+    //Push to the stack
     if (command == "push")
     {
+        //Push a constant
         if (segment == "constant")
         {
             output_assembler("@"+to_string(number));
             output_assembler("D=A");
             do_push();
         }
+
+        //Push a static
         if (segment == "static")
         {
             output_assembler("@"+to_string(16+number));
@@ -522,6 +535,7 @@ static void translate_vm_stack(ast stack)
             do_push();
         }
 
+        //Push a local variable
         if (segment == "local")
         {
             output_assembler("@"+to_string(number));
@@ -532,6 +546,7 @@ static void translate_vm_stack(ast stack)
             do_push();
         }
 
+        //Push an argument
         if (segment == "argument")
         {
             output_assembler("@"+to_string(number));
@@ -542,6 +557,7 @@ static void translate_vm_stack(ast stack)
             do_push();
         }
 
+        //Push THIS to the stack
         if (segment == "this")
         {
             output_assembler("@"+to_string(number));
@@ -552,6 +568,7 @@ static void translate_vm_stack(ast stack)
             do_push();
         }
 
+        //Push THAT to the stack
         if (segment == "that")
         {
             output_assembler("@"+to_string(number));
@@ -562,6 +579,7 @@ static void translate_vm_stack(ast stack)
             do_push();
         }
 
+        //Push a pointer
         if (segment == "pointer")
         {
             output_assembler("@"+to_string(3+number));
@@ -569,6 +587,7 @@ static void translate_vm_stack(ast stack)
             do_push();
         }
 
+        //Push a temporary variable
         if (segment == "temp")
         {
             output_assembler("@"+to_string(5+number));
@@ -578,8 +597,10 @@ static void translate_vm_stack(ast stack)
 
     }
 
+    //Pop from the stack
     if (command == "pop")
     {
+        //Pop into a pointer
         if (segment == "pointer")
         {
             do_pop();
@@ -587,26 +608,31 @@ static void translate_vm_stack(ast stack)
             output_assembler("M=D");
         }
 
+        //Pop into a local variable
         if (segment == "local")
         {
             pop_into("@LCL", number);
         }
 
+        //Pop into an argument
         if (segment == "argument")
         {
             pop_into("@ARG", number);
         }
 
+        //Pop into THIS
         if (segment == "this")
         {
             pop_into("@THIS", number);
         }
 
+        //Pop into THAT
         if (segment == "that")
         {
             pop_into("@THAT", number);
         }
 
+        //Pop into temp
         if (segment == "temp")
         {
             do_pop();
@@ -614,6 +640,7 @@ static void translate_vm_stack(ast stack)
             output_assembler("M=D");
         }
 
+        //Pop to static
         if (segment == "static")
         {
             do_pop();
@@ -632,6 +659,7 @@ static void translate_vm_stack(ast stack)
 // main program
 int main(int argc,char **argv)
 {
+    //Added this to initialise my global variables
     set_numbers();
 
     // parse abstract syntax tree and pass to the translator
