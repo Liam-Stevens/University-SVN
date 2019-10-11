@@ -34,6 +34,7 @@ static void translate_vm_stack(ast stack) ;
 int gtCalls;
 int ltCalls;
 int eqCalls;
+int callCalls;
 string className;
 
 //Ensures labels start at zero
@@ -42,6 +43,7 @@ static void set_numbers()
     gtCalls = 0;
     ltCalls = 0;
     eqCalls = 0;
+    callCalls = 0;
 }
 
 //Pushes zero to the stack
@@ -441,7 +443,44 @@ static void translate_vm_func(ast func)
 
     if (command == "call")
     {
-
+        //push retAddr
+        output_assembler("@"+className+"$"+label+to_string(callCalls));
+        output_assembler("D=A");
+        do_push();
+        //push LCL
+        output_assembler("@LCL");
+        output_assembler("D=M");
+        do_push();
+        //push ARG
+        output_assembler("@ARG");
+        output_assembler("D=M");
+        do_push();
+        //push THIS
+        output_assembler("@THIS");
+        output_assembler("D=M");
+        do_push();
+        //push THAT
+        output_assembler("@THAT");
+        output_assembler("D=M");
+        do_push();
+        //ARG = SP-nArgs-5
+        output_assembler("@SP");
+        output_assembler("A=M-1");
+        move_back(4+number);
+        output_assembler("D=A");
+        output_assembler("@ARG");
+        output_assembler("M=D");
+        //LCL = SP
+        output_assembler("@SP");
+        output_assembler("D=M");
+        output_assembler("@LCL");
+        output_assembler("M=D");
+        //goto g
+        output_assembler("@"+label);
+        output_assembler("0;JMP");
+        //Label
+        output_assembler("("+className+"$"+label+to_string(callCalls)+")");
+        callCalls++;
     }
 
     /************         AND HERE          **************/
