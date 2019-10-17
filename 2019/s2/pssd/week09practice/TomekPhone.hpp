@@ -23,7 +23,6 @@ public:
     {
         if (sum(keySizes) < frequencies.size())
         {
-            //cout << sum(keySizes) << " | " << frequencies.size() << endl;
             return -1;
         }
 
