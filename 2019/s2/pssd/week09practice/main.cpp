@@ -1,4 +1,4 @@
-#include "SimpleDuplicateRemover.hpp"
+#include "RunLengthEncoding.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -22,14 +22,9 @@ int main()
 	test33.push_back(1);
 	test33.push_back(3);*/
 
-	SimpleDuplicateRemover test;
-	vector<int> tester = test.process(test32);
+	RunLengthEncoding test;
 
-	for (int i = 0; i < tester.size(); i++)
-	{
-		cout << tester[i] << " ";
-	}
-	cout << endl;
+	cout << test.decode("4A3BC2DE") << endl;
 
 
 	return 0;
