@@ -24,7 +24,7 @@ int main()
 
 	RunLengthEncoding test;
 
-	cout << test.decode("4A3BC2DE") << endl;
+	cout << test.decode("50A") << endl;
 
 
 	return 0;

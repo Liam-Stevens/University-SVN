@@ -10,12 +10,12 @@ private:
 string original;
 int length;
 
-    void disassemble(int index, string text)
+    void disassemble(int num, char target)
     {
 
-        for (int i = 0; i < text[index] - 48; i++)
+        for (int i = 0; i < num; i++)
         {
-            original += text[index+1];
+            original += target;
             length++;
 
             if (length > 50)
@@ -37,8 +37,26 @@ public:
 
             if (isdigit(text[i]))
             {
-                disassemble(i,text);
-                i++;
+                if (isdigit(text[i+1]))
+                {
+                    if (isdigit(text[i+2]))
+                    {
+                        return "TOO LONG";
+                    }
+                    else
+                    {
+                        int tmp = text[i] - 48;
+                        tmp = tmp * 10;
+                        tmp = tmp + text[i+1] - 48;
+                        disassemble(tmp, text[i+2]);
+                        i = i + 2;
+                    }
+                }
+                else
+                {
+                    disassemble(text[i] - 48, text[i+1]);
+                    i++;
+                }
             }
             else
             {
