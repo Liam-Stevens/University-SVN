@@ -33,7 +33,8 @@ private:
 public:
     vector<int> process(vector<int> sequence)
     {
-        
+        unique.clear();
+
         for (int i = sequence.size() - 1; i >= 0; i--)
         {
             if (checkExistance(sequence[i]) == false)
