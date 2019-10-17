@@ -1,4 +1,4 @@
-#include "ImportantTasks.hpp"
+#include "SimpleDuplicateRemover.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -10,33 +10,26 @@ int main()
 {
 
 	vector<int> test32;
+	test32.push_back(1);
 	test32.push_back(5);
-	test32.push_back(2);
-	test32.push_back(7);
-	test32.push_back(8);
+	test32.push_back(5);
+	test32.push_back(1);
 	test32.push_back(6);
-	test32.push_back(4);
-	test32.push_back(2);
-	test32.push_back(10);
-	test32.push_back(2);
-	test32.push_back(3);
+	test32.push_back(1);
 	
-	vector<int> test33;
+	/*vector<int> test33;
 	test33.push_back(4);
 	test33.push_back(1);
-	test33.push_back(3);
-	test33.push_back(6);
-	test33.push_back(2);
-	test33.push_back(10);
-	test33.push_back(11);
-	test33.push_back(1);
-	test33.push_back(1);
-	test33.push_back(3);
-	test33.push_back(4);
-	test33.push_back(2);
+	test33.push_back(3);*/
 
-	ImportantTasks test;
-	cout << test.maximalCost(test32,test33) << endl;
+	SimpleDuplicateRemover test;
+	vector<int> tester = test.process(test32);
+
+	for (int i = 0; i < tester.size(); i++)
+	{
+		cout << tester[i] << " ";
+	}
+	cout << endl;
 
 
 	return 0;
