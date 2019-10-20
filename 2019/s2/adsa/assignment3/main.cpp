@@ -78,9 +78,10 @@ public:
 		int hashKey = target[target.length()-1] - 97;
 
 		//Insert if unoccupied
-		if (table[hashKey] == "" && tombstone[hashKey] == false)
+		if (table[hashKey] == "" || tombstone[hashKey] == true)
 		{
 			table[hashKey] = target;
+			tombstone[hashKey] = false;
 		}
 		else
 		{
