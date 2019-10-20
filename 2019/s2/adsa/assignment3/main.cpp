@@ -41,7 +41,11 @@ public:
 				//loop around table
 				if (i > 25)
 				{
-					i = i - 25;
+					i = i - 26;
+				}
+				if (i == hashKey)
+				{
+					break;
 				}
 
 				//Found element
@@ -60,6 +64,7 @@ public:
 
 			return -1;
 		}
+		return -1;
 	};
 
 	void insert(string target)
@@ -86,7 +91,11 @@ public:
 				//loop around table
 				if (i > 25)
 				{
-					i = i - 25;
+					i = i - 26;
+				}
+				if (i == hashKey)
+				{
+					break;
 				}
 
 				//Found unoccupied element
@@ -128,7 +137,7 @@ public:
 		bool firstPrint = false;
 
 		//Iterate over all elements
-		for (int i = 0; i < table.size(); i++)
+		for (unsigned i = 0; i < table.size(); i++)
 		{
 			//Output if not empty or tombstone
 			if (table[i] != "" && tombstone[i] != true)
@@ -175,7 +184,7 @@ int main()
 	HashTable table1;
 
 	//Do commands
-	for (int i = 0; i < commands.size(); i++)
+	for (unsigned i = 0; i < commands.size(); i++)
 	{
 		//Insert command
 		if (commands[i][0] == 'A')
@@ -189,9 +198,7 @@ int main()
 			commands[i].erase(commands[i].begin());
 			table1.deletion(commands[i]);
 		}
-
 	}
-
 	//Print all elements of hashtable
 	table1.printAll();
 
