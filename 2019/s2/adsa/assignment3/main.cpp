@@ -109,7 +109,6 @@ public:
 	{
 		int hashKey = search(target);
 
-		cout << "DELETION OF " << target << " | " << hashKey << endl;
 		//Stop if not in table
 		if (hashKey == -1)
 		{
