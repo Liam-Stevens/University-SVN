@@ -168,7 +168,29 @@ int main()
 	vector<string> commands;
 	string line;
 
-	//Take the inputs
+	getline(cin, line);
+	int tracker = -1;
+	int commandNum = 0;
+	for (unsigned i = 0; i < line.length(); i++)
+	{
+		if (line[i] == ' ' || i == line.length()-1)
+		{
+			if (i == line.length()-1)
+			{
+				i++;
+			}
+			commands.push_back("");
+			for (unsigned j = tracker + 1; j < i; j++)
+			{
+				commands[commandNum] += line[j];
+			}
+			tracker = i;
+			commandNum++;
+		}
+
+	}
+
+	/*//Take the inputs
 	while(cin >> line)
 	{
 		//Check for end of file
@@ -179,7 +201,7 @@ int main()
 
 		//Push back operation
 		commands.push_back(line);
-	}
+	}*/
 
 	//Create hashtable
 	HashTable table1;
