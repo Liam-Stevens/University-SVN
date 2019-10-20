@@ -168,18 +168,22 @@ int main()
 	vector<string> commands;
 	string line;
 
+	//Takes input
 	getline(cin, line);
 	int tracker = -1;
 	int commandNum = 0;
 	for (unsigned i = 0; i < line.length(); i++)
 	{
+		//Push new command if a space or end of line
 		if (line[i] == ' ' || i == line.length()-1)
 		{
+			//Move end of command marker if end of line
 			if (i == line.length()-1)
 			{
 				i++;
 			}
 			commands.push_back("");
+			//Copy each character
 			for (unsigned j = tracker + 1; j < i; j++)
 			{
 				commands[commandNum] += line[j];
@@ -189,19 +193,6 @@ int main()
 		}
 
 	}
-
-	/*//Take the inputs
-	while(cin >> line)
-	{
-		//Check for end of file
-		if (cin.eof())
-		{
-			break;
-		}
-
-		//Push back operation
-		commands.push_back(line);
-	}*/
 
 	//Create hashtable
 	HashTable table1;
