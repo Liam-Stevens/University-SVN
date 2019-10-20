@@ -108,6 +108,8 @@ public:
 	void deletion(string target)
 	{
 		int hashKey = search(target);
+
+		cout << "DELETION OF " << target << " | " << hashKey << endl;
 		//Stop if not in table
 		if (hashKey == -1)
 		{
@@ -116,7 +118,7 @@ public:
 		else
 		{
 			//Set index to tombstone
-			tombstone[hashKey] == true;
+			tombstone[hashKey] = true;
 		}
 		return;
 	}
