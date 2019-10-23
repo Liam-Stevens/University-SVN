@@ -3,6 +3,7 @@
 #include "iobuffer.h"
 #include "symbols.h"
 #include "abstract-syntax-tree.h"
+#include <sstream>
 
 // to shorten our code:
 using namespace std ;
@@ -435,6 +436,7 @@ vector<ast> parse_var_dec()
         segment = "0";
         offset = 0;
         decs.push_back( create_var_dec(name, segment, offset, type) );
+        exist = current_token();
     }
 
     mustbe(tk_semi);
@@ -522,6 +524,8 @@ ast parse_let()
 {
     push_error_context("parse_let()") ;
 
+
+
     pop_error_context() ;
     return -1 ;
 }
@@ -555,8 +559,16 @@ ast parse_while()
 {
     push_error_context("parse_while()") ;
 
+    mustbe(tk_while);
+    mustbe(tk_lrb);
+    ast expression = parse_expr();
+    mustbe(tk_rrb);
+    mustbe(tk_lcb);
+    ast statements = parse_statements();
+    mustbe(tk_rcb);
+
     pop_error_context() ;
-    return -1 ;
+    return create_while(expression, statements) ;
 }
 
 // do ::= 'do' identifier (call | id_call) ';'
@@ -620,8 +632,17 @@ ast parse_expr()
 {
     push_error_context("parse_expr()") ;
 
+    vector<ast> expressions;
+
+    expressions.push_back( parse_term() );
+    while ( have( current_token(), tk_infix_op ) )
+    {
+        expressions.push_back( parse_infix_op() );
+        expressions.push_back( parse_term() );
+    }
+
     pop_error_context() ;
-    return -1 ;
+    return create_expr(expressions) ;
 }
 
 // term ::= integer_constant | string_constant | 'true' | 'false' | 'null' | 'this' | '(' expr ')' | unary_op term | var_term
@@ -651,8 +672,73 @@ ast parse_term()
 {
     push_error_context("parse_term()") ;
 
+    ast term;
+    ast nextTerm;
+
+    if ( have( current_token(), tk_integerConstant ) )
+    {
+        string number = token_spelling( current_token() );
+        stringstream convert(number);
+        int constant = 0;
+        convert >> constant;
+        term = create_int(constant);
+        next_token();
+    }
+
+    else if ( have( current_token(), tk_stringConstant ) )
+    {
+        string literal = token_spelling( current_token() );
+        term = create_string(literal);
+        next_token();
+    }
+
+    else if ( have( current_token(), tk_true ) )
+    {
+        term = create_bool(true);
+        next_token();
+    }
+
+    else if ( have( current_token(), tk_false ) )
+    {
+        term = create_bool(false);
+        next_token();
+    }
+
+    else if ( have( current_token(), tk_null ) )
+    {
+        term = create_null();
+        next_token();
+    }
+
+    else if ( have( current_token(), tk_this ) )
+    {
+        term = create_this();
+        next_token();
+    }
+
+    else if ( have( current_token(), tk_lrb ) )
+    {
+        mustbe(tk_lrb);
+        term = parse_expr();
+        mustbe(tk_rrb);
+    }
+
+    else if ( have( current_token(), tk_unary_op ) )
+    {
+        string op = token_spelling( current_token() );
+        nextTerm = parse_term();
+        term = create_unary_op(op, nextTerm);
+        next_token();
+    }
+
+    else if ( have( current_token(), tk_identifier ) )
+    {
+        term = parse_var_term();
+        //next_token(); ?????????????????????????????????????????????????????????????????????
+    }
+
     pop_error_context() ;
-    return -1 ;
+    return create_term(term) ;
 }
 
 // var_term ::= identifier (index | id_call | call)?
