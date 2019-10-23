@@ -146,23 +146,26 @@ ast parse_class_var_decs()
 {
     push_error_context("parse_class_var_decs()") ;
 
-    vector<ast> declarations;
+    vector<ast> class_declarations;
 
-    while(false)//////////////////////////////////////////////////////////////////
+    while( have( current_token(), tk_class_var ) )
     {
-        if (true)
+        vector<ast> new_decs;
+        if ( have( current_token(), tk_static ) )
         {
-
+            new_decs = parse_static_var_dec();
         }
 
-        else if (true)
+        else if ( have( current_token(), tk_field ) )
         {
-
+            new_decs = parse_field_var_dec();
         }
+
+        class_declarations.insert( class_declarations.end(), new_decs.begin(), new_decs.end() );
     }
 
     pop_error_context() ;
-    return create_class_var_decs(declarations) ;
+    return create_class_var_decs(class_declarations) ;
 }
 
 // static_var_dec ::= 'static' type identifier (',' identifier)* ';'
@@ -179,6 +182,29 @@ vector<ast> parse_static_var_dec()
 {
     vector<ast> decs ;
     push_error_context("parse_class()") ;
+
+    mustbe(tk_static);
+
+    string type = token_spelling( current_token() );
+    next_token();
+    string name = token_spelling( mustbe(tk_identifier) );
+    string segment = "static test"; ////////////////////////////////////////////////////////////
+    int offset = 0;
+
+    decs.push_back( create_var_dec(name, segment, offset, type) );
+
+    while ( current_token() == tk_type )
+    {
+        mustbe(tk_comma);
+        next_token();
+        name = token_spelling( mustbe(tk_identifier) );
+        segment = "static test";
+        offset = 0;
+
+        decs.push_back( create_var_dec(name, segment, offset, type) );
+    }
+
+    mustbe(tk_semi);
 
     pop_error_context() ;
     return decs ;
@@ -199,6 +225,29 @@ vector<ast> parse_field_var_dec()
     vector<ast> decs ;
     push_error_context("parse_class()") ;
 
+    mustbe(tk_field);
+
+    string type = token_spelling( current_token() );
+    next_token();
+    string name = token_spelling( mustbe(tk_identifier) );
+    string segment = "field test"; ////////////////////////////////////////////////////////////
+    int offset = 0;
+
+    decs.push_back( create_var_dec(name, segment, offset, type) );
+
+    while ( current_token() == tk_type )
+    {
+        mustbe(tk_comma);
+        next_token();
+        name = token_spelling( mustbe(tk_identifier) );
+        segment = "field test";
+        offset = 0;
+
+        decs.push_back( create_var_dec(name, segment, offset, type) );
+    }
+
+    mustbe(tk_semi);
+
     pop_error_context() ;
     return decs ;
 }
@@ -209,8 +258,30 @@ Token parse_type()
 {
     push_error_context("parse_type()") ;
 
+    Token type;
+
+    if ( have( current_token(), tk_int ) )
+    {
+        type = tk_int;
+    }
+
+    else if ( have( current_token(), tk_char ) )
+    {
+        type = tk_char;
+    }
+
+    else if ( have( current_token(), tk_boolean ) )
+    {
+        type = tk_boolean;
+    }
+
+    else if ( have( current_token(), tk_identifier ) )
+    {
+        type = tk_identifier;
+    }
+
     pop_error_context() ;
-    return -1 ;
+    return type ;
 }
 
 // vtype ::= 'void' | type
@@ -219,8 +290,20 @@ Token parse_vtype()
 {
     push_error_context("parse_vtype()") ;
 
+    Token type;
+
+    if ( have( current_token(), tk_void ) )
+    {
+        type = tk_void;
+    }
+
+    else if ( have( current_token(), tk_type ) )
+    {
+        type = parse_type();
+    }
+
     pop_error_context() ;
-    return -1 ;
+    return type ;
 }
 
 // subr_decs ::= (constructor | function | method)*
@@ -235,23 +318,21 @@ ast parse_subr_decs()
     push_error_context("parse_subr_decs()") ;
 
     vector<ast> subrs;
-    Token sub_token = current_token();
-    while(have(sub_token, tk_subroutine))
+    while( have( current_token(), tk_subroutine) )
     {
-        if (have(sub_token, tk_constructor))
+        if ( have( current_token(), tk_constructor ) )
         {
             subrs.push_back( create_subr( parse_constructor() ) );
         }
-        else if (have(sub_token, tk_function))
+        else if ( have( current_token(), tk_function ) )
         {
             subrs.push_back( create_subr( parse_function() ) );
         }
-        else if (have(sub_token, tk_method))
+        else if ( have( current_token(), tk_method ) )
         {
             subrs.push_back( create_subr( parse_method() ) );
         }
 
-        sub_token = current_token(); ////////////////////////////////////////////////////
     }
 
     pop_error_context() ;
@@ -328,31 +409,26 @@ ast parse_param_list()
 
     vector<ast> parameters;
 
-    Token exist = current_token();
-    if (exist == tk_type)
+    if ( current_token() == tk_type )
     {
-        string type = token_spelling(exist);
+        string type = token_spelling( current_token() );
         next_token();
         string name = token_spelling( mustbe(tk_identifier) );
-        string segment = 0;
+        string segment = "local test";
         int offset = 0;
 
         parameters.push_back( create_var_dec(name, segment, offset, type) );
 
-        exist = current_token();
-
-        while (exist == tk_type)
+        while ( current_token() == tk_type )
         {
             mustbe(tk_comma);
-            string type = token_spelling(exist);
+            type = token_spelling( current_token() );
             next_token();
-            string name = token_spelling( mustbe(tk_identifier) );
-            string segment = "0"; ////////////////////////////////////////////////////////////////////
-            int offset = 0;
+            name = token_spelling( mustbe(tk_identifier) );
+            segment = "local test"; ////////////////////////////////////////////////////////////////////
+            offset = 0;
 
             parameters.push_back( create_var_dec(name, segment, offset, type) );
-
-            exist = current_token();
         }
     }
 
@@ -391,14 +467,10 @@ ast parse_var_decs()
 
     vector<ast> declarations;
 
-    Token exist = current_token();
-    while( have(exist, tk_var))
+    while( have( current_token(), tk_var ))
     {
-
         vector<ast> new_decs = parse_var_dec();
         declarations.insert( declarations.end(), new_decs.begin(), new_decs.end() );
-
-        exist = next_token();
     }
 
     pop_error_context() ;
@@ -423,7 +495,7 @@ vector<ast> parse_var_dec()
     mustbe(tk_var);
     string type = token_spelling( mustbe(tk_type) );
     string name = token_spelling( mustbe(tk_identifier) );
-    string segment = "0"; /////////////////////////////////////////////////////////////
+    string segment = "0"; ////////////////////////////////////////////////////////////////////////////////////////////////////////
     int offset = 0;
 
     decs.push_back( create_var_dec(name, segment, offset, type) );
@@ -455,13 +527,9 @@ ast parse_statements()
 
     vector<ast> statements;
 
-    Token exist = current_token();
-    while( have(exist, tk_statement))
+    while( have( current_token(), tk_statement) )
     {
-
         statements.push_back( parse_statement() );
-
-        exist = current_token(); //////////////////////////
     }
 
     pop_error_context() ;
@@ -484,7 +552,7 @@ ast parse_statement()
         statement = parse_let();
     }
 
-    else if ( have(type, tk_if) )
+    if ( have(type, tk_if) )
     {
         statement = parse_if();
     }
@@ -546,8 +614,33 @@ ast parse_if()
 {
     push_error_context("parse_if()") ;
 
+    mustbe(tk_if);
+    mustbe(tk_lrb);
+
+    ast condition = parse_expr();
+
+    mustbe(tk_rrb);
+    mustbe(tk_lcb);
+
+    ast statement_true = parse_statements();
+
+    mustbe(tk_rcb);
+
+    if ( have( current_token(), tk_else) )
+    {
+        mustbe(tk_else);
+        mustbe(tk_lcb);
+
+        ast statement_false = parse_statements();
+
+        mustbe(tk_rcb);
+
+        pop_error_context() ;
+        return create_if_else(condition, statement_true, statement_false);
+    }
+
     pop_error_context() ;
-    return -1 ;
+    return create_if(condition, statement_true) ;
 }
 
 // while ::= 'while' '(' expr ')' '{' statements '}'
@@ -831,8 +924,11 @@ ast parse_infix_op()
 {
     push_error_context("parse_infix_op()") ;
 
+    Token infix_oper = mustbe(tk_infix_op);
+    string op = token_spelling(infix_oper);
+
     pop_error_context() ;
-    return -1 ;
+    return create_infix_op(op) ;
 }
 
 // unary_op ::= '-' | '~'
@@ -842,8 +938,20 @@ Token parse_unary_op()
 {
     push_error_context("parse_unary_op()") ;
 
+    Token type;
+
+    if ( have( current_token(), tk_sub ) )
+    {
+        type = tk_sub;
+    }
+
+    else if ( have( current_token(), tk_not ) )
+    {
+        type = tk_not;
+    }
+
     pop_error_context() ;
-    return -1 ;
+    return type ;
 }
 
 ast jack_parser()
