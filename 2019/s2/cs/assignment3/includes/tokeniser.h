@@ -152,7 +152,7 @@ namespace Jack_Compiler
     // to assist with parsing, TokenKind has some extra definitions that are never returned as real tokens
     // these extra tokens can be used to check if a token is a member of a particular group
     // for example, tk_statement provides a group of all tokens that can start a statement
-    
+
 
     // check if we HAVE a current token of the given kind or that belongs to the given grouping?
     extern bool have(TokenKind kind_or_grouping) ;
