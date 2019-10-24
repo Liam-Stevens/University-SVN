@@ -452,7 +452,7 @@ ast parse_method()
     delete_variables(function_symbol_table);
 
     pop_error_context() ;
-    return -1 ;
+    return create_method(type, name, parameters, body) ;
 }
 
 // param_list ::= ((type identifier) (',' type identifier)*)?
@@ -530,10 +530,15 @@ ast parse_var_decs()
 
     vector<ast> declarations;
 
-    while( have( current_token(), tk_var ))
+    //CHANGING THIS CAUSES CRASHES
+    Token exist = current_token();
+    while( have(exist, tk_var))
     {
+
         vector<ast> new_decs = parse_var_dec();
         declarations.insert( declarations.end(), new_decs.begin(), new_decs.end() );
+
+        exist = next_token();
     }
 
     pop_error_context() ;
@@ -671,6 +676,7 @@ ast parse_let()
     mustbe(tk_semi);
 
     pop_error_context() ;
+    return -1; //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     if (array == true)
     {
         return create_let(var, new_expression);
