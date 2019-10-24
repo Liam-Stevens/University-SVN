@@ -119,11 +119,44 @@ ast parse_expr_list() ;
 ast parse_infix_op() ;
 Token parse_unary_op() ;
 
+//Symbol Table
+symbols class_symbol_table;
+int class_offset;
+symbols function_symbol_table;
+int function_offset;
+
+int declare_variable(string name, string type, string segment)
+{
+    symbols symbol_table;
+    int offset;
+
+    if (segment == "static" || segment == "field")
+    {
+        symbol_table = class_symbol_table;
+        offset = class_offset;
+        class_offset++;
+    }
+    else
+    {
+        symbol_table = function_symbol_table;
+        offset = function_offset;
+        function_offset++;
+    }
+
+    st_variable new_var(name, type, segment, offset);
+    insert_variables(symbol_table, name, new_var);
+
+    return offset;
+}
+
 // class ::= 'class' identifier '{' class_var_decs subr_decs '}'
 // create_class(myclassname,class_var_decs,class_subrs)
 ast parse_class()
 {
     push_error_context("parse_class()") ;
+
+    class_symbol_table = create_variables();
+    class_offset = 0;
 
     mustbe(tk_class);
     string className = token_spelling( mustbe(tk_identifier) );
@@ -133,6 +166,8 @@ ast parse_class()
     ast subr_decs = parse_subr_decs();
 
     mustbe(tk_rcb);
+
+    delete_variables(class_symbol_table);
 
     pop_error_context() ;
     return create_class(className,class_var,subr_decs) ;
@@ -187,18 +222,18 @@ vector<ast> parse_static_var_dec()
 
     string type = token_spelling( mustbe(tk_type) );
     string name = token_spelling( mustbe(tk_identifier) );
-    string segment = "static test"; ////////////////////////////////////////////////////////////
-    int offset = 0;
+    string segment = "static"; ///////////////////////////////////////////////////////////////////////
 
+    int offset = declare_variable(name, type, segment);
     decs.push_back( create_var_dec(name, segment, offset, type) );
 
     while ( have( current_token(), tk_comma ) )
     {
         mustbe(tk_comma);
         name = token_spelling( mustbe(tk_identifier) );
-        segment = "static test";
-        offset = 0;
+        segment = "static";
 
+        offset = declare_variable(name, type, segment);
         decs.push_back( create_var_dec(name, segment, offset, type) );
     }
 
@@ -227,18 +262,18 @@ vector<ast> parse_field_var_dec()
 
     string type = token_spelling( mustbe(tk_type) );
     string name = token_spelling( mustbe(tk_identifier) );
-    string segment = "field test"; ////////////////////////////////////////////////////////////
-    int offset = 0;
+    string segment = "field"; ////////////////////////////////////////////////////////////
 
+    int offset = declare_variable(name, type, segment);
     decs.push_back( create_var_dec(name, segment, offset, type) );
 
     while ( have( current_token(), tk_comma ) )
     {
         mustbe(tk_comma);
         name = token_spelling( mustbe(tk_identifier) );
-        segment = "field test";
-        offset = 0;
+        segment = "field";
 
+        offset = declare_variable(name, type, segment);
         decs.push_back( create_var_dec(name, segment, offset, type) );
     }
 
@@ -346,8 +381,21 @@ ast parse_constructor()
 {
     push_error_context("parse_constructor()") ;
 
+    function_symbol_table = create_variables();
+    function_offset = 0;
+
+    mustbe(tk_constructor);
+    string type = token_spelling( parse_vtype() );
+    string name = token_spelling( mustbe(tk_identifier) );
+    mustbe(tk_lrb);
+    ast parameters = parse_param_list();
+    mustbe(tk_rrb);
+    ast body = parse_subr_body();
+
+    delete_variables(function_symbol_table);
+
     pop_error_context() ;
-    return -1 ;
+    return create_constructor(type, name, parameters, body) ;
 }
 
 // function ::= 'function' vtype identifier '(' param_list ')' subr_body
@@ -361,6 +409,9 @@ ast parse_function()
 {
     push_error_context("parse_function()") ;
 
+    function_symbol_table = create_variables();
+    function_offset = 0;
+
     mustbe(tk_function);
     string type = token_spelling( mustbe(tk_vtype) );
     string name = token_spelling( mustbe(tk_identifier) );
@@ -368,6 +419,9 @@ ast parse_function()
     ast parameters = parse_param_list();
     mustbe(tk_rrb);
     ast body = parse_subr_body();
+
+
+    delete_variables(function_symbol_table);
 
     pop_error_context() ;
     return create_function(type, name, parameters, body) ;
@@ -383,6 +437,19 @@ ast parse_function()
 ast parse_method()
 {
     push_error_context("parse_method()") ;
+
+    function_symbol_table = create_variables();
+    function_offset = 0;
+
+    mustbe(tk_method);
+    string type = token_spelling( parse_vtype() );
+    string name = token_spelling( mustbe(tk_identifier) );
+    mustbe(tk_lrb);
+    ast parameters = parse_param_list();
+    mustbe(tk_rrb);
+    ast body = parse_subr_body();
+
+    delete_variables(function_symbol_table);
 
     pop_error_context() ;
     return -1 ;
@@ -888,7 +955,7 @@ ast parse_var_term()
 
     ast var_term;
 
-    mustbe(tk_identifer);
+    string name = token_spelling( mustbe(tk_identifier) );
     if ( have( current_token(), tk_lsb ) )
     {
         var_term = parse_index(); ///////////////////////////////////////// I think I need more here
@@ -896,10 +963,12 @@ ast parse_var_term()
     else if ( have( current_token(), tk_stop ) )
     {
         var_term = parse_id_call();
+        return create_call_as_function(name, var_term);
     }
     else if ( have( current_token(), tk_lrb ) )
     {
         var_term = parse_call();
+        //return create_call_as_method(name, ast object, var_term); ///////////////////Unsure about name
     }
 
     pop_error_context() ;
@@ -967,7 +1036,7 @@ ast parse_expr_list()
     {
         expression_list.push_back( parse_expr() );
         while ( have( current_token(), tk_comma ) )
-        {  
+        {
             mustbe(tk_comma);
             expression_list.push_back( parse_expr() );
         }
