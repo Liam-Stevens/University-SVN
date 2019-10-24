@@ -703,9 +703,10 @@ ast parse_do()
     mustbe(tk_do);
     string name = token_spelling( mustbe(tk_identifier) );
     //////////////////////////////////////////////////////////////////////////////////////////
+    ast call;
 
     pop_error_context() ;
-    return create_do ;
+    return create_do(call) ;
 }
 
 // return ::= 'return' expr? ';'
@@ -885,7 +886,21 @@ ast parse_var_term()
 {
     push_error_context("parse_var_term()") ;
 
-    next_token();
+    ast var_term;
+
+    mustbe(tk_identifer);
+    if ( have( current_token(), tk_lsb ) )
+    {
+        var_term = parse_index(); ///////////////////////////////////////// I think I need more here
+    }
+    else if ( have( current_token(), tk_stop ) )
+    {
+        var_term = parse_id_call();
+    }
+    else if ( have( current_token(), tk_lrb ) )
+    {
+        var_term = parse_call();
+    }
 
     pop_error_context() ;
     return -1 ;
@@ -915,10 +930,12 @@ ast parse_id_call()
 {
     push_error_context("parse_id_call()") ;
 
-    
+    mustbe(tk_stop);
+    string name = token_spelling( mustbe(tk_identifier) );
+    ast call = parse_call();
 
     pop_error_context() ;
-    return -1 ;
+    return create_subr_call(name, call) ;
 }
 
 // call ::= '(' expr_list ')'
@@ -928,8 +945,12 @@ ast parse_call()
 {
     push_error_context("parse_call()") ;
 
+    mustbe(tk_lrb);
+    ast expression_list = parse_expr_list();
+    mustbe(tk_rrb);
+
     pop_error_context() ;
-    return -1 ;
+    return expression_list ;
 }
 
 // expr_list ::= (expr (',' expr)*)?
@@ -940,8 +961,20 @@ ast parse_expr_list()
 {
     push_error_context("parse_expr_list()") ;
 
+    vector<ast> expression_list;
+
+    if ( have( current_token(), tk_term) )
+    {
+        expression_list.push_back( parse_expr() );
+        while ( have( current_token(), tk_comma ) )
+        {  
+            mustbe(tk_comma);
+            expression_list.push_back( parse_expr() );
+        }
+    }
+
     pop_error_context() ;
-    return -1 ;
+    return create_expr_list(expression_list) ;
 }
 
 // infix_op ::= '+' | '-' | '*' | '/' | '&' | '|' | '<' | '>' | '='
