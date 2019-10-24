@@ -293,22 +293,22 @@ Token parse_type()
 
     if ( have( current_token(), tk_int ) )
     {
-        type = tk_int;
+        type = mustbe(tk_int);
     }
 
     else if ( have( current_token(), tk_char ) )
     {
-        type = tk_char;
+        type = mustbe(tk_char);
     }
 
     else if ( have( current_token(), tk_boolean ) )
     {
-        type = tk_boolean;
+        type = mustbe(tk_boolean);
     }
 
-    else if ( have( current_token(), tk_identifier ) )
+    else
     {
-        type = tk_identifier;
+        type = mustbe(tk_identifier);
     }
 
     pop_error_context() ;
@@ -325,10 +325,10 @@ Token parse_vtype()
 
     if ( have( current_token(), tk_void ) )
     {
-        type = tk_void;
+        type = mustbe(tk_void);
     }
 
-    else if ( have( current_token(), tk_type ) )
+    else
     {
         type = parse_type();
     }
@@ -385,7 +385,7 @@ ast parse_constructor()
     function_offset = 0;
 
     mustbe(tk_constructor);
-    string type = token_spelling( parse_vtype() );
+    string type = token_spelling( mustbe(tk_identifier) );
     string name = token_spelling( mustbe(tk_identifier) );
     mustbe(tk_lrb);
     ast parameters = parse_param_list();
@@ -530,15 +530,12 @@ ast parse_var_decs()
 
     vector<ast> declarations;
 
-    //CHANGING THIS CAUSES CRASHES
-    Token exist = current_token();
-    while( have(exist, tk_var))
+    while( have( current_token(), tk_var ) )
     {
+        vector<ast> new_decs;
+        new_decs = parse_var_dec();
 
-        vector<ast> new_decs = parse_var_dec();
         declarations.insert( declarations.end(), new_decs.begin(), new_decs.end() );
-
-        exist = next_token();
     }
 
     pop_error_context() ;
@@ -563,20 +560,19 @@ vector<ast> parse_var_dec()
     mustbe(tk_var);
     string type = token_spelling( mustbe(tk_type) );
     string name = token_spelling( mustbe(tk_identifier) );
-    string segment = "0"; ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    int offset = 0;
+    string segment = "local"; ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    int offset = declare_variable(name, type, segment);;
 
     decs.push_back( create_var_dec(name, segment, offset, type) );
 
-    Token exist = current_token();
-    while( have(exist, tk_comma) )
+
+  while( have( current_token(), tk_comma) )
     {
-        next_token();
+        mustbe(tk_comma);
         name = mustbe(tk_identifier);
-        segment = "0";
-        offset = 0;
+        segment = "local";
+        offset = declare_variable(name, type, segment);
         decs.push_back( create_var_dec(name, segment, offset, type) );
-        exist = current_token();
     }
 
     mustbe(tk_semi);
@@ -660,7 +656,7 @@ ast parse_let()
 {
     push_error_context("parse_let()") ;
 
-    bool array = false;
+    /*bool array = false;
 
     mustbe(tk_let);
     Token variable = mustbe(tk_identifier);
@@ -673,11 +669,12 @@ ast parse_let()
     }
     mustbe(tk_eq);
     ast new_expression = parse_expr(); ////////////////////////////////////////////////////////////////
-    mustbe(tk_semi);
+    mustbe(tk_semi);*/
+    next_token(); // REMOVE LATER
 
     pop_error_context() ;
     return -1; //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    if (array == true)
+    /*if (array == true)
     {
         return create_let(var, new_expression);
     }
@@ -685,7 +682,7 @@ ast parse_let()
     {
         return create_let_array(var, new_index, new_expression);
         //return -1;
-    }
+    }*/
 }
 
 // if ::= 'if' '(' expr ')' '{' statements '}' ('else' '{' statements '}')?
