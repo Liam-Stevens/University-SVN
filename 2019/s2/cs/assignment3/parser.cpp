@@ -185,18 +185,16 @@ vector<ast> parse_static_var_dec()
 
     mustbe(tk_static);
 
-    string type = token_spelling( current_token() );
-    next_token();
+    string type = token_spelling( mustbe(tk_type) );
     string name = token_spelling( mustbe(tk_identifier) );
     string segment = "static test"; ////////////////////////////////////////////////////////////
     int offset = 0;
 
     decs.push_back( create_var_dec(name, segment, offset, type) );
 
-    while ( current_token() == tk_type )
+    while ( have( current_token(), tk_comma ) )
     {
         mustbe(tk_comma);
-        next_token();
         name = token_spelling( mustbe(tk_identifier) );
         segment = "static test";
         offset = 0;
@@ -227,18 +225,16 @@ vector<ast> parse_field_var_dec()
 
     mustbe(tk_field);
 
-    string type = token_spelling( current_token() );
-    next_token();
+    string type = token_spelling( mustbe(tk_type) );
     string name = token_spelling( mustbe(tk_identifier) );
     string segment = "field test"; ////////////////////////////////////////////////////////////
     int offset = 0;
 
     decs.push_back( create_var_dec(name, segment, offset, type) );
 
-    while ( current_token() == tk_type )
+    while ( have( current_token(), tk_comma ) )
     {
         mustbe(tk_comma);
-        next_token();
         name = token_spelling( mustbe(tk_identifier) );
         segment = "field test";
         offset = 0;
@@ -409,7 +405,7 @@ ast parse_param_list()
 
     vector<ast> parameters;
 
-    if ( current_token() == tk_type )
+    if ( have( current_token(), tk_type ) )
     {
         string type = token_spelling( current_token() );
         next_token();
@@ -592,10 +588,31 @@ ast parse_let()
 {
     push_error_context("parse_let()") ;
 
+    bool array = false;
 
+    mustbe(tk_let);
+    Token variable = mustbe(tk_identifier);
+    ast var; ////////////////////////////////////////////////////////////////////////////////////////
+    ast new_index;
+    if ( have( current_token(), tk_lsb ) )
+    {
+        new_index = parse_index();
+        array = true;
+    }
+    mustbe(tk_eq);
+    ast new_expression = parse_expr(); ////////////////////////////////////////////////////////////////
+    mustbe(tk_semi);
 
     pop_error_context() ;
-    return -1 ;
+    if (array == true)
+    {
+        return create_let(var, new_expression);
+    }
+    else
+    {
+        return create_let_array(var, new_index, new_expression);
+        //return -1;
+    }
 }
 
 // if ::= 'if' '(' expr ')' '{' statements '}' ('else' '{' statements '}')?
@@ -683,8 +700,12 @@ ast parse_do()
 {
     push_error_context("parse_do()") ;
 
+    mustbe(tk_do);
+    string name = token_spelling( mustbe(tk_identifier) );
+    //////////////////////////////////////////////////////////////////////////////////////////
+
     pop_error_context() ;
-    return -1 ;
+    return create_do ;
 }
 
 // return ::= 'return' expr? ';'
@@ -709,6 +730,7 @@ ast parse_return()
     }
 
     ast expr = parse_expr();
+    mustbe(tk_semi);
 
     pop_error_context() ;
 
@@ -821,13 +843,12 @@ ast parse_term()
         string op = token_spelling( current_token() );
         nextTerm = parse_term();
         term = create_unary_op(op, nextTerm);
-        next_token();
     }
 
     else if ( have( current_token(), tk_identifier ) )
     {
         term = parse_var_term();
-        //next_token(); ?????????????????????????????????????????????????????????????????????
+        //Test 08 ???????????????????????????????????????????????????????????????????
     }
 
     pop_error_context() ;
@@ -864,6 +885,8 @@ ast parse_var_term()
 {
     push_error_context("parse_var_term()") ;
 
+    next_token();
+
     pop_error_context() ;
     return -1 ;
 }
@@ -874,8 +897,12 @@ ast parse_index()
 {
     push_error_context("parse_index()") ;
 
+    mustbe(tk_lsb);
+    ast expression = parse_expr();
+    mustbe(tk_rsb);
+
     pop_error_context() ;
-    return -1 ;
+    return expression ;
 }
 
 // id_call ::= '.' identifier call
@@ -887,6 +914,8 @@ ast parse_index()
 ast parse_id_call()
 {
     push_error_context("parse_id_call()") ;
+
+    
 
     pop_error_context() ;
     return -1 ;
@@ -942,12 +971,12 @@ Token parse_unary_op()
 
     if ( have( current_token(), tk_sub ) )
     {
-        type = tk_sub;
+        type = mustbe(tk_sub);
     }
 
     else if ( have( current_token(), tk_not ) )
     {
-        type = tk_not;
+        type = mustbe(tk_not);
     }
 
     pop_error_context() ;

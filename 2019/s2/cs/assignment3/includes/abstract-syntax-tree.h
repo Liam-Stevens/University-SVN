@@ -111,7 +111,7 @@ namespace Jack_Compiler
     extern ast ast_parse_xml() ;
 
     //***** AST nodes to represent Jack classes *****//
-    // class ::= 
+    // class ::=
     // ast_class - a Jack class
     // it has a class name, static and field declarations (decs) and subroutine declarations (subrs)
     // decs must be an ast_class_var_decs node
@@ -122,7 +122,7 @@ namespace Jack_Compiler
     extern ast get_class_subr_decs(ast _class) ;
 
 
-    // class_var_decs ::= 
+    // class_var_decs ::=
     // ast_class_var_decs - a vector of ast_var nodes
     // vars must be a vector of ast_var nodes
     extern ast create_class_var_decs(vector<ast> vars) ;
@@ -130,7 +130,7 @@ namespace Jack_Compiler
     extern ast get_class_var_decs(ast t,int i) ;
 
 
-    // var_decs ::= 
+    // var_decs ::=
     // ast_var_decs - a vector of ast_var_dec nodes
     // vars must be a vector of ast_var_dec nodes
     extern ast create_var_decs(vector<ast> vars) ;
@@ -138,7 +138,7 @@ namespace Jack_Compiler
     extern ast get_var_decs(ast t,int i) ;
 
 
-    // var_dec ::= 
+    // var_dec ::=
     // ast_var_dec node
     // it records the variable's name, it's segment name, it's segment offset and it's type
     extern ast create_var_dec(string name,string segment,int offset,string type) ;
@@ -148,7 +148,7 @@ namespace Jack_Compiler
     extern string get_var_dec_type(ast var_dec) ;
 
 
-    // var ::= 
+    // var ::=
     // ast_var node
     // it records the variable's name, it's segment name, it's segment offset and it's type
     extern ast create_var(string name,string segment,int offset,string type) ;
@@ -165,7 +165,7 @@ namespace Jack_Compiler
     extern ast get_subr_decs(ast t,int i) ;
 
 
-    // subr ::= 
+    // subr ::=
     // ast_subr node - a subroutine declaration
     // subr must be one of ast_constructor, ast_function or ast_method
     extern ast create_subr(ast subr) ;
@@ -204,7 +204,7 @@ namespace Jack_Compiler
     extern ast get_method_subr_body(ast method) ;
 
 
-    // param_list ::= 
+    // param_list ::=
     // ast_param_list node - subroutine parameter declarations
     // params must be a vector of ast_var_dec nodes
     extern ast create_param_list(vector<ast> params) ;
@@ -212,7 +212,7 @@ namespace Jack_Compiler
     extern ast get_param_list(ast param_list,int index) ;
 
 
-    // subr_body ::= 
+    // subr_body ::=
     // ast_subr_body node - body of a Jack subroutine, ie a constructor, function or method
     // decs must be an ast_var_decs node
     // body must be an ast_statements node
@@ -221,7 +221,7 @@ namespace Jack_Compiler
     extern ast get_subr_body_body(ast subr_body) ;
 
 
-    // statements ::= 
+    // statements ::=
     // ast_statements node - a Jack statement sequence
     // statements must be a vector of ast_statement node
     extern ast create_statements(vector<ast> statements) ;
@@ -229,14 +229,14 @@ namespace Jack_Compiler
     extern ast get_statements(ast statements,int index) ;
 
 
-    // statement ::= 
+    // statement ::=
     // ast_statement node - a single statement
     // statement must be one of ast_let, ast_let_array, ast_if, ast_if_else, ast_while, ast_do, ast_return or ast_return_expr nodes
     extern ast create_statement(ast statement) ;
     extern ast get_statement_statement(ast statement) ;
 
 
-    // let ::= 
+    // let ::=
     // ast_let node - a Jack variable assignment statement
     // var must be an ast_var node
     // index must be an ast_expr node
@@ -246,7 +246,7 @@ namespace Jack_Compiler
     extern ast get_let_expr(ast _let) ;                     // also accepts an ast_let_array node
 
 
-    // let_array ::= 
+    // let_array ::=
     // ast_let_array node - a Jack array assignment statement
     // var must be an ast_var node
     // index must be an ast_expr node
@@ -257,7 +257,7 @@ namespace Jack_Compiler
     extern ast get_let_array_expr(ast _let) ;               // also accepts an ast_let node
 
 
-    // if ::= 
+    // if ::=
     // ast_if node - a Jack if then statement
     // condition must be an ast_expr node
     // if_true must be a statements node
@@ -266,7 +266,7 @@ namespace Jack_Compiler
     extern ast get_if_if_true(ast _if) ;                    // also accepts an ast_if_else node
 
 
-    // if_else ::= 
+    // if_else ::=
     // ast_if_else node - a Jack if then else statement
     // condition must be an ast_expr node
     // if_true must be a statements node
@@ -277,7 +277,7 @@ namespace Jack_Compiler
     extern ast get_if_else_if_false(ast _if) ;
 
 
-    // while ::= 
+    // while ::=
     // ast_while node - a Jack while loop
     // condition must be an ast_expr node
     // body must be a statements node
@@ -286,26 +286,26 @@ namespace Jack_Compiler
     extern ast get_while_body(ast _while) ;
 
 
-    // do ::= 
+    // do ::=
     // ast_do node - a Jack void function call statement
     // call must be an ast_call node
     extern ast create_do(ast call) ;
     extern ast get_do_call(ast _do) ;
 
 
-    // return ::= 
+    // return ::=
     // ast_return node - a Jack return statement with no result
     extern ast create_return() ;
 
 
-    // return_expr ::= 
+    // return_expr ::=
     // ast_return_expr node - a Jack return statement with a result
     // expr must be an ast_expr node
     extern ast create_return_expr(ast expr) ;
     extern ast get_return_expr(ast _return) ;
 
 
-    // expr_list ::= 
+    // expr_list ::=
     // ast_expr_list node - arguments to a Jack subroutine call
     // exprs must be a vector of ast_expr nodes
     extern ast create_expr_list(vector<ast> exprs) ;
@@ -313,7 +313,7 @@ namespace Jack_Compiler
     extern ast get_expr_list(ast expr_list,int index) ;
 
 
-    // expression ::= 
+    // expression ::=
     // ast_expr node - a Jack expression
     // expr must be  a vector alternating between ast_term and ast_infix_op nodes, ending with an ast_term
     extern ast create_expr(vector<ast> expr) ;
@@ -325,7 +325,7 @@ namespace Jack_Compiler
     extern ast get_expr(ast expr,int index) ;
 
 
-    // term ::= 
+    // term ::=
     // ast_term node - a single expression term
     // term must be one of ast_int, ast_string, ast_bool, ast_null, ast_this, ast_expr, ast_var, ast_array_index, ast_unary_op or ast_call
     extern ast create_term(ast term) ;
@@ -345,7 +345,7 @@ namespace Jack_Compiler
     extern int get_int_constant(ast _int) ;
 
 
-    // string ::= 
+    // string ::=
     // ast_string node - a Jack string constant
     extern ast create_string(string _constant) ;
     extern string get_string_constant(ast _string) ;
@@ -367,7 +367,7 @@ namespace Jack_Compiler
     extern ast create_this() ;
 
 
-    // array_index ::= 
+    // array_index ::=
     // ast_array_index node - a Jack array indexing expression
     // var must be an ast_var node
     // index must be an ast_expr node
@@ -376,7 +376,7 @@ namespace Jack_Compiler
     extern ast get_array_index_index(ast _array_index) ;
 
 
-    // unary_op ::= 
+    // unary_op ::=
     // ast_unary_op node - a Jack unary op expression
     // op must be a unary op, ie '-' or '~'
     // index must be an ast_term node
