@@ -861,17 +861,40 @@ ast parse_do()
     ast sub_call;
     ast object; //need to get object somehow
 
-    if ( have( current_token(), tk_stop) )
+    if ( have( current_token(), tk_stop ) )
     {
         //function
         sub_call = parse_id_call();
-        call = create_call_as_function(name, sub_call);
+
+        st_variable temp = lookup_variables(class_symbol_table, name);
+        if (temp.offset == -1)
+        {
+            temp = lookup_variables(function_symbol_table, name);
+        }
+
+        if (temp.offset == -1)
+        {
+            call = create_call_as_function(name, sub_call);
+        }
+        else
+        {
+            string segment = temp.segment;
+            int offset = temp.offset;
+            string type = temp.type;
+
+            object = create_var(name, segment, offset, type);
+
+            call = create_call_as_method(type, object, sub_call);
+        }
+
     }
-    else
+    else if ( have( current_token(), tk_lrb ) )
     {
         //method
-        sub_call = parse_call();
-        call = create_call_as_method(name, object, sub_call);
+        sub_call = create_subr_call(name, parse_call() );
+        object = create_this();
+        //object = ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        call = create_call_as_method(class_name, object, sub_call);
     }
 
     mustbe(tk_semi);
@@ -1067,14 +1090,6 @@ ast parse_var_term()
         var_term = parse_index(); ///////////////////////////////////////// I think I need more here
 
         variable = get_variable(name);
-        /*string segment = "local";
-        int offset = function_offset[0];
-        function_offset[0]++;
-        string type = "int";
-
-        declare_variable(name, type, segment);
-
-        variable = create_var(name, segment, offset, type);*/
 
         pop_error_context() ;
         return create_array_index(variable, var_term);
