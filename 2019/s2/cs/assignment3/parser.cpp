@@ -762,7 +762,6 @@ ast parse_let()
     mustbe(tk_eq);
     ast new_expression = parse_expr(); ////////////////////////////////////////////////////////////////
     mustbe(tk_semi);
-    //next_token(); // REMOVE LATER
 
     pop_error_context() ;
     if (array == false)
@@ -926,7 +925,7 @@ ast parse_return()
 
     if ( have( current_token(), tk_semi) )
     {
-        next_token();
+        mustbe(tk_semi);
         pop_error_context() ;
         return create_return() ;
     }
@@ -994,43 +993,41 @@ ast parse_term()
 
     if ( have( current_token(), tk_integerConstant ) )
     {
-        string number = token_spelling( current_token() );
+        string number = token_spelling( mustbe(tk_integerConstant) );
         stringstream convert(number);
         int constant = 0;
         convert >> constant;
         term = create_int(constant);
-        next_token();
     }
 
     else if ( have( current_token(), tk_stringConstant ) )
     {
-        string literal = token_spelling( current_token() );
+        string literal = token_spelling( mustbe(tk_stringConstant) );
         term = create_string(literal);
-        next_token();
     }
 
     else if ( have( current_token(), tk_true ) )
     {
+        mustbe(tk_true);
         term = create_bool(true);
-        next_token();
     }
 
     else if ( have( current_token(), tk_false ) )
     {
+        mustbe(tk_false);
         term = create_bool(false);
-        next_token();
     }
 
     else if ( have( current_token(), tk_null ) )
     {
+        mustbe(tk_null);
         term = create_null();
-        next_token();
     }
 
     else if ( have( current_token(), tk_this ) )
     {
+        mustbe(tk_this);
         term = create_this();
-        next_token();
     }
 
     else if ( have( current_token(), tk_lrb ) )
@@ -1050,7 +1047,11 @@ ast parse_term()
     else if ( have( current_token(), tk_identifier ) )
     {
         term = parse_var_term();
-        //Test 08 ???????????????????????????????????????????????????????????????????
+    }
+
+    else
+    {
+        mustbe(tk_term);
     }
 
     pop_error_context() ;
