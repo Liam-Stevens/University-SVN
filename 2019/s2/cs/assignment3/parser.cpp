@@ -697,7 +697,7 @@ ast parse_let()
 {
     push_error_context("parse_let()") ;
 
-    /*bool array = false;
+    bool array = false;
 
     mustbe(tk_let);
     //Token variable = mustbe(tk_identifier);
@@ -710,18 +710,18 @@ ast parse_let()
     }
     mustbe(tk_eq);
     ast new_expression = parse_expr(); ////////////////////////////////////////////////////////////////
-    mustbe(tk_semi);*/
-    next_token(); // REMOVE LATER
+    mustbe(tk_semi);
+    //next_token(); // REMOVE LATER
 
     pop_error_context() ;
-    /*if (array == false)
+    if (array == false)
     {
         return create_let(var, new_expression);
     }
     else
     {
         return create_let_array(var, new_index, new_expression);
-    }*/
+    }
     return -1;
 }
 
@@ -812,8 +812,25 @@ ast parse_do()
 
     mustbe(tk_do);
     string name = token_spelling( mustbe(tk_identifier) );
-    //////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ast call;
+    ast sub_call;
+    ast object; //need to get object somehow
+
+    if ( have( current_token(), tk_stop) )
+    {
+        //function
+        sub_call = parse_id_call();
+        call = create_call_as_function(name, sub_call);
+    }
+    else
+    {
+        //method
+        sub_call = parse_call();
+        call = create_call_as_method(name, object, sub_call);
+    }
+
+    mustbe(tk_semi);
 
     pop_error_context() ;
     return create_do(call) ;
@@ -998,6 +1015,7 @@ ast parse_var_term()
 
     ast var_term;
     ast variable;
+    ast object;
 
     string name = token_spelling( mustbe(tk_identifier) );
     if ( have( current_token(), tk_lsb ) )
@@ -1018,16 +1036,16 @@ ast parse_var_term()
     }
     else if ( have( current_token(), tk_stop ) )
     {
-        var_term = parse_id_call();
-
-        pop_error_context() ;
-        return create_call_as_function(name, var_term);
+        //function
+        ast sub_call = parse_id_call();
+        return create_call_as_function(name, sub_call);
     }
     else if ( have( current_token(), tk_lrb ) )
     {
-        var_term = parse_call();
-        return -1;
-        //return create_call_as_method(name, ast object, var_term); ///////////////////Unsure about name
+        //method
+        ast sub_call = parse_call();
+        //object = ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        return create_call_as_method(name, object, sub_call);
     }
     else
     {
@@ -1036,7 +1054,8 @@ ast parse_var_term()
         int offset = temp.offset;
         string type = temp.type;
 
-        //declare_variable(name, type, segment);
+        //declare_variable(name, type, segment); /////////////////////////////////////////////////////////////////////
+        //check whether need to make it create variable if not existant
 
         pop_error_context() ;
         return create_var(name, segment, offset, type);
