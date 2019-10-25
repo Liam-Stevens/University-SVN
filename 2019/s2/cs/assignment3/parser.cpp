@@ -124,7 +124,7 @@ symbols class_symbol_table;
 int class_offset[2];
 string class_name;
 symbols function_symbol_table;
-int function_offset[2];
+int function_offset[3];
 
 int declare_variable(string name, string type, string segment)
 {
@@ -145,7 +145,7 @@ int declare_variable(string name, string type, string segment)
             class_offset[1]++;
         }
     }
-    else
+    else if (segment == "local" || segment == "argument")
     {
         symbol_table = function_symbol_table;
         if (segment == "local")
@@ -158,6 +158,12 @@ int declare_variable(string name, string type, string segment)
             offset = function_offset[1];
             function_offset[1]++;
         }
+    }
+    else
+    {
+        symbol_table = function_symbol_table;
+        offset = function_offset[2];
+        function_offset[2]++;
     }
 
     st_variable new_var(name, type, segment, offset);
@@ -224,6 +230,7 @@ void clean_table(string table)
     else if (table == "function")
     {
         function_offset[0] = 0;
+        function_offset[2] = 0;
     }
 }
 
