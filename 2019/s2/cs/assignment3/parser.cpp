@@ -122,8 +122,9 @@ Token parse_unary_op() ;
 //Symbol Table
 symbols class_symbol_table;
 int class_offset[2];
+string class_name;
 symbols function_symbol_table;
-int function_offset;
+int function_offset[2];
 
 int declare_variable(string name, string type, string segment)
 {
@@ -147,8 +148,16 @@ int declare_variable(string name, string type, string segment)
     else
     {
         symbol_table = function_symbol_table;
-        offset = function_offset;
-        function_offset++;
+        if (segment == "local")
+        {
+            offset = function_offset[0];
+            function_offset[0]++;
+        }
+        else
+        {
+            offset = function_offset[1];
+            function_offset[1]++;
+        }
     }
 
     st_variable new_var(name, type, segment, offset);
@@ -182,7 +191,7 @@ void clean_table(string table)
     }
     else if (table == "function")
     {
-        function_offset = 0;
+        function_offset[0] = 0;
     }
 }
 
@@ -201,7 +210,7 @@ ast parse_class()
     clean_table("class");
 
     mustbe(tk_class);
-    string className = token_spelling( mustbe(tk_identifier) );
+    class_name = token_spelling( mustbe(tk_identifier) );
     mustbe(tk_lcb);
 
     ast class_var = parse_class_var_decs();
@@ -212,7 +221,7 @@ ast parse_class()
     delete_variables(class_symbol_table);
 
     pop_error_context() ;
-    return create_class(className,class_var,subr_decs) ;
+    return create_class(class_name,class_var,subr_decs) ;
 }
 
 // class_var_decs ::= (static_var_dec | field_var_dec)*
@@ -313,7 +322,7 @@ vector<ast> parse_field_var_dec()
     {
         mustbe(tk_comma);
         name = token_spelling( mustbe(tk_identifier) );
-        segment = "field";
+        segment = "this";
 
         offset = declare_variable(name, type, segment);
         decs.push_back( create_var_dec(name, segment, offset, type) );
@@ -396,14 +405,17 @@ ast parse_subr_decs()
         if ( have( current_token(), tk_constructor ) )
         {
             subrs.push_back( create_subr( parse_constructor() ) );
+            function_offset[1] = 1;
         }
         else if ( have( current_token(), tk_function ) )
         {
             subrs.push_back( create_subr( parse_function() ) );
+            function_offset[1] = 0;
         }
         else if ( have( current_token(), tk_method ) )
         {
             subrs.push_back( create_subr( parse_method() ) );
+            function_offset[1] = 1;
         }
 
     }
@@ -518,7 +530,7 @@ ast parse_param_list()
     {
         string type = token_spelling( mustbe(tk_type));
         string name = token_spelling( mustbe(tk_identifier) );
-        string segment = "local"; ///////////////////////////////////////////////////////////////////////////////////
+        string segment = "argument"; ///////////////////////////////////////////////////////////////////////////////////
         int offset = declare_variable(name, type, segment);
 
         parameters.push_back( create_var_dec(name, segment, offset, type) );
@@ -528,7 +540,7 @@ ast parse_param_list()
             mustbe(tk_comma);
             type = token_spelling( mustbe(tk_type) );
             name = token_spelling( mustbe(tk_identifier) );
-            segment = "local"; ///////////////////////////////////////////////////////////////////////////////////
+            segment = "argument"; ///////////////////////////////////////////////////////////////////////////////////
             offset = declare_variable(name, type, segment);
 
             parameters.push_back( create_var_dec(name, segment, offset, type) );
@@ -1023,8 +1035,8 @@ ast parse_var_term()
         var_term = parse_index(); ///////////////////////////////////////// I think I need more here
 
         string segment = "local";
-        int offset = function_offset;
-        function_offset++;
+        int offset = function_offset[0];
+        function_offset[0]++;
         string type = "int";
 
         declare_variable(name, type, segment);
@@ -1038,14 +1050,34 @@ ast parse_var_term()
     {
         //function
         ast sub_call = parse_id_call();
-        return create_call_as_function(name, sub_call);
+
+        st_variable temp = lookup_variables(class_symbol_table, name);
+        if (temp.offset == -1)
+        {
+            temp = lookup_variables(function_symbol_table, name);
+        }
+
+        if (temp.offset == -1)
+        {
+            return create_call_as_function(name, sub_call);
+        }
+
+        string segment = temp.segment;
+        int offset = temp.offset;
+        string type = temp.type;
+
+        object = create_var(name, segment, offset, type);
+
+        return create_call_as_method(class_name, object, sub_call);
+
     }
     else if ( have( current_token(), tk_lrb ) )
     {
         //method
-        ast sub_call = parse_call();
+        ast sub_call = create_subr_call(name, parse_call() );
+        object = create_this();
         //object = ////////////////////////////////////////////////////////////////////////////////////////////////////////
-        return create_call_as_method(name, object, sub_call);
+        return create_call_as_method(class_name, object, sub_call);
     }
     else
     {
