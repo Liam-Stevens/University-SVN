@@ -1123,7 +1123,7 @@ ast parse_var_term()
 
         object = create_var(name, segment, offset, type);
 
-        return create_call_as_method(class_name, object, sub_call);
+        return create_call_as_method(type, object, sub_call);
 
     }
     else if ( have( current_token(), tk_lrb ) )
