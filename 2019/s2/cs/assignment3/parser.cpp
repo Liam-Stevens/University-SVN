@@ -182,6 +182,38 @@ st_variable lookup_variable(string name)
     return temp;
 }
 
+ast get_variable(string name)
+{
+    st_variable temp = lookup_variables(class_symbol_table, name);
+    if (temp.offset == -1)
+    {
+        temp = lookup_variables(function_symbol_table, name);
+    }
+
+    if (temp.offset == -1)
+    {
+        string segment = "local";
+        int offset = 0;
+        //function_offset[0]++;
+        string type = "Array";
+
+        declare_variable(name, type, segment);
+
+        ast variable = create_var(name, segment, offset, type);
+        return variable;
+    }
+    else
+    {
+        string segment = temp.segment;
+        int offset = temp.offset;
+        string type = temp.type;
+
+        ast variable = create_var(name, segment, offset, type);
+        return variable;
+    }
+
+}
+
 void clean_table(string table)
 {
     if (table == "class")
@@ -712,8 +744,8 @@ ast parse_let()
     bool array = false;
 
     mustbe(tk_let);
-    //Token variable = mustbe(tk_identifier);
-    ast var = parse_var_term(); ////////////////////////////////////////////////////////////////////////////////////////
+    string var_name = token_spelling( mustbe(tk_identifier) );
+    ast var = get_variable(var_name); ////////////////////////////////////////////////////////////////////////////////////////
     ast new_index;
     if ( have( current_token(), tk_lsb ) )
     {
@@ -1034,14 +1066,15 @@ ast parse_var_term()
     {
         var_term = parse_index(); ///////////////////////////////////////// I think I need more here
 
-        string segment = "local";
+        variable = get_variable(name);
+        /*string segment = "local";
         int offset = function_offset[0];
         function_offset[0]++;
         string type = "int";
 
         declare_variable(name, type, segment);
 
-        variable = create_var(name, segment, offset, type);
+        variable = create_var(name, segment, offset, type);*/
 
         pop_error_context() ;
         return create_array_index(variable, var_term);
