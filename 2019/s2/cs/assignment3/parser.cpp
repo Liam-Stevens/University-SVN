@@ -697,7 +697,7 @@ ast parse_let()
 {
     push_error_context("parse_let()") ;
 
-    bool array = false;
+    /*bool array = false;
 
     mustbe(tk_let);
     //Token variable = mustbe(tk_identifier);
@@ -710,18 +710,19 @@ ast parse_let()
     }
     mustbe(tk_eq);
     ast new_expression = parse_expr(); ////////////////////////////////////////////////////////////////
-    mustbe(tk_semi);
-    //next_token(); // REMOVE LATER
+    mustbe(tk_semi);*/
+    next_token(); // REMOVE LATER
 
     pop_error_context() ;
-    if (array == false)
+    /*if (array == false)
     {
         return create_let(var, new_expression);
     }
     else
     {
         return create_let_array(var, new_index, new_expression);
-    }
+    }*/
+    return -1;
 }
 
 // if ::= 'if' '(' expr ')' '{' statements '}' ('else' '{' statements '}')?
