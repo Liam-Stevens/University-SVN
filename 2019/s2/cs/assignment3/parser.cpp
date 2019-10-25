@@ -121,7 +121,7 @@ Token parse_unary_op() ;
 
 //Symbol Table
 symbols class_symbol_table;
-int class_offset;
+int class_offset[2];
 symbols function_symbol_table;
 int function_offset;
 
@@ -133,8 +133,16 @@ int declare_variable(string name, string type, string segment)
     if (segment == "static" || segment == "field")
     {
         symbol_table = class_symbol_table;
-        offset = class_offset;
-        class_offset++;
+        if (segment == "static")
+        {
+            offset = class_offset[0];
+            class_offset[0]++;
+        }
+        else
+        {
+            offset = class_offset[1];
+            class_offset[1]++;
+        }
     }
     else
     {
@@ -149,6 +157,40 @@ int declare_variable(string name, string type, string segment)
     return offset;
 }
 
+st_variable lookup_variable(string name)
+{
+    st_variable temp = lookup_variables(class_symbol_table, name);
+    if (temp.offset == -1)
+    {
+        temp = lookup_variables(function_symbol_table, name);
+    }
+
+    if (temp.offset == -1)
+    {
+        cout << "ERROR: COULD NOT FIND VARIABLE (" << name << ")" << endl;
+    }
+
+    return temp;
+}
+
+void clean_table(string table)
+{
+    if (table == "class")
+    {
+        class_offset[0] = 0;
+        class_offset[1] = 0;
+    }
+    else if (table == "function")
+    {
+        function_offset = 0;
+    }
+}
+
+void update_variable(string name, string type, string segment, int offset)
+{
+
+}
+
 // class ::= 'class' identifier '{' class_var_decs subr_decs '}'
 // create_class(myclassname,class_var_decs,class_subrs)
 ast parse_class()
@@ -156,7 +198,7 @@ ast parse_class()
     push_error_context("parse_class()") ;
 
     class_symbol_table = create_variables();
-    class_offset = 0;
+    clean_table("class");
 
     mustbe(tk_class);
     string className = token_spelling( mustbe(tk_identifier) );
@@ -262,7 +304,7 @@ vector<ast> parse_field_var_dec()
 
     string type = token_spelling( mustbe(tk_type) );
     string name = token_spelling( mustbe(tk_identifier) );
-    string segment = "field"; ////////////////////////////////////////////////////////////
+    string segment = "this"; ////////////////////////////////////////////////////////////
 
     int offset = declare_variable(name, type, segment);
     decs.push_back( create_var_dec(name, segment, offset, type) );
@@ -382,7 +424,7 @@ ast parse_constructor()
     push_error_context("parse_constructor()") ;
 
     function_symbol_table = create_variables();
-    function_offset = 0;
+    clean_table("function");
 
     mustbe(tk_constructor);
     string type = token_spelling( mustbe(tk_identifier) );
@@ -410,7 +452,7 @@ ast parse_function()
     push_error_context("parse_function()") ;
 
     function_symbol_table = create_variables();
-    function_offset = 0;
+    clean_table("function");
 
     mustbe(tk_function);
     string type = token_spelling( mustbe(tk_vtype) );
@@ -439,7 +481,7 @@ ast parse_method()
     push_error_context("parse_method()") ;
 
     function_symbol_table = create_variables();
-    function_offset = 0;
+    clean_table("function");
 
     mustbe(tk_method);
     string type = token_spelling( parse_vtype() );
@@ -474,22 +516,20 @@ ast parse_param_list()
 
     if ( have( current_token(), tk_type ) )
     {
-        string type = token_spelling( current_token() );
-        next_token();
+        string type = token_spelling( mustbe(tk_type));
         string name = token_spelling( mustbe(tk_identifier) );
-        string segment = "local test";
-        int offset = 0;
+        string segment = "local"; ///////////////////////////////////////////////////////////////////////////////////
+        int offset = declare_variable(name, type, segment);
 
         parameters.push_back( create_var_dec(name, segment, offset, type) );
 
-        while ( current_token() == tk_type )
+        while ( have( current_token(), tk_comma) )
         {
             mustbe(tk_comma);
-            type = token_spelling( current_token() );
-            next_token();
+            type = token_spelling( mustbe(tk_type) );
             name = token_spelling( mustbe(tk_identifier) );
-            segment = "local test"; ////////////////////////////////////////////////////////////////////
-            offset = 0;
+            segment = "local"; ///////////////////////////////////////////////////////////////////////////////////
+            offset = declare_variable(name, type, segment);
 
             parameters.push_back( create_var_dec(name, segment, offset, type) );
         }
@@ -535,6 +575,7 @@ ast parse_var_decs()
         vector<ast> new_decs;
         new_decs = parse_var_dec();
 
+        declarations.reserve(new_decs.size());
         declarations.insert( declarations.end(), new_decs.begin(), new_decs.end() );
     }
 
@@ -569,7 +610,7 @@ vector<ast> parse_var_dec()
   while( have( current_token(), tk_comma) )
     {
         mustbe(tk_comma);
-        name = mustbe(tk_identifier);
+        name = token_spelling( mustbe(tk_identifier) );
         segment = "local";
         offset = declare_variable(name, type, segment);
         decs.push_back( create_var_dec(name, segment, offset, type) );
@@ -656,11 +697,11 @@ ast parse_let()
 {
     push_error_context("parse_let()") ;
 
-    /*bool array = false;
+    bool array = false;
 
     mustbe(tk_let);
-    Token variable = mustbe(tk_identifier);
-    ast var; ////////////////////////////////////////////////////////////////////////////////////////
+    //Token variable = mustbe(tk_identifier);
+    ast var = parse_var_term(); ////////////////////////////////////////////////////////////////////////////////////////
     ast new_index;
     if ( have( current_token(), tk_lsb ) )
     {
@@ -669,20 +710,18 @@ ast parse_let()
     }
     mustbe(tk_eq);
     ast new_expression = parse_expr(); ////////////////////////////////////////////////////////////////
-    mustbe(tk_semi);*/
-    next_token(); // REMOVE LATER
+    mustbe(tk_semi);
+    //next_token(); // REMOVE LATER
 
     pop_error_context() ;
-    return -1; //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    /*if (array == true)
+    if (array == false)
     {
         return create_let(var, new_expression);
     }
     else
     {
         return create_let_array(var, new_index, new_expression);
-        //return -1;
-    }*/
+    }
 }
 
 // if ::= 'if' '(' expr ')' '{' statements '}' ('else' '{' statements '}')?
@@ -911,7 +950,7 @@ ast parse_term()
 
     else if ( have( current_token(), tk_unary_op ) )
     {
-        string op = token_spelling( current_token() );
+        string op = token_spelling( mustbe(tk_unary_op) );
         nextTerm = parse_term();
         term = create_unary_op(op, nextTerm);
     }
@@ -957,21 +996,49 @@ ast parse_var_term()
     push_error_context("parse_var_term()") ;
 
     ast var_term;
+    ast variable;
 
     string name = token_spelling( mustbe(tk_identifier) );
     if ( have( current_token(), tk_lsb ) )
     {
         var_term = parse_index(); ///////////////////////////////////////// I think I need more here
+
+        string segment = "local";
+        int offset = function_offset;
+        function_offset++;
+        string type = "int";
+
+        declare_variable(name, type, segment);
+
+        variable = create_var(name, segment, offset, type);
+
+        pop_error_context() ;
+        return create_array_index(variable, var_term);
     }
     else if ( have( current_token(), tk_stop ) )
     {
         var_term = parse_id_call();
+
+        pop_error_context() ;
         return create_call_as_function(name, var_term);
     }
     else if ( have( current_token(), tk_lrb ) )
     {
         var_term = parse_call();
+        return -1;
         //return create_call_as_method(name, ast object, var_term); ///////////////////Unsure about name
+    }
+    else
+    {
+        st_variable temp = lookup_variable(name);
+        string segment = temp.segment;
+        int offset = temp.offset;
+        string type = temp.type;
+
+        //declare_variable(name, type, segment);
+
+        pop_error_context() ;
+        return create_var(name, segment, offset, type);
     }
 
     pop_error_context() ;
