@@ -195,7 +195,7 @@ st_variable lookup_variable(string name)
     //In the case that the variable does not exist
     if (temp.offset == -1)
     {
-        //cout << "ERROR: COULD NOT FIND VARIABLE (" << name << ")" << endl;
+        fatal_error(0,"Could not find variable") ;
     }
 
     return temp;
@@ -305,6 +305,11 @@ ast parse_class_var_decs()
         else if ( have( current_token(), tk_field ) )
         {
             new_decs = parse_field_var_dec();
+        }
+        //Error Handling
+        else
+        {
+            fatal_error(0,"Bad Token") ;
         }
 
         //Concatenates temporary vector to the end of the main vector
@@ -454,6 +459,7 @@ ast parse_subr_decs()
             subrs.push_back( create_subr( parse_function() ) );
             function_offset[1] = 0;
         }
+        //Method
         else if ( have( current_token(), tk_method ) )
         {
             subrs.push_back( create_subr( parse_method() ) );
