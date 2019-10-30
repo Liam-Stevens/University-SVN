@@ -62,6 +62,14 @@ void walk_expr_list(ast t) ;
 void walk_infix_op(ast t) ;
 
 string current_class;
+int while_counter;
+int if_counter;
+
+void reset_counters()
+{
+    while_counter = 0;
+    if_counter = 0;
+}
 
 void walk_class(ast t)
 {
@@ -70,7 +78,7 @@ void walk_class(ast t)
     ast subr_decs = get_class_subr_decs(t) ;
     current_class = myclassname;
 
-    int num_of_vars = size_of_class_var_decs(var_decs);
+    reset_counters();
 
     walk_class_var_decs(var_decs) ;
     walk_subr_decs(subr_decs) ;
@@ -145,7 +153,8 @@ void walk_function(ast t)
     ast param_list = get_function_param_list(t) ;
     ast subr_body = get_function_subr_body(t) ;
 
-    int num_of_vars = size_of_param_list(param_list);
+
+    int num_of_vars = size_of_var_decs( get_subr_body_decs(subr_body) );
 
     write_to_output("function " + current_class + "." + name + " " + to_string( num_of_vars ) + "\n");
 
@@ -274,9 +283,23 @@ void walk_if_else(ast t)
     ast if_true = get_if_else_if_true(t) ;
     ast if_false = get_if_else_if_false(t) ;
 
+    int index = if_counter;
+    if_counter++;
+
     walk_expr(condition) ;
+
+    write_to_output("if-goto IF_TRUE"+to_string(index)+"\n");
+    write_to_output("goto IF_FALSE"+to_string(index)+"\n");
+    write_to_output("label IF_TRUE"+to_string(index)+"\n");
+
     walk_statements(if_true) ;
+
+    write_to_output("goto IF_END"+to_string(index)+"\n");
+    write_to_output("label IF_FALSE"+to_string(index)+"\n");
+
     walk_statements(if_false) ;
+
+    write_to_output("label IF_END"+to_string(index)+"\n");
 }
 
 void walk_while(ast t)
@@ -284,8 +307,21 @@ void walk_while(ast t)
     ast condition = get_while_condition(t) ;
     ast body = get_while_body(t) ;
 
+    int index = while_counter;
+    while_counter++;
+
+    write_to_output("label WHILE_EXP"+to_string(index)+"\n");
+
     walk_expr(condition) ;
+
+    write_to_output("if-goto WHILE_END"+to_string(index)+"\n");
+
     walk_statements(body) ;
+
+    write_to_output("goto WHILE_EXP"+to_string(index)+"\n");
+
+    write_to_output("label WHILE_END"+to_string(index)+"\n");
+
 }
 
 void walk_do(ast t)
@@ -396,6 +432,14 @@ void walk_string(ast t)
 void walk_bool(ast t)
 {
     bool _constant = get_bool_t_or_f(t) ;
+    write_to_output("push constant 0\n");
+    write_to_output("not\n");
+
+    if (_constant == true)
+    {
+        // ISSUES WITH DIFFERENT AMOUNT OF NOTS ///////////////////////////////////////////////////////////////////////////////////
+        write_to_output("not\n");
+    }
 }
 
 void walk_null(ast t)
