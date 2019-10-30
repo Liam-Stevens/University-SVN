@@ -61,11 +61,16 @@ void walk_subr_call(ast t) ;
 void walk_expr_list(ast t) ;
 void walk_infix_op(ast t) ;
 
+string current_class;
+
 void walk_class(ast t)
 {
     string myclassname = get_class_class_name(t) ;
     ast var_decs = get_class_var_decs(t) ;
     ast subr_decs = get_class_subr_decs(t) ;
+    current_class = myclassname;
+
+    int num_of_vars = size_of_class_var_decs(var_decs);
 
     walk_class_var_decs(var_decs) ;
     walk_subr_decs(subr_decs) ;
@@ -125,6 +130,10 @@ void walk_constructor(ast t)
     ast param_list = get_constructor_param_list(t) ;
     ast subr_body = get_constructor_subr_body(t) ;
 
+    int num_of_vars = size_of_param_list(param_list);
+
+    write_to_output("function " + current_class + "." + name + " " + to_string( num_of_vars ) + "\n");
+
     walk_param_list(param_list) ;
     walk_subr_body(subr_body) ;
 }
@@ -135,6 +144,10 @@ void walk_function(ast t)
     string name = get_function_name(t) ;
     ast param_list = get_function_param_list(t) ;
     ast subr_body = get_function_subr_body(t) ;
+
+    int num_of_vars = size_of_param_list(param_list);
+
+    write_to_output("function " + current_class + "." + name + " " + to_string( num_of_vars ) + "\n");
 
     walk_param_list(param_list) ;
     walk_subr_body(subr_body) ;
@@ -295,6 +308,8 @@ void walk_do(ast t)
 
 void walk_return(ast t)
 {
+    write_to_output("push constant 0\n");
+    write_to_output("return\n");
 }
 
 void walk_return_expr(ast t)
@@ -302,6 +317,8 @@ void walk_return_expr(ast t)
     ast expr = get_return_expr(t) ;
 
     walk_expr(expr) ;
+
+    write_to_output("return\n");
 }
 
 void walk_expr(ast t)
@@ -475,4 +492,3 @@ int main(int argc,char **argv)
     print_output() ;
     print_errors() ;
 }
-
