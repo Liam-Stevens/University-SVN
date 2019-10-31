@@ -10,6 +10,7 @@ private:
     int num_of_spaces;
     int maxSpaces;
     int minSpaces;
+    vector<string> secondPassCheck;
 
     int word_size(vector<string> words)
     {
@@ -41,11 +42,44 @@ private:
         return;
     }
 
+    void insert_lower()
+    {
+
+        for (int i = 0; i < placement.size(); i++)
+        {
+            //cout << "sp: " << (int)secondPassCheck[i+1][0] << " " << secondPassCheck[i+1][0] << " | _ " << (int)'_' << " | spaces " << num_of_spaces << endl;
+            if((int)secondPassCheck[i+1][0] > (int)'_' && num_of_spaces > 0)
+            {
+                num_of_spaces--;
+                placement[i]++;
+            }
+        }
+
+    }
+
+    void insert_upper()
+    {
+
+        for (int i = placement.size()-1; i >= 0; i--)
+        {
+            if((int)secondPassCheck[i+1][0] < (int)'_' && num_of_spaces > 0)
+            {
+                num_of_spaces--;
+                placement[i]++;
+            }
+        }
+
+    }
+
     void second_pass()
     {
         checkMinMax();
 
+        insert_lower();
 
+        checkMinMax();
+
+        insert_upper();
 
 
         return;
@@ -59,7 +93,7 @@ private:
         }
 
         int spaces_per_slot = num_of_spaces/slots;
-        
+
         for (int i = 0; i < slots; i++)
         {
             placement.push_back(spaces_per_slot);
@@ -98,6 +132,7 @@ public:
     string adjusted(vector<string> words, int width)
     {
         placement.clear();
+        secondPassCheck = words;
         int num_of_characters = word_size(words);
         num_of_spaces = width - num_of_characters;
 
