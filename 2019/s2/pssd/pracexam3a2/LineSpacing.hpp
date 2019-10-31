@@ -8,8 +8,6 @@ class LineSpacing
 private:
     vector<int> placement;
     int num_of_spaces;
-    int maxSpaces;
-    int minSpaces;
     vector<string> secondPassCheck;
 
     int word_size(vector<string> words)
@@ -22,24 +20,6 @@ private:
         }
 
         return size;
-    }
-
-    void checkMinMax()
-    {
-        maxSpaces = placement[0];
-        minSpaces = placement[0];
-        for (int i = 1; i < placement.size(); i++)
-        {
-            if (placement[i] > maxSpaces)
-            {
-                maxSpaces = placement[i];
-            }
-            if (placement[i] < minSpaces)
-            {
-                minSpaces = placement[i];
-            }
-        }
-        return;
     }
 
     void insert_lower()
@@ -73,14 +53,8 @@ private:
 
     void second_pass()
     {
-        checkMinMax();
-
         insert_lower();
-
-        checkMinMax();
-
         insert_upper();
-
 
         return;
     }
