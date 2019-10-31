@@ -59,9 +59,7 @@ private:
         }
 
         int spaces_per_slot = num_of_spaces/slots;
-        cout << spaces_per_slot << endl;
-        cout << slots << endl;
-
+        
         for (int i = 0; i < slots; i++)
         {
             placement.push_back(spaces_per_slot);
