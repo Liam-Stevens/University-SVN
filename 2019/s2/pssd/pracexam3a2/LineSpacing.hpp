@@ -45,7 +45,7 @@ private:
     {
         checkMinMax();
 
-        
+
 
 
         return;
@@ -59,6 +59,8 @@ private:
         }
 
         int spaces_per_slot = num_of_spaces/slots;
+        cout << spaces_per_slot << endl;
+        cout << slots << endl;
 
         for (int i = 0; i < slots; i++)
         {
@@ -82,7 +84,7 @@ private:
         string line = words[0];
         for (int i = 0; i < placement.size(); i++)
         {
-            string space = "_";
+            string space = "";
             for (int j = 0; j < placement[i]; j++)
             {
                 space += '_';
