@@ -35,6 +35,7 @@ private:
             }
         }
 
+        return;
     }
 
     void insert_upper()
@@ -49,6 +50,7 @@ private:
             }
         }
 
+        return;
     }
 
     void second_pass()
