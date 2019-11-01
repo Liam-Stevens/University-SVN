@@ -23,7 +23,7 @@ using namespace Jack_Compiler ;
 // forward declarations of one function per node in the abstract syntax tree
 void walk_class(ast t) ;
 void walk_class_var_decs(ast t) ;
-void walk_var_dec(ast t) ;
+void walk_var_dec(ast t, bool param) ;
 void walk_subr_decs(ast t) ;
 void walk_subr(ast t) ;
 void walk_constructor(ast t) ;
@@ -98,7 +98,7 @@ void walk_class_var_decs(ast t)
     int ndecs = size_of_class_var_decs(t) ;
     for ( int i = 0 ; i < ndecs ; i++ )
     {
-        walk_var_dec(get_class_var_decs(t,i)) ;
+        walk_var_dec(get_class_var_decs(t,i), false) ;
     }
 
     if (ndecs > 0)
@@ -108,7 +108,7 @@ void walk_class_var_decs(ast t)
 
 }
 
-void walk_var_dec(ast t)
+void walk_var_dec(ast t, bool param)
 {
     string name = get_var_dec_name(t) ;
     string type = get_var_dec_type(t) ;
@@ -116,21 +116,30 @@ void walk_var_dec(ast t)
     int offset = get_var_dec_offset(t) ;
 
     string var_type;
+    string tmp_indent = indents;
+    string tmp_end = " ;\n";
 
     if (segment == "local")
     {
-        var_type = "var";
+        var_type = "var ";
     }
     else if (segment == "this")
     {
-        var_type = "field";
+        var_type = "field ";
     }
     else
     {
-        var_type = segment;
+        var_type = segment + " ";
     }
 
-    write_to_output(indents+var_type+" "+type+" "+name+" ;\n");
+    if (param == true)
+    {
+        var_type = "";
+        tmp_indent = "";
+        tmp_end = "";
+    }
+
+    write_to_output(tmp_indent+var_type+type+" "+name+tmp_end);
 }
 
 void walk_subr_decs(ast t)
@@ -229,7 +238,11 @@ void walk_param_list(ast t)
 
     for ( int i = 0 ; i < ndecs ; i++ )
     {
-        walk_var_dec(get_param_list(t,i)) ;
+        if (i != 0)
+        {
+            write_to_output(",");
+        }
+        walk_var_dec(get_param_list(t,i), true) ;
     }
 
 }
@@ -248,7 +261,7 @@ void walk_var_decs(ast t)
     int ndecs = size_of_var_decs(t) ;
     for ( int i = 0 ; i < ndecs ; i++ )
     {
-        walk_var_dec(get_var_decs(t,i)) ;
+        walk_var_dec(get_var_decs(t,i), false) ;
     }
 
     if (ndecs > 0)
@@ -333,9 +346,19 @@ void walk_let_array(ast t)
     ast index = get_let_array_index(t) ;
     ast expr = get_let_array_expr(t) ;
 
+    write_to_output(indents+"let ");
+
     walk_var(var) ;
+
+    write_to_output("[");
     walk_expr(index) ;
+    write_to_output("]");
+
+    write_to_output(" = ");
+
     walk_expr(expr) ;
+
+    write_to_output(" ;\n");
 }
 
 void walk_if(ast t)
@@ -403,6 +426,8 @@ void walk_do(ast t)
 {
     ast call = get_do_call(t) ;
 
+    write_to_output(indents+"do ");
+
     switch(ast_node_kind(call))
     {
     case ast_call_as_function:
@@ -415,6 +440,8 @@ void walk_do(ast t)
         fatal_error(0,"Unexpected call kind") ;
         break ;
     }
+
+    write_to_output(" ;\n");
 }
 
 void walk_return(ast t)
@@ -502,7 +529,7 @@ void walk_int(ast t)
 void walk_string(ast t)
 {
     string _constant = get_string_constant(t) ;
-    write_to_output(_constant);
+    write_to_output("\""+_constant+"\"");
 }
 
 void walk_bool(ast t)
@@ -554,7 +581,10 @@ void walk_array_index(ast t)
     ast index = get_array_index_index(t) ;
 
     walk_var(var) ;
+
+    write_to_output("[");
     walk_expr(index) ;
+    write_to_output("]");
 }
 
 void walk_call_as_function(ast t)
@@ -565,8 +595,6 @@ void walk_call_as_function(ast t)
     write_to_output(class_name+".");
 
     walk_subr_call(subr_call) ;
-
-    write_to_output("()");
 }
 
 void walk_call_as_method(ast t)
@@ -591,8 +619,6 @@ void walk_call_as_method(ast t)
     write_to_output(".");
 
     walk_subr_call(subr_call) ;
-
-    write_to_output("()");
 }
 
 void walk_subr_call(ast t)
@@ -608,10 +634,17 @@ void walk_subr_call(ast t)
 void walk_expr_list(ast t)
 {
     int nexpressions = size_of_expr_list(t) ;
+
+    write_to_output("(");
     for ( int i = 0 ; i < nexpressions ; i++ )
     {
+        if (i != 0)
+        {
+            write_to_output(",");
+        }
         walk_expr(get_expr_list(t,i)) ;
     }
+    write_to_output(")");
 }
 
 void walk_infix_op(ast t)
