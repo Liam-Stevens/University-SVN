@@ -64,11 +64,13 @@ void walk_infix_op(ast t) ;
 string current_class;
 int while_counter;
 int if_counter;
+int field_counter;
 
 void reset_counters()
 {
     while_counter = 0;
     if_counter = 0;
+    field_counter = 0;
 }
 
 void walk_class(ast t)
@@ -100,6 +102,10 @@ void walk_var_dec(ast t)
     string segment = get_var_dec_segment(t) ;
     int offset = get_var_dec_offset(t) ;
 
+    if (segment == "this")
+    {
+        field_counter++;
+    }
 }
 
 void walk_subr_decs(ast t)
@@ -144,7 +150,14 @@ void walk_constructor(ast t)
     write_to_output("function " + current_class + "." + name + " " + to_string( num_of_vars ) + "\n");
 
     walk_param_list(param_list) ;
+
+    write_to_output("call Memory.alloc 1\n");
+    write_to_output("pop pointer 0\n");
+    write_to_output("push pointer 0\n");
+
     walk_subr_body(subr_body) ;
+
+
 }
 
 void walk_function(ast t)
@@ -379,16 +392,21 @@ void walk_return_expr(ast t)
 void walk_expr(ast t)
 {
     int term_ops = size_of_expr(t) ;
-    for ( int i = 0 ; i < term_ops ; i++ )
+    for ( int i = 0 ; i < term_ops ; i += 2 )
     {
         ast term_op = get_expr(t,i) ;
         if ( i % 2 == 0 )
         {
             walk_term(term_op) ;
+            if ( i != 0 )
+            {
+                i -= 3;
+            }
         }
         else
         {
             walk_infix_op(term_op) ;
+            i++;
         }
     }
 }
@@ -466,10 +484,7 @@ void walk_null(ast t)
 
 void walk_this(ast t)
 {
-    write_to_output("push constant 1\n");
-    write_to_output("call Memory.alloc 1\n");
-    write_to_output("pop pointer 0\n");
-    write_to_output("push pointer 0\n");
+    write_to_output("push constant "+to_string(field_counter)+"\n");
 }
 
 void walk_unary_op(ast t)
@@ -478,6 +493,15 @@ void walk_unary_op(ast t)
     ast term = get_unary_op_term(t) ;
 
     walk_term(term) ;
+
+    if (uop == "~")
+    {
+        write_to_output("not\n");
+    } else if (uop == "-")
+    {
+        write_to_output("neg\n");
+    }
+
 }
 
 void walk_var(ast t)
@@ -568,10 +592,10 @@ void walk_infix_op(ast t)
         write_to_output("sub\n");
     } else if (op == "*")
     {
-        write_to_output("math.multiply\n");
+        write_to_output("call Math.multiply 2\n");
     } else if (op == "/")
     {
-        write_to_output("math.divide\n");
+        write_to_output("call Math.divide 2\n");
     } else if (op == "&")
     {
         write_to_output("and\n");
@@ -580,13 +604,13 @@ void walk_infix_op(ast t)
         write_to_output("or\n");
     } else if (op == "<")
     {
-        //write_to_output("\n");
+        write_to_output("lt\n");
     } else if (op == ">")
     {
-        //write_to_output("\n");
+        write_to_output("gt\n");
     } else if (op == "=")
     {
-        //write_to_output("\n");
+        write_to_output("eq\n");
     }
 }
 
