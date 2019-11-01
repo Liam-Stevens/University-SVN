@@ -58,14 +58,39 @@ void walk_subr_call(ast t) ;
 void walk_expr_list(ast t) ;
 void walk_infix_op(ast t) ;
 
+string indents;
+bool new_line_statement;
+
+void indent(string op)
+{
+    if (op == "add")
+    {
+        indents += "    ";
+    }
+    else if (op == "sub")
+    {
+        indents.erase(indents.end()-4,indents.end());
+    }
+}
+
 void walk_class(ast t)
 {
     string myclassname = get_class_class_name(t) ;
     ast var_decs = get_class_var_decs(t) ;
     ast subr_decs = get_class_subr_decs(t) ;
 
+    indents = "";
+    new_line_statement = false;
+
+    write_to_output(indents+"class "+myclassname+"\n");
+    write_to_output(indents+"{\n");
+    indent("add");
+
     walk_class_var_decs(var_decs) ;
     walk_subr_decs(subr_decs) ;
+
+    indent("sub");
+    write_to_output(indents+"}\n");
 }
 
 void walk_class_var_decs(ast t)
@@ -75,6 +100,12 @@ void walk_class_var_decs(ast t)
     {
         walk_var_dec(get_class_var_decs(t,i)) ;
     }
+
+    if (ndecs > 0)
+    {
+        write_to_output("\n");
+    }
+
 }
 
 void walk_var_dec(ast t)
@@ -83,6 +114,23 @@ void walk_var_dec(ast t)
     string type = get_var_dec_type(t) ;
     string segment = get_var_dec_segment(t) ;
     int offset = get_var_dec_offset(t) ;
+
+    string var_type;
+
+    if (segment == "local")
+    {
+        var_type = "var";
+    }
+    else if (segment == "this")
+    {
+        var_type = "field";
+    }
+    else
+    {
+        var_type = segment;
+    }
+
+    write_to_output(indents+var_type+" "+type+" "+name+" ;\n");
 }
 
 void walk_subr_decs(ast t)
@@ -91,6 +139,11 @@ void walk_subr_decs(ast t)
     for ( int i = 0 ; i < size ; i++ )
     {
         walk_subr(get_subr_decs(t,i)) ;
+
+        if (i < size-1)
+        {
+            write_to_output("\n");
+        }
     }
 }
 
@@ -122,8 +175,15 @@ void walk_constructor(ast t)
     ast param_list = get_constructor_param_list(t) ;
     ast subr_body = get_constructor_subr_body(t) ;
 
+    write_to_output(indents+"constructor "+vtype+" "+name+"(");
     walk_param_list(param_list) ;
+    write_to_output(")\n"+indents+"{\n");
+    indent("add");
+
     walk_subr_body(subr_body) ;
+
+    indent("sub");
+    write_to_output(indents+"}\n");
 }
 
 void walk_function(ast t)
@@ -133,8 +193,16 @@ void walk_function(ast t)
     ast param_list = get_function_param_list(t) ;
     ast subr_body = get_function_subr_body(t) ;
 
+    write_to_output(indents+"function "+vtype+" "+name+"(");
     walk_param_list(param_list) ;
+    write_to_output(")\n"+indents+"{\n");
+    indent("add");
+
     walk_subr_body(subr_body) ;
+
+    indent("sub");
+    write_to_output(indents+"}\n");
+
 }
 
 void walk_method(ast t)
@@ -144,17 +212,26 @@ void walk_method(ast t)
     ast param_list = get_method_param_list(t) ;
     ast subr_body = get_method_subr_body(t) ;
 
+    write_to_output(indents+"method "+vtype+" "+name+"(");
     walk_param_list(param_list) ;
+    write_to_output(")\n"+indents+"{\n");
+    indent("add");
+
     walk_subr_body(subr_body) ;
+
+    indent("sub");
+    write_to_output(indents+"}\n");
 }
 
 void walk_param_list(ast t)
 {
     int ndecs = size_of_param_list(t) ;
+
     for ( int i = 0 ; i < ndecs ; i++ )
     {
         walk_var_dec(get_param_list(t,i)) ;
     }
+
 }
 
 void walk_subr_body(ast t)
@@ -173,6 +250,11 @@ void walk_var_decs(ast t)
     {
         walk_var_dec(get_var_decs(t,i)) ;
     }
+
+    if (ndecs > 0)
+    {
+        write_to_output("\n");
+    }
 }
 
 void walk_statements(ast t)
@@ -181,6 +263,12 @@ void walk_statements(ast t)
     for ( int i = 0 ; i < nstatements ; i++ )
     {
         walk_statement(get_statements(t,i)) ;
+
+        if (i < nstatements-1 && new_line_statement == true)
+        {
+            write_to_output("\n");
+            new_line_statement = false;
+        }
     }
 }
 
@@ -228,8 +316,15 @@ void walk_let(ast t)
     ast var = get_let_var(t) ;
     ast expr = get_let_expr(t) ;
 
+    write_to_output(indents+"let ");
+
     walk_var(var) ;
+
+    write_to_output(" = ");
+
     walk_expr(expr) ;
+
+    write_to_output(" ;\n");
 }
 
 void walk_let_array(ast t)
@@ -248,8 +343,16 @@ void walk_if(ast t)
     ast condition = get_if_condition(t) ;
     ast if_true = get_if_if_true(t) ;
 
+    write_to_output(indents+"if (");
     walk_expr(condition) ;
+    write_to_output(")\n"+indents+"{\n");
+    indent("add");
+
     walk_statements(if_true) ;
+
+    indent("sub");
+    write_to_output(indents+"}\n");
+    new_line_statement = true;
 }
 
 void walk_if_else(ast t)
@@ -258,9 +361,23 @@ void walk_if_else(ast t)
     ast if_true = get_if_else_if_true(t) ;
     ast if_false = get_if_else_if_false(t) ;
 
+    write_to_output(indents+"if (");
     walk_expr(condition) ;
+    write_to_output(")\n"+indents+"{\n");
+    indent("add");
+
     walk_statements(if_true) ;
+
+    indent("sub");
+    write_to_output(indents+"}\n");
+    write_to_output(indents+"else\n"+indents+"{\n");
+    indent("add");
+
     walk_statements(if_false) ;
+
+    indent("sub");
+    write_to_output(indents+"}\n");
+    new_line_statement = true;
 }
 
 void walk_while(ast t)
@@ -268,8 +385,18 @@ void walk_while(ast t)
     ast condition = get_while_condition(t) ;
     ast body = get_while_body(t) ;
 
+    write_to_output(indents+"while (");
+
     walk_expr(condition) ;
+
+    write_to_output(")\n"+indents+"{\n");
+    indent("add");
+
     walk_statements(body) ;
+
+    indent("sub");
+    write_to_output(indents+"}\n");
+    new_line_statement = true;
 }
 
 void walk_do(ast t)
@@ -292,13 +419,16 @@ void walk_do(ast t)
 
 void walk_return(ast t)
 {
+    write_to_output(indents+"return ;\n");
 }
 
 void walk_return_expr(ast t)
 {
     ast expr = get_return_expr(t) ;
 
+    write_to_output(indents+"return ");
     walk_expr(expr) ;
+    write_to_output(" ;\n");
 }
 
 void walk_expr(ast t)
@@ -366,24 +496,37 @@ void walk_term(ast t)
 void walk_int(ast t)
 {
     int _constant = get_int_constant(t) ;
+    write_to_output(to_string(_constant));
 }
 
 void walk_string(ast t)
 {
     string _constant = get_string_constant(t) ;
+    write_to_output(_constant);
 }
 
 void walk_bool(ast t)
 {
     bool _constant = get_bool_t_or_f(t) ;
+
+    if (_constant)
+    {
+        write_to_output("true");
+    }
+    else
+    {
+        write_to_output("false");
+    }
 }
 
 void walk_null(ast t)
 {
+    write_to_output("null");
 }
 
 void walk_this(ast t)
 {
+    write_to_output("this");
 }
 
 void walk_unary_op(ast t)
@@ -391,6 +534,7 @@ void walk_unary_op(ast t)
     string uop = get_unary_op_op(t);
     ast term = get_unary_op_term(t) ;
 
+    write_to_output(uop);
     walk_term(term) ;
 }
 
@@ -400,6 +544,8 @@ void walk_var(ast t)
     string type = get_var_type(t) ;
     string segment = get_var_segment(t) ;
     int offset = get_var_offset(t) ;
+
+    write_to_output(name);
 }
 
 void walk_array_index(ast t)
@@ -416,7 +562,11 @@ void walk_call_as_function(ast t)
     string class_name = get_call_as_function_class_name(t) ;
     ast subr_call = get_call_as_function_subr_call(t) ;
 
+    write_to_output(class_name+".");
+
     walk_subr_call(subr_call) ;
+
+    write_to_output("()");
 }
 
 void walk_call_as_method(ast t)
@@ -437,13 +587,20 @@ void walk_call_as_method(ast t)
         fatal_error(0,"Expected var or this") ;
         break ;
     }
+
+    write_to_output(".");
+
     walk_subr_call(subr_call) ;
+
+    write_to_output("()");
 }
 
 void walk_subr_call(ast t)
 {
     string subr_name = get_subr_call_subr_name(t) ;
     ast expr_list = get_subr_call_expr_list(t) ;
+
+    write_to_output(subr_name);
 
     walk_expr_list(expr_list) ;
 }
@@ -460,6 +617,8 @@ void walk_expr_list(ast t)
 void walk_infix_op(ast t)
 {
     string op = get_infix_op_op(t) ;
+
+    write_to_output(" "+op+" ");
 }
 
 // main program
@@ -472,4 +631,3 @@ int main(int argc,char **argv)
     print_output() ;
     print_errors() ;
 }
-
