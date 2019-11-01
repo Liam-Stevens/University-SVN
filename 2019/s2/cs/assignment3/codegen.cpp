@@ -99,6 +99,7 @@ void walk_var_dec(ast t)
     string type = get_var_dec_type(t) ;
     string segment = get_var_dec_segment(t) ;
     int offset = get_var_dec_offset(t) ;
+
 }
 
 void walk_subr_decs(ast t)
@@ -168,6 +169,12 @@ void walk_method(ast t)
     string name = get_method_name(t) ;
     ast param_list = get_method_param_list(t) ;
     ast subr_body = get_method_subr_body(t) ;
+
+    int num_of_vars = size_of_var_decs( get_subr_body_decs(subr_body) );
+
+    write_to_output("function " + current_class + "." + name + " " + to_string( num_of_vars ) + "\n");
+    write_to_output("push argument 0\n");
+    write_to_output("pop pointer 0\n");
 
     walk_param_list(param_list) ;
     walk_subr_body(subr_body) ;
@@ -253,8 +260,9 @@ void walk_let(ast t)
     ast var = get_let_var(t) ;
     ast expr = get_let_expr(t) ;
 
-    walk_var(var) ;
     walk_expr(expr) ;
+
+    write_to_output("pop "+get_var_segment(var)+" "+to_string(get_var_offset(var))+"\n");
 }
 
 void walk_let_array(ast t)
@@ -273,8 +281,18 @@ void walk_if(ast t)
     ast condition = get_if_condition(t) ;
     ast if_true = get_if_if_true(t) ;
 
+    int index = if_counter;
+    if_counter++;
+
     walk_expr(condition) ;
+
+    write_to_output("if-goto IF_TRUE"+to_string(index)+"\n");
+    write_to_output("goto IF_FALSE"+to_string(index)+"\n");
+    write_to_output("label IF_TRUE"+to_string(index)+"\n");
+
     walk_statements(if_true) ;
+
+    write_to_output("label IF_FALSE"+to_string(index)+"\n");
 }
 
 void walk_if_else(ast t)
@@ -314,6 +332,7 @@ void walk_while(ast t)
 
     walk_expr(condition) ;
 
+    write_to_output("not\n");
     write_to_output("if-goto WHILE_END"+to_string(index)+"\n");
 
     walk_statements(body) ;
@@ -422,6 +441,7 @@ void walk_term(ast t)
 void walk_int(ast t)
 {
     int _constant = get_int_constant(t) ;
+    write_to_output("push constant "+to_string(_constant)+"\n");
 }
 
 void walk_string(ast t)
@@ -433,11 +453,9 @@ void walk_bool(ast t)
 {
     bool _constant = get_bool_t_or_f(t) ;
     write_to_output("push constant 0\n");
-    write_to_output("not\n");
 
-    if (_constant == true)
+    if (_constant)
     {
-        // ISSUES WITH DIFFERENT AMOUNT OF NOTS ///////////////////////////////////////////////////////////////////////////////////
         write_to_output("not\n");
     }
 }
@@ -448,6 +466,10 @@ void walk_null(ast t)
 
 void walk_this(ast t)
 {
+    write_to_output("push constant 1\n");
+    write_to_output("call Memory.alloc 1\n");
+    write_to_output("pop pointer 0\n");
+    write_to_output("push pointer 0\n");
 }
 
 void walk_unary_op(ast t)
@@ -464,6 +486,8 @@ void walk_var(ast t)
     string type = get_var_type(t) ;
     string segment = get_var_segment(t) ;
     int offset = get_var_offset(t) ;
+
+    write_to_output("push "+segment+" "+to_string(offset)+"\n");
 }
 
 void walk_array_index(ast t)
@@ -481,6 +505,12 @@ void walk_call_as_function(ast t)
     ast subr_call = get_call_as_function_subr_call(t) ;
 
     walk_subr_call(subr_call) ;
+
+    string call_name = get_subr_call_subr_name(subr_call);
+    ast expr_list = get_subr_call_expr_list(subr_call);
+    int vars = size_of_expr_list(expr_list);
+
+    write_to_output("call "+class_name+"."+call_name+" "+to_string(vars)+"\n");
 }
 
 void walk_call_as_method(ast t)
@@ -502,6 +532,12 @@ void walk_call_as_method(ast t)
         break ;
     }
     walk_subr_call(subr_call) ;
+
+    string call_name = get_subr_call_subr_name(subr_call);
+    ast expr_list = get_subr_call_expr_list(subr_call);
+    int vars = size_of_expr_list(expr_list) + 1;
+
+    write_to_output("call "+class_name+"."+call_name+" "+to_string(vars)+"\n");
 }
 
 void walk_subr_call(ast t)
@@ -524,6 +560,34 @@ void walk_expr_list(ast t)
 void walk_infix_op(ast t)
 {
     string op = get_infix_op_op(t) ;
+    if (op == "+")
+    {
+        write_to_output("add\n");
+    } else if (op == "-")
+    {
+        write_to_output("sub\n");
+    } else if (op == "*")
+    {
+        write_to_output("math.multiply\n");
+    } else if (op == "/")
+    {
+        write_to_output("math.divide\n");
+    } else if (op == "&")
+    {
+        write_to_output("and\n");
+    } else if (op == "|")
+    {
+        write_to_output("or\n");
+    } else if (op == "<")
+    {
+        //write_to_output("\n");
+    } else if (op == ">")
+    {
+        //write_to_output("\n");
+    } else if (op == "=")
+    {
+        //write_to_output("\n");
+    }
 }
 
 // main program
