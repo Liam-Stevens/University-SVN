@@ -145,15 +145,11 @@ void walk_constructor(ast t)
     ast param_list = get_constructor_param_list(t) ;
     ast subr_body = get_constructor_subr_body(t) ;
 
-    int num_of_vars = size_of_param_list(param_list);
+    int num_of_vars = size_of_var_decs( get_subr_body_decs(subr_body) );
 
     write_to_output("function " + current_class + "." + name + " " + to_string( num_of_vars ) + "\n");
 
     walk_param_list(param_list) ;
-
-    write_to_output("call Memory.alloc 1\n");
-    write_to_output("pop pointer 0\n");
-    write_to_output("push pointer 0\n");
 
     walk_subr_body(subr_body) ;
 
@@ -372,6 +368,8 @@ void walk_do(ast t)
         fatal_error(0,"Unexpected call kind") ;
         break ;
     }
+
+    write_to_output("pop temp 0\n");
 }
 
 void walk_return(ast t)
@@ -465,6 +463,14 @@ void walk_int(ast t)
 void walk_string(ast t)
 {
     string _constant = get_string_constant(t) ;
+
+    write_to_output("push constant "+to_string(_constant.length())+"\n");
+    write_to_output("call String.new 1\n");
+    for (int i = 0; i < _constant.length(); i++)
+    {
+        write_to_output("push constant "+to_string((int)_constant[i])+"\n");
+        write_to_output("call String.appendChar 2\n");
+    }
 }
 
 void walk_bool(ast t)
@@ -485,6 +491,9 @@ void walk_null(ast t)
 void walk_this(ast t)
 {
     write_to_output("push constant "+to_string(field_counter)+"\n");
+    write_to_output("call Memory.alloc 1\n");
+    write_to_output("pop pointer 0\n");
+    write_to_output("push pointer 0\n");
 }
 
 void walk_unary_op(ast t)
