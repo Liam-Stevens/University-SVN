@@ -58,9 +58,12 @@ void walk_subr_call(ast t) ;
 void walk_expr_list(ast t) ;
 void walk_infix_op(ast t) ;
 
+//String of spaces to append to the front
 string indents;
+//For checking if a new line is needed in var_decs
 bool new_line_statement;
 
+//Increases or decreases the indentation level
 void indent(string op)
 {
     if (op == "add")
@@ -73,12 +76,14 @@ void indent(string op)
     }
 }
 
+//Walks over a class
 void walk_class(ast t)
 {
     string myclassname = get_class_class_name(t) ;
     ast var_decs = get_class_var_decs(t) ;
     ast subr_decs = get_class_subr_decs(t) ;
 
+    //Initialising variables
     indents = "";
     new_line_statement = false;
 
@@ -93,6 +98,7 @@ void walk_class(ast t)
     write_to_output(indents+"}\n");
 }
 
+//Walks over the class variable declarations
 void walk_class_var_decs(ast t)
 {
     int ndecs = size_of_class_var_decs(t) ;
@@ -101,13 +107,14 @@ void walk_class_var_decs(ast t)
         walk_var_dec(get_class_var_decs(t,i), false) ;
     }
 
+    //New line if there were variables
     if (ndecs > 0)
     {
         write_to_output("\n");
     }
-
 }
 
+//Walks over variable declarations
 void walk_var_dec(ast t, bool param)
 {
     string name = get_var_dec_name(t) ;
@@ -119,6 +126,7 @@ void walk_var_dec(ast t, bool param)
     string tmp_indent = indents;
     string tmp_end = " ;\n";
 
+    //Fixes the name for the variable declaration
     if (segment == "local")
     {
         var_type = "var ";
@@ -132,6 +140,7 @@ void walk_var_dec(ast t, bool param)
         var_type = segment + " ";
     }
 
+    //Suppresses output if called from param_list
     if (param == true)
     {
         var_type = "";
@@ -142,6 +151,7 @@ void walk_var_dec(ast t, bool param)
     write_to_output(tmp_indent+var_type+type+" "+name+tmp_end);
 }
 
+//Walks over the subroutine declarations
 void walk_subr_decs(ast t)
 {
     int size = size_of_subr_decs(t) ;
@@ -149,6 +159,7 @@ void walk_subr_decs(ast t)
     {
         walk_subr(get_subr_decs(t,i)) ;
 
+        //New line for all but the last
         if (i < size-1)
         {
             write_to_output("\n");
@@ -156,6 +167,7 @@ void walk_subr_decs(ast t)
     }
 }
 
+//Walks over subroutines
 void walk_subr(ast t)
 {
     ast subr = get_subr_subr(t) ;
@@ -177,6 +189,7 @@ void walk_subr(ast t)
     }
 }
 
+//Walks over a constructor
 void walk_constructor(ast t)
 {
     string vtype = get_constructor_vtype(t) ;
@@ -195,6 +208,7 @@ void walk_constructor(ast t)
     write_to_output(indents+"}\n");
 }
 
+//Walks over a function
 void walk_function(ast t)
 {
     string vtype = get_function_vtype(t) ;
@@ -214,6 +228,7 @@ void walk_function(ast t)
 
 }
 
+//Walks over a method
 void walk_method(ast t)
 {
     string vtype = get_method_vtype(t) ;
@@ -232,12 +247,14 @@ void walk_method(ast t)
     write_to_output(indents+"}\n");
 }
 
+//Walks over the parameter list
 void walk_param_list(ast t)
 {
     int ndecs = size_of_param_list(t) ;
 
     for ( int i = 0 ; i < ndecs ; i++ )
     {
+        //Places a comma between parameters
         if (i != 0)
         {
             write_to_output(",");
@@ -247,6 +264,7 @@ void walk_param_list(ast t)
 
 }
 
+//Walks over a subroutine body
 void walk_subr_body(ast t)
 {
     ast decs = get_subr_body_decs(t) ;
@@ -256,6 +274,7 @@ void walk_subr_body(ast t)
     walk_statements(body) ;
 }
 
+//Walks over variable declarations
 void walk_var_decs(ast t)
 {
     int ndecs = size_of_var_decs(t) ;
@@ -264,12 +283,14 @@ void walk_var_decs(ast t)
         walk_var_dec(get_var_decs(t,i), false) ;
     }
 
+    //Places a new line if there were variables declared
     if (ndecs > 0)
     {
         write_to_output("\n");
     }
 }
 
+//Walks over statements
 void walk_statements(ast t)
 {
     int nstatements = size_of_statements(t) ;
@@ -277,6 +298,7 @@ void walk_statements(ast t)
     {
         walk_statement(get_statements(t,i)) ;
 
+        //Places a new line for if and while, if it is not the last statement
         if (i < nstatements-1 && new_line_statement == true)
         {
             write_to_output("\n");
@@ -285,6 +307,7 @@ void walk_statements(ast t)
     }
 }
 
+//Walks over a statement
 void walk_statement(ast t)
 {
     ast statement = get_statement_statement(t) ;
@@ -324,6 +347,7 @@ void walk_statement(ast t)
     }
 }
 
+//Walks over a let statement
 void walk_let(ast t)
 {
     ast var = get_let_var(t) ;
@@ -340,6 +364,7 @@ void walk_let(ast t)
     write_to_output(" ;\n");
 }
 
+//Walks over a let-array statement
 void walk_let_array(ast t)
 {
     ast var = get_let_array_var(t) ;
@@ -361,6 +386,7 @@ void walk_let_array(ast t)
     write_to_output(" ;\n");
 }
 
+//Walks over an if statement
 void walk_if(ast t)
 {
     ast condition = get_if_condition(t) ;
@@ -375,9 +401,11 @@ void walk_if(ast t)
 
     indent("sub");
     write_to_output(indents+"}\n");
+    //Places conditional new line
     new_line_statement = true;
 }
 
+//Walks over an if-else statement
 void walk_if_else(ast t)
 {
     ast condition = get_if_else_condition(t) ;
@@ -400,9 +428,11 @@ void walk_if_else(ast t)
 
     indent("sub");
     write_to_output(indents+"}\n");
+    //Places conditional new line
     new_line_statement = true;
 }
 
+//Walks over a while statement
 void walk_while(ast t)
 {
     ast condition = get_while_condition(t) ;
@@ -419,9 +449,11 @@ void walk_while(ast t)
 
     indent("sub");
     write_to_output(indents+"}\n");
+    //Places conditional new line
     new_line_statement = true;
 }
 
+//Walks over a do statement
 void walk_do(ast t)
 {
     ast call = get_do_call(t) ;
@@ -444,11 +476,13 @@ void walk_do(ast t)
     write_to_output(" ;\n");
 }
 
+//Walks over a return statement
 void walk_return(ast t)
 {
     write_to_output(indents+"return ;\n");
 }
 
+//Walks over a return expression statement
 void walk_return_expr(ast t)
 {
     ast expr = get_return_expr(t) ;
@@ -458,6 +492,7 @@ void walk_return_expr(ast t)
     write_to_output(" ;\n");
 }
 
+//Walks over an expression
 void walk_expr(ast t)
 {
     int term_ops = size_of_expr(t) ;
@@ -475,6 +510,7 @@ void walk_expr(ast t)
     }
 }
 
+//Walks over a term
 void walk_term(ast t)
 {
     ast term = get_term_term(t) ;
@@ -520,18 +556,21 @@ void walk_term(ast t)
     }
 }
 
+//Walks over an integer
 void walk_int(ast t)
 {
     int _constant = get_int_constant(t) ;
     write_to_output(to_string(_constant));
 }
 
+//Walks over a string
 void walk_string(ast t)
 {
     string _constant = get_string_constant(t) ;
     write_to_output("\""+_constant+"\"");
 }
 
+//Walks over a boolean
 void walk_bool(ast t)
 {
     bool _constant = get_bool_t_or_f(t) ;
@@ -546,16 +585,19 @@ void walk_bool(ast t)
     }
 }
 
+//Walks over null
 void walk_null(ast t)
 {
     write_to_output("null");
 }
 
+//Walks over this
 void walk_this(ast t)
 {
     write_to_output("this");
 }
 
+//Walks over an unary operator
 void walk_unary_op(ast t)
 {
     string uop = get_unary_op_op(t);
@@ -565,6 +607,7 @@ void walk_unary_op(ast t)
     walk_term(term) ;
 }
 
+//Walks over a variable
 void walk_var(ast t)
 {
     string name = get_var_name(t) ;
@@ -575,6 +618,7 @@ void walk_var(ast t)
     write_to_output(name);
 }
 
+//Walks over an array index
 void walk_array_index(ast t)
 {
     ast var = get_array_index_var(t) ;
@@ -587,6 +631,7 @@ void walk_array_index(ast t)
     write_to_output("]");
 }
 
+//Walks over a call as function
 void walk_call_as_function(ast t)
 {
     string class_name = get_call_as_function_class_name(t) ;
@@ -597,6 +642,7 @@ void walk_call_as_function(ast t)
     walk_subr_call(subr_call) ;
 }
 
+//Walks over a call as method
 void walk_call_as_method(ast t)
 {
     string class_name = get_call_as_method_class_name(t) ;
@@ -621,6 +667,7 @@ void walk_call_as_method(ast t)
     walk_subr_call(subr_call) ;
 }
 
+//Walks over a subroutine call
 void walk_subr_call(ast t)
 {
     string subr_name = get_subr_call_subr_name(t) ;
@@ -631,6 +678,7 @@ void walk_subr_call(ast t)
     walk_expr_list(expr_list) ;
 }
 
+//Walks over an expression list
 void walk_expr_list(ast t)
 {
     int nexpressions = size_of_expr_list(t) ;
@@ -638,6 +686,7 @@ void walk_expr_list(ast t)
     write_to_output("(");
     for ( int i = 0 ; i < nexpressions ; i++ )
     {
+        //Places a comma between expressions
         if (i != 0)
         {
             write_to_output(",");
@@ -647,6 +696,7 @@ void walk_expr_list(ast t)
     write_to_output(")");
 }
 
+//Walks over an infix operator
 void walk_infix_op(ast t)
 {
     string op = get_infix_op_op(t) ;
