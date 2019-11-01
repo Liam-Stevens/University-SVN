@@ -70,7 +70,6 @@ void reset_counters()
 {
     while_counter = 0;
     if_counter = 0;
-    field_counter = 0;
 }
 
 void walk_class(ast t)
@@ -121,6 +120,7 @@ void walk_subr(ast t)
 {
     ast subr = get_subr_subr(t) ;
 
+    reset_counters();
     switch(ast_node_kind(subr))
     {
     case ast_constructor:
@@ -148,6 +148,9 @@ void walk_constructor(ast t)
     int num_of_vars = size_of_var_decs( get_subr_body_decs(subr_body) );
 
     write_to_output("function " + current_class + "." + name + " " + to_string( num_of_vars ) + "\n");
+    write_to_output("push constant "+to_string(field_counter)+"\n");
+    write_to_output("call Memory.alloc 1\n");
+    write_to_output("pop pointer 0\n");
 
     walk_param_list(param_list) ;
 
@@ -486,13 +489,11 @@ void walk_bool(ast t)
 
 void walk_null(ast t)
 {
+    write_to_output("push constant 0\n");
 }
 
 void walk_this(ast t)
 {
-    write_to_output("push constant "+to_string(field_counter)+"\n");
-    write_to_output("call Memory.alloc 1\n");
-    write_to_output("pop pointer 0\n");
     write_to_output("push pointer 0\n");
 }
 
