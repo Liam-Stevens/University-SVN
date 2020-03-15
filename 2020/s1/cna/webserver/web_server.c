@@ -55,7 +55,6 @@ int main(int argc, char *argv[])
   {
       puts("Could not create socket");
   }
-  puts("Socket created");
 
   /* END CODE SNIPPET 1 */
 
@@ -87,7 +86,7 @@ int main(int argc, char *argv[])
 
   server_address.sin_family = AF_INET;
   server_address.sin_addr.s_addr = INADDR_ANY;
-  server_address.sin_port = htons( 8888 );
+  server_address.sin_port = htons( port );
 
   /* END CODE SNIPPET 2 */
 
@@ -98,7 +97,6 @@ int main(int argc, char *argv[])
   {
       puts("Bind failed");
   }
-  puts("Bind done");
 
   /* END CODE SNIPPET 3 */
 
@@ -106,6 +104,7 @@ int main(int argc, char *argv[])
   /* START CODE SNIPPET 4 */
 
   listen(listen_socket, 3);
+  printf("Waiting for connection on port %d...\n", port);
 
   /* END CODE SNIPPET 4 */
 
@@ -117,7 +116,6 @@ int main(int argc, char *argv[])
     /* 5) Accept a connection */
     /* START CODE SNIPPET 5 */
 
-    puts("Waiting for incomming connections...");
     int c = sizeof(struct sockaddr_in);
     connection_socket = accept(listen_socket, (struct sockaddr *) & client_address, (socklen_t*)&c);
 
