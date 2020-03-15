@@ -49,6 +49,14 @@ int main(int argc, char *argv[])
 
   /* 1) Create a socket */
   /* START CODE SNIPPET 1 */
+
+  listen_socket = socket(AF_INET, SOCK_STREAM, 0);
+  if (listen_socket == -1)
+  {
+      puts("Could not create socket");
+  }
+  puts("Socket created");
+
   /* END CODE SNIPPET 1 */
 
   /* Check command-line argument for port and extract
@@ -76,14 +84,29 @@ int main(int argc, char *argv[])
 
   /* 2) Set the values for the server address structure */
   /* START CODE SNIPPET 2 */
+
+  server_address.sin_family = AF_INET;
+  server_address.sin_addr.s_addr = INADDR_ANY;
+  server_address.sin_port = htons( 8888 );
+
   /* END CODE SNIPPET 2 */
 
   /* 3) Bind the socket to the address information set in server_address */
   /* START CODE SNIPPET 3 */
+
+  if ( bind(listen_socket,(struct sockaddr *) & server_address , sizeof(server_address)) < 0)
+  {
+      puts("Bind failed");
+  }
+  puts("Bind done");
+
   /* END CODE SNIPPET 3 */
 
   /* 4) Start listening for connections */
   /* START CODE SNIPPET 4 */
+
+  listen(listen_socket, 3);
+
   /* END CODE SNIPPET 4 */
 
   /* Main server loop
@@ -93,6 +116,16 @@ int main(int argc, char *argv[])
   {
     /* 5) Accept a connection */
     /* START CODE SNIPPET 5 */
+
+    puts("Waiting for incomming connections...");
+    int c = sizeof(struct sockaddr_in);
+    connection_socket = accept(listen_socket, (struct sockaddr *) & client_address, (socklen_t*)&c);
+
+    if (connection_socket < 0) {
+        perror("Accept Failed");
+    }
+    puts("Connection Accepted");
+
     /* END CODE SNIPPET 5 */
 
     /* Fork a child process to handle this request */
@@ -102,7 +135,7 @@ int main(int argc, char *argv[])
       /* We are now in the child process */
 
       /* Close the listening socket
-       * The child process does not need access to listen_socket 
+       * The child process does not need access to listen_socket
        */
       if (close(listen_socket) < 0)
       {
@@ -114,9 +147,15 @@ int main(int argc, char *argv[])
       struct http_request new_request;
       /* 6) call helper function to read the request
        * this will fill in the struct new_request for you
-       * see helper.h and httpreq.h                      
+       * see helper.h and httpreq.h
        */
       /* START CODE SNIPPET 6 */
+
+      if ( !Parse_HTTP_Request(connection_socket, &new_request) )
+      {
+          printf("Failed to parse HTTP request");
+      }
+
       /* END CODE SNIPPET 6 */
 
       /* 7) Decide which status_code and reason phrase to return to client */
@@ -162,7 +201,7 @@ int main(int argc, char *argv[])
       }
 
       /* Child's work is done
-       * Close remaining descriptors and exit 
+       * Close remaining descriptors and exit
        */
       if (connection_socket >= 0)
       {
@@ -180,7 +219,7 @@ int main(int argc, char *argv[])
 
     /* Back in parent process
      * Close parent's reference to connection socket,
-     * then back to top of loop waiting for next request 
+     * then back to top of loop waiting for next request
      */
     if (connection_socket >= 0)
     {
