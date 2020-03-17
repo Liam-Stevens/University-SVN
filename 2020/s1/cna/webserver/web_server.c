@@ -159,8 +159,25 @@ int main(int argc, char *argv[])
 
       /* 7) Decide which status_code and reason phrase to return to client */
       /* START CODE SNIPPET 7 */
-      status_code = 200;
-      status_phrase = "OK";
+      if ( !strcmp(new_request.method, "GET") || !strcmp(new_request.method, "HEAD") )
+      {
+          if ( Is_Valid_Resource(new_request.URI) )
+          {
+              status_code = 200;
+              status_phrase = "OK";
+          } else {
+              status_code = 404;
+              status_phrase = "Not Found";
+          }
+
+      } else if ( !strcmp(new_request.method, "POST") || !strcmp(new_request.method, "PUT") || !strcmp(new_request.method, "DELETE") ||
+                  !strcmp(new_request.method, "CONNECT") || !strcmp(new_request.method, "OPTIONS") || !strcmp(new_request.method, "TRACE") ) {
+          status_code = 501;
+          status_phrase = "Not Implemented";
+      } else {
+          status_code = 400;
+          status_phrase = "Bad Request";
+      }
 
       /* END CODE SNIPPET 7 */
 
@@ -187,7 +204,10 @@ int main(int argc, char *argv[])
        * server send an entity body?
        */
       /* START CODE SNIPPET 10 */
-      is_ok_to_send_resource = Is_Valid_Resource(new_request.URI);
+      if (status_code == 200 && !strcmp(new_request.method, "GET"))
+      {
+          is_ok_to_send_resource = Is_Valid_Resource(new_request.URI);
+      }
       /* END CODE SNIPPET 10 */
 
       if (is_ok_to_send_resource)
