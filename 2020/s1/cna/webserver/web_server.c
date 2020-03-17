@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
           is_ok_to_send_resource = Is_Valid_Resource(new_request.URI);
       }
       bool headOnly = false;
-      if (strcmp(new_request.method, "HEAD"))
+      if (!strcmp(new_request.method, "HEAD"))
       {
           headOnly = true;
       }
