@@ -38,12 +38,12 @@ extern bool Parse_HTTP_Request(int, struct http_request *);
 extern bool Is_Valid_Resource(char *);
 
 /*----------------------------------------------------------
- * Function: void Send_Resource(int socket, char * URI) 
+ * Function: void Send_Resource(int socket, char * URI)
  *
  * Purpose:  Sends the contents of the file referred to in URI on the socket
  *
  * Parameters:  socket  : the socket to send the content on
- *                URI   : the Universal Resource Locator, both absolute and 
+ *                URI   : the Universal Resource Locator, both absolute and
  *                        relative URIs are accepted
  *
  * Returns:  void - errors will cause exit with error printed to stderr
@@ -51,6 +51,6 @@ extern bool Is_Valid_Resource(char *);
  *-----------------------------------------------------------
  */
 
-extern void Send_Resource(int, char *);
+extern void Send_Resource(int, char *, bool);
 
 #endif

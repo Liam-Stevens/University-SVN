@@ -204,15 +204,20 @@ int main(int argc, char *argv[])
        * server send an entity body?
        */
       /* START CODE SNIPPET 10 */
-      if (status_code == 200 && !strcmp(new_request.method, "GET"))
+      if (status_code == 200)
       {
           is_ok_to_send_resource = Is_Valid_Resource(new_request.URI);
+      }
+      bool headOnly = false;
+      if (strcmp(new_request.method, "HEAD"))
+      {
+          headOnly = true;
       }
       /* END CODE SNIPPET 10 */
 
       if (is_ok_to_send_resource)
       {
-        Send_Resource(connection_socket, new_request.URI);
+        Send_Resource(connection_socket, new_request.URI, headOnly);
       }
       else
       {
