@@ -206,7 +206,7 @@ void Send_Resource(int socket, char * URI, bool headOnly) {
   printf("Sending headers: %s\n", content_header);
   send(socket, content_header, strlen(content_header), 0);
 
-  if (headOnly)
+  if (!headOnly)
   {
       printf("Sending file contents of %s\n", location);
       free(server_directory);
