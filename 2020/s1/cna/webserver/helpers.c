@@ -1,4 +1,4 @@
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <stdlib.h>
@@ -41,8 +41,8 @@ bool Parse_HTTP_Request(int socket, struct http_request * request_values) {
     }
   } while (recvdBytes > 0 && (strstr(request, "\r\n\r\n") == NULL));
   printf("received request: %s\n", request);
-  
-  // parse request 
+
+  // parse request
   char *line, *method;
   char *line_ptr;
 
@@ -54,7 +54,7 @@ bool Parse_HTTP_Request(int socket, struct http_request * request_values) {
   if (method == NULL)
     return false;
   strcpy(request_values->method, method);
-  
+
   // parse the requested URI
   char * request_URI = strtok(NULL, " ");
   printf("URI is: %s\n", request_URI);
@@ -67,11 +67,11 @@ bool Parse_HTTP_Request(int socket, struct http_request * request_values) {
   if (version == NULL)
     return false;
   printf("version is: %s\n", version);
-    
+
   // we can ignore headers, so just check that the blank line exists
   if ((strstr(request, "\r\n\r\n") == NULL))
     return true;
-  else 
+  else
     return false;
 }
 
@@ -106,7 +106,7 @@ bool Is_Valid_Resource(char * URI) {
     /* no http:// check if first character is /, if not add it */
     if (URI[0] != '/')
       resource = strcat("/", URI);
-    else 
+    else
       resource = URI;
   }
   else
@@ -146,7 +146,7 @@ bool Is_Valid_Resource(char * URI) {
  * Purpose:  Sends the contents of the file referred to in URI on the socket
  *
  * Parameters:  socket  : the socket to send the content on
- *                URI   : the Universal Resource Locator, both absolute and 
+ *                URI   : the Universal Resource Locator, both absolute and
  *                        relative URIs are accepted
  *
  * Returns:  void - errors will cause exit with error printed to stderr
@@ -154,7 +154,7 @@ bool Is_Valid_Resource(char * URI) {
  *-----------------------------------------------------------
  */
 
-void Send_Resource(int socket, char * URI) {
+void Send_Resource(int socket, char * URI, bool headOnly) {
 
   char * server_directory,  * resource;
   char * location;
@@ -170,7 +170,7 @@ void Send_Resource(int socket, char * URI) {
     /* no http:// check if first character is /, if not add it */
     if (URI[0] != '/')
       resource = strcat("/", URI);
-    else 
+    else
       resource = URI;
   }
   else
@@ -196,7 +196,7 @@ void Send_Resource(int socket, char * URI) {
   char c;
   long sz;
   char content_header[MAX_HEADER_LENGTH];
-  
+
   /* get size of file for content_length header */
   fseek(file, 0L, SEEK_END);
   sz = ftell(file);
@@ -206,16 +206,20 @@ void Send_Resource(int socket, char * URI) {
   printf("Sending headers: %s\n", content_header);
   send(socket, content_header, strlen(content_header), 0);
 
-  printf("Sending file contents of %s\n", location);
-  free(server_directory);
+  if (headOnly)
+  {
+      printf("Sending file contents of %s\n", location);
+      free(server_directory);
 
-  while ( (c = fgetc(file)) != EOF ) {
-    if ( send(socket, &c, 1, 0) < 1 ) {
-      fprintf(stderr, "Error sending file.");
-      exit(EXIT_FAILURE);
-    }
-    printf("%c", c);
+      while ( (c = fgetc(file)) != EOF ) {
+        if ( send(socket, &c, 1, 0) < 1 ) {
+          fprintf(stderr, "Error sending file.");
+          exit(EXIT_FAILURE);
+        }
+        printf("%c", c);
+      }
+      puts("\nfinished reading file\n");
   }
-  puts("\nfinished reading file\n");
+
   fclose(file);
 }
