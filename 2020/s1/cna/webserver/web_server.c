@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
   int listen_socket = -1;
   int connection_socket = -1;
   int port = 0;
+  int queueLength = 5;
 
   /* id of child process to handle request */
   pid_t pid = 0;
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
   /* 4) Start listening for connections */
   /* START CODE SNIPPET 4 */
 
-  listen(listen_socket, 3);
+  listen(listen_socket, queueLength);
   printf("Waiting for connection on port %d...\n", port);
 
   /* END CODE SNIPPET 4 */
@@ -117,7 +118,7 @@ int main(int argc, char *argv[])
     /* START CODE SNIPPET 5 */
 
     int c = sizeof(struct sockaddr_in);
-    connection_socket = accept(listen_socket, (struct sockaddr *) & client_address, (socklen_t*)&c);
+    connection_socket = accept(listen_socket, NULL, NULL);
 
     if (connection_socket < 0) {
         perror("Accept Failed");
@@ -158,6 +159,9 @@ int main(int argc, char *argv[])
 
       /* 7) Decide which status_code and reason phrase to return to client */
       /* START CODE SNIPPET 7 */
+      status_code = 200;
+      status_phrase = "OK";
+
       /* END CODE SNIPPET 7 */
 
       /* 8) Set the reply message to the client
@@ -165,6 +169,7 @@ int main(int argc, char *argv[])
        * sprintf(response_buffer, "HTTP/1.0 %d %s\r\n", ??, ??);
        */
       /* START CODE SNIPPET 8 */
+      sprintf(response_buffer, "HTTP/1.0 %d %s\r\n", status_code, status_phrase);
       /* END CODE SNIPPET 8 */
 
       printf("Sending response line: %s\n", response_buffer);
@@ -174,6 +179,7 @@ int main(int argc, char *argv[])
        * send(??, response_buffer, strlen(response_buffer), 0);
        */
       /* START CODE SNIPPET 9 */
+      send(connection_socket, response_buffer, strlen(response_buffer), 0);
       /* END CODE SNIPPET 9 */
 
       bool is_ok_to_send_resource = false;
@@ -181,6 +187,7 @@ int main(int argc, char *argv[])
        * server send an entity body?
        */
       /* START CODE SNIPPET 10 */
+      is_ok_to_send_resource = Is_Valid_Resource(new_request.URI);
       /* END CODE SNIPPET 10 */
 
       if (is_ok_to_send_resource)
@@ -195,6 +202,7 @@ int main(int argc, char *argv[])
          * send(??, "\r\n\r\n", strlen("\r\n\r\n"), 0);
          */
         /* START CODE SNIPPET 11 */
+        send(connection_socket, "\r\n\r\n", strlen("\r\n\r\n"), 0);
         /* END CODE SNIPPET 11 */
       }
 
