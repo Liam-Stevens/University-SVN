@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "Node.h"
 #include "map.h"
 
 extern bool verify(int, std::string, std::string, std::string);

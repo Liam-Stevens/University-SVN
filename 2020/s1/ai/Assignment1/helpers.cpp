@@ -4,12 +4,14 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
+#include "Node.h"
 #include "map.h"
 
 using namespace std;
 
 //Forward Declarations
 void convertMap(vector<string> mapLines, struct map * myMap);
+void setNodeConnections(std::vector< std::vector<Node *> > * nodeMap);
 
 /*-----------------------------------------
 | Verifies the input arguments
