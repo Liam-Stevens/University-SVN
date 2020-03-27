@@ -248,7 +248,7 @@ void Graph::BFS(int startX, int startY, int endX, int endY)
 			break;
 		}
 
-		if (!inSet(currentNode, closed))
+		if (!inSet(currentNode, closed) && currentNode->getElevation() != -1)
 		{
 			currentNode->visited(true);
 			closed.push_back(currentNode);
