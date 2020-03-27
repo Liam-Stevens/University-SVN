@@ -10,7 +10,12 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	string mapLocation = argv[1], algorithm = argv[2], heuristic = argv[3];
+	string mapLocation = argv[1], algorithm = argv[2], heuristic = "";
+	if (argc > 3)
+	{
+		heuristic = argv[3];
+	}
+
 	if ( !verify(argc, mapLocation, algorithm, heuristic) )
 	{
 		cout << "Invalid Arguments" << endl;
