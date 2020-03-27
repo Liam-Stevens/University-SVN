@@ -27,10 +27,33 @@ int main(int argc, char **argv)
 	//Construct Map Nodes
 	Graph mapGraph;
 	mapGraph.constructMap(&myMap);
+	//mapGraph.printGraph(false);
+
+	//Do search
+	if (algorithm == "bfs")
+	{
+		mapGraph.BFS(myMap.startX, myMap.startY, myMap.endX, myMap.endY);
+	}
+	else if (algorithm == "ucs")
+	{
+		mapGraph.UCS();
+	}
+	else if (algorithm == "astar" && heuristic == "")
+	{
+		mapGraph.ASTAR(false);
+	}
+	else if (algorithm == "astar" && heuristic == "")
+	{
+		mapGraph.ASTAR(true);
+	}
+	else
+	{
+		cout << "Argument Error" << endl;
+		return 1;
+	}
+
+	//Print results
 	mapGraph.printGraph(false);
-	mapGraph.printGraph(true);
-
-
 
 	return 0;
 }

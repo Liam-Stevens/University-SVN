@@ -80,11 +80,15 @@ void convertMap(vector<string> mapLines, struct map * myMap)
 	stringstream ss2(mapLines[1]);
 	ss2 >> myMap->startY;
 	ss2 >> myMap->startX;
+	myMap->startY = myMap->startY - 1;
+	myMap->startX = myMap->startX - 1;
 
 	//Store End position
 	stringstream ss3(mapLines[2]);
 	ss3 >> myMap->endY;
 	ss3 >> myMap->endX;
+	myMap->endY = myMap->endY - 1;
+	myMap->endX = myMap->endX - 1;
 
 	//Store Map
 	for (int i = 0; i < myMap->sizeY; i++)

@@ -1,19 +1,7 @@
 all: pathfinder test
 
-main.o:
-	g++ -c main.cpp
-
-helpers.o:
-	g++ -c helpers.cpp
-
-Node.o:
-	g++ -c Node.cpp
-
-Graph.o:
-	g++ -c Graph.cpp
-
-pathfinder: Node.o Graph.o helpers.o main.o
-	g++ -o pathfinder.bin Node.o Graph.o helpers.o main.o
+pathfinder: Node.h Node.cpp Graph.h Graph.cpp helpers.h helpers.cpp map.h main.cpp
+	g++ -Wall -o pathfinder.bin Node.cpp Graph.cpp helpers.cpp main.cpp
 
 test: pathfinder.bin
 	./pathfinder.bin map.txt bfs euclidean

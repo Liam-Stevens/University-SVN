@@ -26,6 +26,7 @@ void Graph::constructMap(struct map * myMap)
 		{
 			Node * temp;
 			temp = new Node(myMap->view[i][j]);
+			temp->setPos(j,i);
 			nodeRow.push_back(temp);
 		}
 		nodeMap.push_back(nodeRow);
@@ -40,9 +41,9 @@ void Graph::constructMap(struct map * myMap)
 ------------------------------------------*/
 void Graph::setNodeConnections()
 {
-	for (int i = 0; i < nodeMap.size(); i++)
+	for (int i = 0; i < (signed)nodeMap.size(); i++)
 	{
-		for (int j = 0; j < nodeMap[0].size(); j++)
+		for (int j = 0; j < (signed)nodeMap[0].size(); j++)
 		{
 			//Set Up Ptrs
 			if (i == 0)
@@ -55,7 +56,7 @@ void Graph::setNodeConnections()
 			}
 
 			//Set Down Ptrs
-			if (i == nodeMap.size() - 1)
+			if (i == (signed)nodeMap.size() - 1)
 			{
 				nodeMap[i][j]->setDown(NULL);
 			}
@@ -75,7 +76,7 @@ void Graph::setNodeConnections()
 			}
 
 			//Set Right Ptrs
-			if (j == nodeMap[0].size() - 1)
+			if (j == (signed)nodeMap[0].size() - 1)
 			{
 				nodeMap[i][j]->setRight(NULL);
 			}
@@ -95,14 +96,18 @@ void Graph::printGraph(bool printType)
 	//Prints using the vector of nodes
 	if (printType == false)
 	{
-		cout << "Vector Map: " << endl;
-		for (int i = 0; i < nodeMap.size(); i++)
+		//cout << "Vector Map: " << endl;
+		for (int i = 0; i < (signed)nodeMap.size(); i++)
 		{
-			for (int j = 0; j < nodeMap[0].size(); j++)
+			for (int j = 0; j < (signed)nodeMap[0].size(); j++)
 			{
 				if (nodeMap[i][j]->getElevation() == -1)
 				{
 					cout << "X ";
+				}
+				else if (nodeMap[i][j]->getPath())
+				{
+					cout << "* ";
 				}
 				else
 				{
@@ -116,12 +121,12 @@ void Graph::printGraph(bool printType)
 	//Prints using the Node connections
 	else
 	{
-		cout << "Node Map: " << endl;
+		//cout << "Node Map: " << endl;
 		Node * ptr;
 		ptr = nodeMap[0][0];
-		for (int i = 0; i < nodeMap.size(); i++)
+		for (int i = 0; i < (signed)nodeMap.size(); i++)
 		{
-			for (int j = 0; j < nodeMap[0].size(); j++)
+			for (int j = 0; j < (signed)nodeMap[0].size(); j++)
 			{
 
 				if (ptr != NULL)
@@ -130,12 +135,16 @@ void Graph::printGraph(bool printType)
 					{
 						cout << "X ";
 					}
+					else if (ptr->getPath())
+					{
+						cout << "* ";
+					}
 					else
 					{
 						cout << ptr->getElevation() << " ";
 					}
 
-					if (j != nodeMap[0].size() -1)
+					if (j != (signed)nodeMap[0].size() - 1)
 					{
 						ptr = ptr->getRight();
 					}
@@ -148,7 +157,7 @@ void Graph::printGraph(bool printType)
 			{
 				ptr = ptr->getDown();
 			}
-			for (int j = 0; j < nodeMap[0].size()-1; j++)
+			for (int j = 0; j < (signed)nodeMap[0].size()-1; j++)
 			{
 				if (ptr != NULL)
 				{
@@ -160,15 +169,123 @@ void Graph::printGraph(bool printType)
 
 }
 
+bool Graph::inSet(Node * check, vector<Node *> set)
+{
+	for (int i = 0; i < (signed)set.size(); i++)
+	{
+		if (check == set[i])
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+vector<Node *> Graph::expandNode(Node * expand, vector<Node *> set)
+{
+	if (expand->getUp() != NULL)
+	{
+		expand->getUp()->insertNode(expand);
+		set.push_back( expand->getUp() );
+	}
+
+	if (expand->getDown() != NULL)
+	{
+		expand->getDown()->insertNode(expand);
+		set.push_back( expand->getDown() );
+	}
+
+	if (expand->getLeft() != NULL)
+	{
+		expand->getLeft()->insertNode(expand);
+		set.push_back( expand->getLeft() );
+	}
+
+	if (expand->getRight() != NULL)
+	{
+		expand->getRight()->insertNode(expand);
+		set.push_back( expand->getRight() );
+	}
+
+	return set;
+}
+
+/*-----------------------------------------
+| Search Algorithms
+------------------------------------------*/
+
+/*-----------------------------------------
+| Bredth First Search
+------------------------------------------*/
+void Graph::BFS(int startX, int startY, int endX, int endY)
+{
+	Node * startNode = nodeMap[startY][startX];
+	Node * endNode = nodeMap[endY][endX];
+
+	vector<Node *> closed;
+	vector<Node *> fringe;
+	fringe.push_back(startNode);
+
+	while(true)
+	{
+
+		if (fringe.size() == 0)
+		{
+			cout << "No Solution" << endl;
+			break;
+		}
+
+		Node * currentNode = fringe[0];
+		fringe.erase (fringe.begin());
+
+		if (currentNode == endNode)
+		{
+			//Goal Return
+			currentNode->visited(true);
+			//currentNode->printNodes();
+			//cout << "Node Found" << endl;
+			currentNode->traceNodes();
+			break;
+		}
+
+		if (!inSet(currentNode, closed))
+		{
+			currentNode->visited(true);
+			closed.push_back(currentNode);
+			fringe = expandNode(currentNode, fringe);
+		}
+		else
+		{
+			currentNode->visited(false);
+		}
+	}
+}
+
+/*-----------------------------------------
+| Uniform-Cost Search
+------------------------------------------*/
+void Graph::UCS()
+{
+
+}
+
+/*-----------------------------------------
+| A* Search
+------------------------------------------*/
+void Graph::ASTAR(bool heuristic)
+{
+
+}
+
 /*-----------------------------------------
 | Deletes all nodes in the vector
 ------------------------------------------*/
 Graph::~Graph()
 {
 
-	for (int i = 0; i < nodeMap.size(); i++)
+	for (int i = 0; i < (signed)nodeMap.size(); i++)
 	{
-		for (int j = 0; j < nodeMap[0].size(); j++)
+		for (int j = 0; j < (signed)nodeMap[0].size(); j++)
 		{
 			delete nodeMap[i][j];
 		}

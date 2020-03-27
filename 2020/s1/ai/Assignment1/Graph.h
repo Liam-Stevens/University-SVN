@@ -14,12 +14,21 @@ public:
 	//Constructor
     Graph();
 
+	//Prepare Nodes
 	void constructMap(struct map *);
-
 	void setNodeConnections();
-
 	void printGraph(bool);
 
+	//Helpers
+	bool inSet(Node *, std::vector<Node *>);
+	std::vector<Node *> expandNode(Node *, std::vector<Node *>);
+
+	//Search Algorithms
+	void BFS(int, int, int, int);
+	void UCS();
+	void ASTAR(bool);
+
+	//Destructor
 	~Graph();
 };
 
