@@ -3,6 +3,7 @@
 #include "map.h"
 #include <vector>
 #include <iostream>
+#include <cstdlib>
 
 
 using namespace std;
@@ -181,6 +182,36 @@ bool Graph::inSet(Node * check, vector<Node *> set)
 	return false;
 }
 
+void Graph::priorityQueue(Node * insertNode, int insertCost, std::vector<Node *> * nodeQueue, std::vector<int> * costQueue)
+{
+
+	if (costQueue->size() != 0)
+	{
+		for (int i = 0; i < (signed)costQueue->size(); i++)
+		{
+			if ( (*costQueue)[i] > insertCost)
+			{
+				nodeQueue->insert(nodeQueue->begin()+i, insertNode);
+				costQueue->insert(costQueue->begin()+i, insertCost);
+				break;
+			}
+			else if (i == (signed)costQueue->size() - 1)
+			{
+				nodeQueue->push_back( insertNode );
+				costQueue->push_back( insertCost );
+				break;
+			}
+		}
+	}
+	else
+	{
+		nodeQueue->push_back( insertNode );
+		costQueue->push_back( insertCost );
+	}
+
+
+}
+
 vector<Node *> Graph::expandNode(Node * expand, vector<Node *> set)
 {
 	if (expand->getUp() != NULL)
@@ -210,6 +241,48 @@ vector<Node *> Graph::expandNode(Node * expand, vector<Node *> set)
 	return set;
 }
 
+void Graph::expandNodeCost(Node * expand, int currentCost, std::vector<Node *> * set, std::vector<int> * cost)
+{
+	int nodeCost = 1;
+
+	if (expand->getUp() != NULL)
+	{
+		Node * nextNode = expand->getUp();
+		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation());
+
+		nextNode->insertNode(expand);
+		priorityQueue(nextNode, nodeCost, set, cost);
+	}
+
+	if (expand->getDown() != NULL)
+	{
+		Node * nextNode = expand->getDown();
+		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation());
+
+		nextNode->insertNode(expand);
+		priorityQueue(nextNode, nodeCost, set, cost);
+	}
+
+	if (expand->getLeft() != NULL)
+	{
+		Node * nextNode = expand->getLeft();
+		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation());
+
+		nextNode->insertNode(expand);
+		priorityQueue(nextNode, nodeCost, set, cost);
+	}
+
+	if (expand->getRight() != NULL)
+	{
+		Node * nextNode = expand->getRight();
+		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation());
+
+		nextNode->insertNode(expand);
+		priorityQueue(nextNode, nodeCost, set, cost);
+	}
+
+}
+
 /*-----------------------------------------
 | Search Algorithms
 ------------------------------------------*/
@@ -217,7 +290,7 @@ vector<Node *> Graph::expandNode(Node * expand, vector<Node *> set)
 /*-----------------------------------------
 | Bredth First Search
 ------------------------------------------*/
-void Graph::BFS(int startX, int startY, int endX, int endY)
+bool Graph::BFS(int startX, int startY, int endX, int endY)
 {
 	Node * startNode = nodeMap[startY][startX];
 	Node * endNode = nodeMap[endY][endX];
@@ -231,8 +304,8 @@ void Graph::BFS(int startX, int startY, int endX, int endY)
 
 		if (fringe.size() == 0)
 		{
-			cout << "No Solution" << endl;
-			break;
+			//cout << "No Solution" << endl;
+			return false;
 		}
 
 		Node * currentNode = fringe[0];
@@ -245,7 +318,7 @@ void Graph::BFS(int startX, int startY, int endX, int endY)
 			//currentNode->printNodes();
 			//cout << "Node Found" << endl;
 			currentNode->traceNodes();
-			break;
+			return true;
 		}
 
 		if (!inSet(currentNode, closed) && currentNode->getElevation() != -1)
@@ -264,17 +337,62 @@ void Graph::BFS(int startX, int startY, int endX, int endY)
 /*-----------------------------------------
 | Uniform-Cost Search
 ------------------------------------------*/
-void Graph::UCS()
+bool Graph::UCS(int startX, int startY, int endX, int endY)
 {
+	Node * startNode = nodeMap[startY][startX];
+	Node * endNode = nodeMap[endY][endX];
 
+	vector<Node *> closed;
+	vector<Node *> fringe;
+	vector<int> cost;
+
+	fringe.push_back(startNode);
+	cost.push_back(0);
+
+	while(true)
+	{
+
+		if (fringe.size() == 0)
+		{
+			//cout << "No Solution" << endl;
+			return false;
+		}
+
+		Node * currentNode = fringe[0];
+		int currentCost = cost[0];
+
+		fringe.erase (fringe.begin());
+		cost.erase (cost.begin());
+
+		//cout << "[" << currentNode->getX()+1 << "][" << currentNode->getY()+1 << "]" << endl;
+
+		if (currentNode == endNode)
+		{
+			//Goal Return
+			currentNode->visited(true);
+			currentNode->traceNodes();
+			return true;
+		}
+
+		if (!inSet(currentNode, closed) && currentNode->getElevation() != -1)
+		{
+			currentNode->visited(true);
+			closed.push_back(currentNode);
+			expandNodeCost(currentNode, currentCost, &fringe, &cost);
+		}
+		else
+		{
+			currentNode->visited(false);
+		}
+	}
 }
 
 /*-----------------------------------------
 | A* Search
 ------------------------------------------*/
-void Graph::ASTAR(bool heuristic)
+bool Graph::ASTAR(bool heuristic)
 {
-
+	return false;
 }
 
 /*-----------------------------------------

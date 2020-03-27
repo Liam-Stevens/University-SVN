@@ -35,21 +35,22 @@ int main(int argc, char **argv)
 	//mapGraph.printGraph(false);
 
 	//Do search
+	bool print = false;
 	if (algorithm == "bfs")
 	{
-		mapGraph.BFS(myMap.startX, myMap.startY, myMap.endX, myMap.endY);
+		print = mapGraph.BFS(myMap.startX, myMap.startY, myMap.endX, myMap.endY);
 	}
 	else if (algorithm == "ucs")
 	{
-		mapGraph.UCS();
+		print = mapGraph.UCS(myMap.startX, myMap.startY, myMap.endX, myMap.endY);
 	}
 	else if (algorithm == "astar" && heuristic == "")
 	{
-		mapGraph.ASTAR(false);
+		print = mapGraph.ASTAR(false);
 	}
 	else if (algorithm == "astar" && heuristic == "")
 	{
-		mapGraph.ASTAR(true);
+		print = mapGraph.ASTAR(true);
 	}
 	else
 	{
@@ -58,7 +59,15 @@ int main(int argc, char **argv)
 	}
 
 	//Print results
-	mapGraph.printGraph(false);
+	if (print)
+	{
+		mapGraph.printGraph(false);
+	}
+	else
+	{
+		cout << "null" << endl;
+	}
+
 
 	return 0;
 }
