@@ -171,7 +171,13 @@ void Graph::printGraph(bool printType)
 
 }
 
-//Heuristics
+/*-----------------------------------------
+| Heuristics
+------------------------------------------*/
+
+/*-----------------------------------------
+| Calculates the euclidean distance between two nodes
+------------------------------------------*/
 double Graph::calcEucladean(Node * startPoint, Node * endPoint)
 {
 	int x1 = startPoint->getX();
@@ -184,6 +190,9 @@ double Graph::calcEucladean(Node * startPoint, Node * endPoint)
 	return dist;
 }
 
+/*-----------------------------------------
+| Calculates the manhattan distance between two nodes
+------------------------------------------*/
 double Graph::calcManhattan(Node * startPoint, Node * endPoint)
 {
 	int x1 = startPoint->getX();
@@ -196,7 +205,13 @@ double Graph::calcManhattan(Node * startPoint, Node * endPoint)
 	return dist;
 }
 
-//Helpers
+/*-----------------------------------------
+| Helpers
+------------------------------------------*/
+
+/*-----------------------------------------
+| checks if a nodes is in a set
+------------------------------------------*/
 bool Graph::inSet(Node * check, vector<Node *> set)
 {
 	for (int i = 0; i < (signed)set.size(); i++)
@@ -209,6 +224,9 @@ bool Graph::inSet(Node * check, vector<Node *> set)
 	return false;
 }
 
+/*-----------------------------------------
+| Inserts a node into a priority queue
+------------------------------------------*/
 void Graph::priorityQueue(Node * insertNode, int insertCost, std::vector<Node *> * nodeQueue, std::vector<int> * costQueue)
 {
 
@@ -237,6 +255,9 @@ void Graph::priorityQueue(Node * insertNode, int insertCost, std::vector<Node *>
 	}
 }
 
+/*-----------------------------------------
+| Inserts a node into a order 2 priority queue
+------------------------------------------*/
 void Graph::heuristicQueue(Node * insertNode, int insertCost, double insertDist, std::vector<Node *> * nodeQueue, std::vector<int> * costQueue, vector<double> * distQueue)
 {
 
@@ -257,6 +278,11 @@ void Graph::heuristicQueue(Node * insertNode, int insertCost, double insertDist,
 			{
 				beginIndex = i;
 			}
+		}
+
+		if (beginIndex >= 0 && endIndex < 0)
+		{
+			endIndex = beginIndex+1;
 		}
 
 		if (endIndex < 0)
@@ -286,11 +312,18 @@ void Graph::heuristicQueue(Node * insertNode, int insertCost, double insertDist,
 
 			for (int i = beginIndex; i < endIndex; i++)
 			{
-				if ( (insertDist > (*distQueue)[i]) || (i == endIndex - 1) )
+				if (insertDist < (*distQueue)[i])
 				{
 					nodeQueue->insert(nodeQueue->begin()+i, insertNode);
 					costQueue->insert(costQueue->begin()+i, insertCost);
 					distQueue->insert(distQueue->begin()+i, insertDist);
+					break;
+				}
+				if (i == endIndex - 1)
+				{
+					nodeQueue->insert(nodeQueue->begin()+i+1, insertNode);
+					costQueue->insert(costQueue->begin()+i+1, insertCost);
+					distQueue->insert(distQueue->begin()+i+1, insertDist);
 					break;
 				}
 			}
@@ -306,6 +339,9 @@ void Graph::heuristicQueue(Node * insertNode, int insertCost, double insertDist,
 	}
 }
 
+/*-----------------------------------------
+| Expands a node's neighbours
+------------------------------------------*/
 vector<Node *> Graph::expandNode(Node * expand, vector<Node *> set)
 {
 	if (expand->getUp() != NULL)
@@ -335,6 +371,9 @@ vector<Node *> Graph::expandNode(Node * expand, vector<Node *> set)
 	return set;
 }
 
+/*-----------------------------------------
+| Expands a node's neighbours with respect to cost
+------------------------------------------*/
 void Graph::expandNodeCost(Node * expand, int currentCost, std::vector<Node *> * set, std::vector<int> * cost)
 {
 	int nodeCost = 1;
@@ -397,6 +436,9 @@ void Graph::expandNodeCost(Node * expand, int currentCost, std::vector<Node *> *
 
 }
 
+/*-----------------------------------------
+| Expands a node's neighbours with respect to cost and distance
+------------------------------------------*/
 void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int currentCost, std::vector<Node *> * set, std::vector<int> * cost, vector<double> * distCost)
 {
 	int nodeCost = 1;
@@ -408,11 +450,11 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 
 		if (heuristic)
 		{
-			dist = calcManhattan(expand, endNode);
+			dist = calcManhattan(nextNode, endNode);
 		}
 		else
 		{
-			dist = calcEucladean(expand, endNode);
+			dist = calcEucladean(nextNode, endNode);
 		}
 
 		int climbCost = (nextNode->getElevation() - expand->getElevation());
@@ -422,9 +464,10 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 		}
 
 		nodeCost = 1 + climbCost;
+		dist = dist + nodeCost;
 
 		nextNode->insertNode(expand);
-		priorityQueue(nextNode, nodeCost, set, cost);
+		heuristicQueue(nextNode, nodeCost, dist, set, cost, distCost);
 	}
 
 	if (expand->getDown() != NULL)
@@ -434,11 +477,11 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 
 		if (heuristic)
 		{
-			dist = calcManhattan(expand, endNode);
+			dist = calcManhattan(nextNode, endNode);
 		}
 		else
 		{
-			dist = calcEucladean(expand, endNode);
+			dist = calcEucladean(nextNode, endNode);
 		}
 
 		int climbCost = (nextNode->getElevation() - expand->getElevation());
@@ -448,9 +491,10 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 		}
 
 		nodeCost = 1 + climbCost;
+		dist = dist + nodeCost;
 
 		nextNode->insertNode(expand);
-		priorityQueue(nextNode, nodeCost, set, cost);
+		heuristicQueue(nextNode, nodeCost, dist, set, cost, distCost);
 	}
 
 	if (expand->getLeft() != NULL)
@@ -460,11 +504,11 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 
 		if (heuristic)
 		{
-			dist = calcManhattan(expand, endNode);
+			dist = calcManhattan(nextNode, endNode);
 		}
 		else
 		{
-			dist = calcEucladean(expand, endNode);
+			dist = calcEucladean(nextNode, endNode);
 		}
 
 		int climbCost = (nextNode->getElevation() - expand->getElevation());
@@ -474,9 +518,10 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 		}
 
 		nodeCost = 1 + climbCost;
+		dist = dist + nodeCost;
 
 		nextNode->insertNode(expand);
-		priorityQueue(nextNode, nodeCost, set, cost);
+		heuristicQueue(nextNode, nodeCost, dist, set, cost, distCost);
 	}
 
 	if (expand->getRight() != NULL)
@@ -486,11 +531,11 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 
 		if (heuristic)
 		{
-			dist = calcManhattan(expand, endNode);
+			dist = calcManhattan(nextNode, endNode);
 		}
 		else
 		{
-			dist = calcEucladean(expand, endNode);
+			dist = calcEucladean(nextNode, endNode);
 		}
 
 		int climbCost = (nextNode->getElevation() - expand->getElevation());
@@ -500,9 +545,10 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 		}
 
 		nodeCost = 1 + climbCost;
+		dist = dist + nodeCost;
 
 		nextNode->insertNode(expand);
-		priorityQueue(nextNode, nodeCost, set, cost);
+		heuristicQueue(nextNode, nodeCost, dist, set, cost, distCost);
 	}
 
 }
@@ -648,7 +694,23 @@ bool Graph::ASTAR(bool heuristic, int startX, int startY, int endX, int endY)
 
 		fringe.erase (fringe.begin());
 		cost.erase (cost.begin());
-		//distance.erase (distance.begin());
+		distance.erase (distance.begin());
+
+		/*if( (currentNode->getX() < 4) && (currentNode->getY() < 4) )
+		{
+			cout << "[" << currentNode->getX() << "][" << currentNode->getY() << "]" << endl;
+			for (int i = 0; i < cost.size(); i++)
+			{
+				cout << cost[i] << " # ";
+			}
+			cout << endl;
+			for (int i = 0; i < cost.size(); i++)
+			{
+				cout << distance[i] << " | ";
+			}
+			cout << endl;
+		}*/
+
 
 		if (currentNode == endNode)
 		{
