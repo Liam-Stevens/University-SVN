@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <cstdlib>
+#include <math.h>
 
 
 using namespace std;
@@ -170,6 +171,32 @@ void Graph::printGraph(bool printType)
 
 }
 
+//Heuristics
+double Graph::calcEucladean(Node * startPoint, Node * endPoint)
+{
+	int x1 = startPoint->getX();
+	int y1 = startPoint->getY();
+	int x2 = endPoint->getX();
+	int y2 = endPoint->getY();
+
+	double dist = sqrt( pow(x2-x1,2) + pow(y2-y1,2) );
+
+	return dist;
+}
+
+double Graph::calcManhattan(Node * startPoint, Node * endPoint)
+{
+	int x1 = startPoint->getX();
+	int y1 = startPoint->getY();
+	int x2 = endPoint->getX();
+	int y2 = endPoint->getY();
+
+	double dist = abs(x2 - x1) + abs(y2 - y1);
+
+	return dist;
+}
+
+//Helpers
 bool Graph::inSet(Node * check, vector<Node *> set)
 {
 	for (int i = 0; i < (signed)set.size(); i++)
@@ -276,6 +303,92 @@ void Graph::expandNodeCost(Node * expand, int currentCost, std::vector<Node *> *
 	{
 		Node * nextNode = expand->getRight();
 		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation());
+
+		nextNode->insertNode(expand);
+		priorityQueue(nextNode, nodeCost, set, cost);
+	}
+
+}
+
+void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int currentCost, std::vector<Node *> * set, std::vector<int> * cost)
+{
+	int nodeCost = 1;
+
+	if (expand->getUp() != NULL)
+	{
+		Node * nextNode = expand->getUp();
+		double dist;
+
+		if (heuristic)
+		{
+			dist = calcEucladean(expand, endNode);
+		}
+		else
+		{
+			dist = calcManhattan(expand, endNode);
+		}
+
+		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation()) + dist;
+
+		nextNode->insertNode(expand);
+		priorityQueue(nextNode, nodeCost, set, cost);
+	}
+
+	if (expand->getDown() != NULL)
+	{
+		Node * nextNode = expand->getDown();
+		double dist;
+
+		if (heuristic)
+		{
+			dist = calcEucladean(expand, endNode);
+		}
+		else
+		{
+			dist = calcManhattan(expand, endNode);
+		}
+
+		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation()) + dist;
+
+		nextNode->insertNode(expand);
+		priorityQueue(nextNode, nodeCost, set, cost);
+	}
+
+	if (expand->getLeft() != NULL)
+	{
+		Node * nextNode = expand->getLeft();
+		double dist;
+
+		if (heuristic)
+		{
+			dist = calcEucladean(expand, endNode);
+		}
+		else
+		{
+			dist = calcManhattan(expand, endNode);
+		}
+
+		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation()) + dist;
+
+		nextNode->insertNode(expand);
+		priorityQueue(nextNode, nodeCost, set, cost);
+	}
+
+	if (expand->getRight() != NULL)
+	{
+		Node * nextNode = expand->getRight();
+		double dist;
+
+		if (heuristic)
+		{
+			dist = calcEucladean(expand, endNode);
+		}
+		else
+		{
+			dist = calcManhattan(expand, endNode);
+		}
+
+		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation()) + dist;
 
 		nextNode->insertNode(expand);
 		priorityQueue(nextNode, nodeCost, set, cost);
@@ -390,9 +503,51 @@ bool Graph::UCS(int startX, int startY, int endX, int endY)
 /*-----------------------------------------
 | A* Search
 ------------------------------------------*/
-bool Graph::ASTAR(bool heuristic)
+bool Graph::ASTAR(bool heuristic, int startX, int startY, int endX, int endY)
 {
-	return false;
+	Node * startNode = nodeMap[startY][startX];
+	Node * endNode = nodeMap[endY][endX];
+
+	vector<Node *> closed;
+	vector<Node *> fringe;
+	vector<int> cost;
+
+	fringe.push_back(startNode);
+	cost.push_back(0);
+
+	while(true)
+	{
+
+		if (fringe.size() == 0)
+		{
+			return false;
+		}
+
+		Node * currentNode = fringe[0];
+		int currentCost = cost[0];
+
+		fringe.erase (fringe.begin());
+		cost.erase (cost.begin());
+
+		if (currentNode == endNode)
+		{
+			//Goal Return
+			currentNode->visited(true);
+			currentNode->traceNodes();
+			return true;
+		}
+
+		if (!inSet(currentNode, closed) && currentNode->getElevation() != -1)
+		{
+			currentNode->visited(true);
+			closed.push_back(currentNode);
+			expandNodeAStar(heuristic, currentNode, endNode, currentCost, &fringe, &cost);
+		}
+		else
+		{
+			currentNode->visited(false);
+		}
+	}
 }
 
 /*-----------------------------------------

@@ -44,13 +44,15 @@ int main(int argc, char **argv)
 	{
 		print = mapGraph.UCS(myMap.startX, myMap.startY, myMap.endX, myMap.endY);
 	}
-	else if (algorithm == "astar" && heuristic == "")
+	else if (algorithm == "astar" && heuristic == "euclidean")
 	{
-		print = mapGraph.ASTAR(false);
+
+		print = mapGraph.ASTAR(false, myMap.startX, myMap.startY, myMap.endX, myMap.endY);
 	}
-	else if (algorithm == "astar" && heuristic == "")
+	else if (algorithm == "astar" && heuristic == "manhattan")
 	{
-		print = mapGraph.ASTAR(true);
+
+		print = mapGraph.ASTAR(true, myMap.startX, myMap.startY, myMap.endX, myMap.endY);
 	}
 	else
 	{
