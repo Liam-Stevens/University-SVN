@@ -26,9 +26,12 @@ public:
 	//Helpers
 	bool inSet(Node *, std::vector<Node *>);
 	void priorityQueue(Node *, int, std::vector<Node *> *, std::vector<int> *);
+	void heuristicQueue(Node *, int, double, std::vector<Node *> *, std::vector<int> *, std::vector<double> *);
+
+
 	std::vector<Node *> expandNode(Node *, std::vector<Node *>);
 	void expandNodeCost(Node *, int, std::vector<Node *> *, std::vector<int> *);
-	void expandNodeAStar(bool, Node *, Node *, int, std::vector<Node *> *, std::vector<int> *);
+	void expandNodeAStar(bool, Node *, Node *, int, std::vector<Node *> *, std::vector<int> *, std::vector<double> *);
 
 	//Search Algorithms
 	bool BFS(int, int, int, int);
