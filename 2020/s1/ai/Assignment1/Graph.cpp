@@ -321,11 +321,11 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 
 		if (heuristic)
 		{
-			dist = calcEucladean(expand, endNode);
+			dist = calcManhattan(expand, endNode);
 		}
 		else
 		{
-			dist = calcManhattan(expand, endNode);
+			dist = calcEucladean(expand, endNode);
 		}
 
 		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation()) + dist;
@@ -341,11 +341,11 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 
 		if (heuristic)
 		{
-			dist = calcEucladean(expand, endNode);
+			dist = calcManhattan(expand, endNode);
 		}
 		else
 		{
-			dist = calcManhattan(expand, endNode);
+			dist = calcEucladean(expand, endNode);
 		}
 
 		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation()) + dist;
@@ -361,11 +361,11 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 
 		if (heuristic)
 		{
-			dist = calcEucladean(expand, endNode);
+			dist = calcManhattan(expand, endNode);
 		}
 		else
 		{
-			dist = calcManhattan(expand, endNode);
+			dist = calcEucladean(expand, endNode);
 		}
 
 		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation()) + dist;
@@ -381,11 +381,11 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 
 		if (heuristic)
 		{
-			dist = calcEucladean(expand, endNode);
+			dist = calcManhattan(expand, endNode);
 		}
 		else
 		{
-			dist = calcManhattan(expand, endNode);
+			dist = calcEucladean(expand, endNode);
 		}
 
 		nodeCost = 1 + abs(nextNode->getElevation() - expand->getElevation()) + dist;
