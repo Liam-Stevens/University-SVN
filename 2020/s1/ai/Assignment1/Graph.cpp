@@ -386,7 +386,7 @@ void Graph::expandNodeCost(Node * expand, int currentCost, std::vector<Node *> *
 		{
 			climbCost = 0;
 		}
-		nodeCost = 1 + climbCost;
+		nodeCost = 1 + climbCost + currentCost;
 
 		nextNode->insertNode(expand);
 		priorityQueue(nextNode, nodeCost, set, cost);
@@ -400,7 +400,7 @@ void Graph::expandNodeCost(Node * expand, int currentCost, std::vector<Node *> *
 		{
 			climbCost = 0;
 		}
-		nodeCost = 1 + climbCost;
+		nodeCost = 1 + climbCost + currentCost;
 
 		nextNode->insertNode(expand);
 		priorityQueue(nextNode, nodeCost, set, cost);
@@ -414,7 +414,7 @@ void Graph::expandNodeCost(Node * expand, int currentCost, std::vector<Node *> *
 		{
 			climbCost = 0;
 		}
-		nodeCost = 1 + climbCost;
+		nodeCost = 1 + climbCost + currentCost;
 
 		nextNode->insertNode(expand);
 		priorityQueue(nextNode, nodeCost, set, cost);
@@ -428,7 +428,7 @@ void Graph::expandNodeCost(Node * expand, int currentCost, std::vector<Node *> *
 		{
 			climbCost = 0;
 		}
-		nodeCost = 1 + climbCost;
+		nodeCost = 1 + climbCost + currentCost;
 
 		nextNode->insertNode(expand);
 		priorityQueue(nextNode, nodeCost, set, cost);
@@ -463,7 +463,7 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 			climbCost = 0;
 		}
 
-		nodeCost = 1 + climbCost;
+		nodeCost = 1 + climbCost + currentCost;
 		dist = dist + nodeCost;
 
 		nextNode->insertNode(expand);
@@ -490,7 +490,7 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 			climbCost = 0;
 		}
 
-		nodeCost = 1 + climbCost;
+		nodeCost = 1 + climbCost + currentCost;
 		dist = dist + nodeCost;
 
 		nextNode->insertNode(expand);
@@ -517,7 +517,7 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 			climbCost = 0;
 		}
 
-		nodeCost = 1 + climbCost;
+		nodeCost = 1 + climbCost + currentCost;
 		dist = dist + nodeCost;
 
 		nextNode->insertNode(expand);
@@ -544,7 +544,7 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 			climbCost = 0;
 		}
 
-		nodeCost = 1 + climbCost;
+		nodeCost = 1 + climbCost + currentCost;
 		dist = dist + nodeCost;
 
 		nextNode->insertNode(expand);
@@ -692,13 +692,9 @@ bool Graph::ASTAR(bool heuristic, int startX, int startY, int endX, int endY)
 		Node * currentNode = fringe[0];
 		int currentCost = cost[0];
 
-		fringe.erase (fringe.begin());
-		cost.erase (cost.begin());
-		distance.erase (distance.begin());
-
-		/*if( (currentNode->getX() < 4) && (currentNode->getY() < 4) )
+		/*if( (currentNode->getX() < 8) && (currentNode->getX() > 5) && (currentNode->getY() < 3) )
 		{
-			cout << "[" << currentNode->getX() << "][" << currentNode->getY() << "]" << endl;
+			cout << "[" << currentNode->getX() << "][" << currentNode->getY() << "] $ Cost: " << currentCost << endl;
 			for (int i = 0; i < cost.size(); i++)
 			{
 				cout << cost[i] << " # ";
@@ -710,6 +706,10 @@ bool Graph::ASTAR(bool heuristic, int startX, int startY, int endX, int endY)
 			}
 			cout << endl;
 		}*/
+
+		fringe.erase (fringe.begin());
+		cost.erase (cost.begin());
+		distance.erase (distance.begin());
 
 
 		if (currentNode == endNode)
