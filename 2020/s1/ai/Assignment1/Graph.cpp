@@ -424,7 +424,7 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 		nodeCost = 1 + climbCost;
 
 		nextNode->insertNode(expand);
-		heuristicQueue(nextNode, nodeCost, dist, set, cost, distCost);
+		priorityQueue(nextNode, nodeCost, set, cost);
 	}
 
 	if (expand->getDown() != NULL)
@@ -450,7 +450,7 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 		nodeCost = 1 + climbCost;
 
 		nextNode->insertNode(expand);
-		heuristicQueue(nextNode, nodeCost, dist, set, cost, distCost);
+		priorityQueue(nextNode, nodeCost, set, cost);
 	}
 
 	if (expand->getLeft() != NULL)
@@ -476,7 +476,7 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 		nodeCost = 1 + climbCost;
 
 		nextNode->insertNode(expand);
-		heuristicQueue(nextNode, nodeCost, dist, set, cost, distCost);
+		priorityQueue(nextNode, nodeCost, set, cost);
 	}
 
 	if (expand->getRight() != NULL)
@@ -502,7 +502,7 @@ void Graph::expandNodeAStar(bool heuristic, Node * expand, Node * endNode, int c
 		nodeCost = 1 + climbCost;
 
 		nextNode->insertNode(expand);
-		heuristicQueue(nextNode, nodeCost, dist, set, cost, distCost);
+		priorityQueue(nextNode, nodeCost, set, cost);
 	}
 
 }
@@ -648,7 +648,7 @@ bool Graph::ASTAR(bool heuristic, int startX, int startY, int endX, int endY)
 
 		fringe.erase (fringe.begin());
 		cost.erase (cost.begin());
-		distance.erase (distance.begin());
+		//distance.erase (distance.begin());
 
 		if (currentNode == endNode)
 		{
