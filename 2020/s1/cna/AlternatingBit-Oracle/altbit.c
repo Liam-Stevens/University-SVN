@@ -37,6 +37,11 @@ int ComputeChecksum(struct pkt packet)
   int checksum = 0;
 
   /****** 4. FILL IN CODE to calculate the checksum of packet *****/
+  int i = 0;
+  for (i = 0; i < 20; i++)
+  {
+      checksum += (int)packet.payload[i];
+  }
 
   return checksum;
 }
