@@ -22,7 +22,7 @@
    (7/8/2009 - CLP)
    - converted to Alt Bit
 
-##############################################################
+###############################################################
    Note for Intructors:
    SVN CHANGELOG for Oracle Tests
    Rev 701: B_init's expectedseqnum to 0.
