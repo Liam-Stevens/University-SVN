@@ -21,6 +21,18 @@
    - fixed C style to adhere to current programming style
    (7/8/2009 - CLP)
    - converted to Alt Bit
+
+##############################################################
+   Note for Intructors:
+   SVN CHANGELOG for Oracle Tests
+   Rev 701: B_init's expectedseqnum to 0.
+   Rev 702: Added starttimer to A_output and A_timerinterrupt. Added stoptimer to A_input.
+   Rev 703: Added static int A_acknum, which is initialised to -1 in A_init.
+            Made A count ACK as duplicate if A_acknum is larger than the ACK. Made B send an ACK with num: expectedseqnum - 1.
+   Rev 704: I realised the ACK can only be 0 or 1. Changed B ACK sent to be (expectedseqnum + 1) % 2.
+   Rev 705: Created checksum as integer sum of the payload.
+   Rev 706: Initialised A_acknum to 1.
+   Rev 707: Added seqnum and acknum to checksum.
 **********************************************************************/
 
 #define RTT  15.0       /* round trip time.  MUST BE SET TO 15.0 when submitting assignment */
