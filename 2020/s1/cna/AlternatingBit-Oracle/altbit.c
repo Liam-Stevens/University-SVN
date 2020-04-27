@@ -173,7 +173,7 @@ void A_init(void)
 		     new packets are placed in winlast + 1
 		     so initially this is set to -1		   */
   windowcount = 0;
-  A_acknum = -1;
+  A_acknum = 1;
 }
 
 
