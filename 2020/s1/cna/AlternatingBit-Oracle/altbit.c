@@ -114,7 +114,7 @@ void A_input(struct pkt packet)
     total_ACKs_received++;
 
     /* check if new ACK or duplicate */
-    if (packet.acknum > A_acknum) {    /**** 2. FILL IN CODE replace TRUE with test whether this is a new ACK ***/
+    if (packet.acknum != A_acknum) {    /**** 2. FILL IN CODE replace TRUE with test whether this is a new ACK ***/
       /* packet is a new ACK */
       if (TRACE > 0)
         printf("----A: ACK %d is not a duplicate\n",packet.acknum);
@@ -206,7 +206,7 @@ void B_input(struct pkt packet)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
-    sendpkt.acknum = expectedseqnum - 1;
+    sendpkt.acknum = (expectedseqnum + 1) % 2;
   }
 
   /* create packet */
