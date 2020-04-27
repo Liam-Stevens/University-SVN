@@ -37,6 +37,12 @@ int ComputeChecksum(struct pkt packet)
   int checksum = 0;
 
   /****** 4. FILL IN CODE to calculate the checksum of packet *****/
+  checksum = packet.seqnum + packet.acknum;
+  int i = 0;
+  for (i = 0; i < 20; i++)
+  {
+      checksum += (int)packet.payload[i];
+  }
 
   return checksum;
 }
@@ -55,6 +61,7 @@ static struct pkt buffer[WINDOWSIZE];  /* array for storing packets waiting for 
 static int windowfirst, windowlast;    /* array indexes of the first/last packet awaiting ACK */
 static int windowcount;                /* the number of packets currently awaiting an ACK */
 static int A_nextseqnum;               /* the next sequence number to be used by the sender */
+static int A_acknum;
 
 /* called from layer 5 (application layer), passed the message to be sent to other side */
 void A_output(struct msg message)
@@ -87,6 +94,7 @@ void A_output(struct msg message)
       printf("Sending packet %d to layer 3\n", sendpkt.seqnum);
     tolayer3 (A, sendpkt);
     /**** 1. FILL IN CODE There's something else A needs to do when it sends a packet. *****/
+    starttimer(A, RTT);
 
     A_nextseqnum = (A_nextseqnum + 1) % 2;  /* we only have seqnum 0 and 1 */
   }
@@ -112,17 +120,20 @@ void A_input(struct pkt packet)
     total_ACKs_received++;
 
     /* check if new ACK or duplicate */
-    if (true) {    /**** 2. FILL IN CODE replace TRUE with test whether this is a new ACK ***/
+    if (packet.acknum != A_acknum) {    /**** 2. FILL IN CODE replace TRUE with test whether this is a new ACK ***/
       /* packet is a new ACK */
       if (TRACE > 0)
         printf("----A: ACK %d is not a duplicate\n",packet.acknum);
       new_ACKs++;
+
+      A_acknum = packet.acknum;
 
       /* delete the acked packets from window buffer */
       windowcount--;
 
       /***** 1. FILL IN CODE  What else needs to be done when an ACK arrives
        besides removing the packet from the window?  ****/
+      stoptimer(A);
     }
     else
       if (TRACE > 0)
@@ -144,6 +155,8 @@ void A_timerinterrupt(void)
     printf ("---A: resending packet %d\n", (buffer[windowfirst]).seqnum);
   tolayer3(A,buffer[windowfirst]);
   /**** 1. FILL IN CODE What state should the timer be in at this point? *****/
+  starttimer(A, RTT);
+
 
   packets_resent++;
 }
@@ -161,6 +174,7 @@ void A_init(void)
 		     new packets are placed in winlast + 1
 		     so initially this is set to -1		   */
   windowcount = 0;
+  A_acknum = 1;
 }
 
 
@@ -198,6 +212,7 @@ void B_input(struct pkt packet)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
+    sendpkt.acknum = (expectedseqnum + 1) % 2;
   }
 
   /* create packet */
