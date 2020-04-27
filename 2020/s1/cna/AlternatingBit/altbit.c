@@ -4,23 +4,19 @@
 #include "emulator.h"
 #include "altbit.h"
 
-/* ******************************************************************
-   Unfinished Alternating bit protocol.  Adapted from
-   ALTERNATING BIT AND GO-BACK-N NETWORK EMULATOR: VERSION 1.1  J.F.Kurose
+/********************************************************************
+   IMPORTANT Note for Intructors: I forgot the write the changes made in
+   the SVN comments, so I am trying to make up for it here.
 
-   Network properties:
-   - one way network delay averages five time units (longer if there
-   are other messages in the channel for GBN), but can be larger
-   - packets can be corrupted (either the header or the data portion)
-   or lost, according to user-defined probabilities
-   - packets will be delivered in the order in which they were sent
-   (although some can be lost).
-
-   Modifications (6/6/2008 - CLP):
-   - removed bidirectional code and other code not used by prac.
-   - fixed C style to adhere to current programming style
-   (7/8/2009 - CLP)
-   - converted to Alt Bit
+   SVN CHANGELOG for Alt Bit Oracle Tests
+   Rev 701: B_init's expectedseqnum to 0.
+   Rev 702: Added starttimer to A_output and A_timerinterrupt. Added stoptimer to A_input.
+   Rev 703: Added static int A_acknum, which is initialised to -1 in A_init to store num of the last ACKed packet.
+            Made A count ACK as duplicate if A_acknum is larger than the ACK. Made B send an ACK with num: expectedseqnum - 1.
+   Rev 704: I realised the ACK can only be 0 or 1. Changed B ACK sent to be (expectedseqnum + 1) % 2.
+   Rev 705: Created checksum as integer sum of the payload.
+   Rev 706: Initialised A_acknum to 1.
+   Rev 707: Added seqnum and acknum to checksum.
 **********************************************************************/
 
 #define RTT  15.0       /* round trip time.  MUST BE SET TO 15.0 when submitting assignment */
