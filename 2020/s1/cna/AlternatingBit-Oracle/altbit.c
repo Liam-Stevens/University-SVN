@@ -87,6 +87,7 @@ void A_output(struct msg message)
       printf("Sending packet %d to layer 3\n", sendpkt.seqnum);
     tolayer3 (A, sendpkt);
     /**** 1. FILL IN CODE There's something else A needs to do when it sends a packet. *****/
+    starttimer(A, RTT);
 
     A_nextseqnum = (A_nextseqnum + 1) % 2;  /* we only have seqnum 0 and 1 */
   }
@@ -123,6 +124,7 @@ void A_input(struct pkt packet)
 
       /***** 1. FILL IN CODE  What else needs to be done when an ACK arrives
        besides removing the packet from the window?  ****/
+      stoptimer(A);
     }
     else
       if (TRACE > 0)
@@ -144,6 +146,8 @@ void A_timerinterrupt(void)
     printf ("---A: resending packet %d\n", (buffer[windowfirst]).seqnum);
   tolayer3(A,buffer[windowfirst]);
   /**** 1. FILL IN CODE What state should the timer be in at this point? *****/
+  starttimer(A, RTT);
+
 
   packets_resent++;
 }
