@@ -55,6 +55,7 @@ static struct pkt buffer[WINDOWSIZE];  /* array for storing packets waiting for 
 static int windowfirst, windowlast;    /* array indexes of the first/last packet awaiting ACK */
 static int windowcount;                /* the number of packets currently awaiting an ACK */
 static int A_nextseqnum;               /* the next sequence number to be used by the sender */
+static int A_acknum;
 
 /* called from layer 5 (application layer), passed the message to be sent to other side */
 void A_output(struct msg message)
@@ -113,11 +114,13 @@ void A_input(struct pkt packet)
     total_ACKs_received++;
 
     /* check if new ACK or duplicate */
-    if (true) {    /**** 2. FILL IN CODE replace TRUE with test whether this is a new ACK ***/
+    if (packet.acknum > A_acknum) {    /**** 2. FILL IN CODE replace TRUE with test whether this is a new ACK ***/
       /* packet is a new ACK */
       if (TRACE > 0)
         printf("----A: ACK %d is not a duplicate\n",packet.acknum);
       new_ACKs++;
+
+      A_acknum = packet.acknum;
 
       /* delete the acked packets from window buffer */
       windowcount--;
@@ -165,6 +168,7 @@ void A_init(void)
 		     new packets are placed in winlast + 1
 		     so initially this is set to -1		   */
   windowcount = 0;
+  A_acknum = -1;
 }
 
 
@@ -202,6 +206,7 @@ void B_input(struct pkt packet)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
+    sendpkt.acknum = expectedseqnum - 1;
   }
 
   /* create packet */
