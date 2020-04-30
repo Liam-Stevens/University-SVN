@@ -20,7 +20,8 @@
 
    SVN CHANGELOG for GBN Oracle Tests
    REV 718: Updated all of the variables which change between 0 and 1 to account for the larger window size.
-   REV 719: Changed timers to work with the larger windows size.
+   REV 719:
+   TODO: Change timers to work with the larger windows size.
 **********************************************************************/
 
 #define RTT  15.0       /* round trip time.  MUST BE SET TO 15.0 when submitting assignment */
@@ -63,6 +64,7 @@ static int windowfirst, windowlast;    /* array indexes of the first/last packet
 static int windowcount;                /* the number of packets currently awaiting an ACK */
 static int A_nextseqnum;               /* the next sequence number to be used by the sender */
 static int A_acknum;
+static int activePackets;
 
 /* called from layer 5 (application layer), passed the message to be sent to other side */
 void A_output(struct msg message)
@@ -94,8 +96,13 @@ void A_output(struct msg message)
     if (TRACE > 0)
       printf("Sending packet %d to layer 3\n", sendpkt.seqnum);
     tolayer3 (A, sendpkt);
-    /**** 1. FILL IN CODE There's something else A needs to do when it sends a packet. *****/
-    starttimer(A, RTT);
+    /* REV 719: will not start timer with more packets */
+    if (activePackets == 0)
+    {
+        starttimer(A, RTT);
+    }
+    activePackets++;
+
 
     /* REV 718: changed to account for window SIZE */
     A_nextseqnum = (A_nextseqnum + 1) % WINDOWSIZE;
@@ -133,9 +140,14 @@ void A_input(struct pkt packet)
       /* delete the acked packets from window buffer */
       windowcount--;
 
-      /***** 1. FILL IN CODE  What else needs to be done when an ACK arrives
-       besides removing the packet from the window?  ****/
       stoptimer(A);
+
+      /* REV 719: start timer again if there is an active packet */
+      activePackets--;
+      if (activePackets != 0)
+      {
+          starttimer(A, RTT);
+      }
     }
     else
       if (TRACE > 0)
@@ -177,6 +189,7 @@ void A_init(void)
 		     so initially this is set to -1		   */
   windowcount = 0;
   A_acknum = WINDOWSIZE-1;
+  activePackets = 0;
 }
 
 
