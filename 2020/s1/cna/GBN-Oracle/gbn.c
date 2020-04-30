@@ -106,7 +106,7 @@ void A_output(struct msg message)
 
 
     /* REV 718: changed to account for window SIZE */
-    A_nextseqnum = (A_nextseqnum + 1) % WINDOWSIZE+1;
+    A_nextseqnum = (A_nextseqnum + 1) % WINDOWSIZE;
   }
   /* if blocked,  window is full */
   else {
@@ -138,7 +138,7 @@ void A_input(struct pkt packet)
 
       /* Find the number of packets being cumulatively acked */
       cumulative = 0;
-      while ( ((cumulative+A_acknum) % WINDOWSIZE+1) != packet.acknum )
+      while ( ((cumulative+A_acknum) % WINDOWSIZE) != packet.acknum )
       {
           cumulative++;
       }
@@ -205,7 +205,7 @@ void A_init(void)
 		     new packets are placed in winlast + 1
 		     so initially this is set to -1		   */
   windowcount = 0;
-  A_acknum = WINDOWSIZE;
+  A_acknum = WINDOWSIZE-1;
   activePackets = 0;
 }
 
@@ -239,7 +239,7 @@ void B_input(struct pkt packet)
 
     /* update state variables */
     /* REV 718: update for windows size */
-    expectedseqnum = (expectedseqnum + 1) % WINDOWSIZE+1;
+    expectedseqnum = (expectedseqnum + 1) % WINDOWSIZE;
   }
   else {
     /* packet is corrupted or out of order */
@@ -257,7 +257,7 @@ void B_input(struct pkt packet)
   /* create packet */
   sendpkt.seqnum = B_nextseqnum;
   /* REV 718: update for window size*/
-  B_nextseqnum = (B_nextseqnum + 1) % WINDOWSIZE+1;
+  B_nextseqnum = (B_nextseqnum + 1) % WINDOWSIZE;
 
   /* we don't have any data to send.  fill payload with 0's */
   for ( i=0; i<20 ; i++ )
