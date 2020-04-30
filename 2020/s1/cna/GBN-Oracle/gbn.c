@@ -65,6 +65,7 @@ static int windowcount;                /* the number of packets currently awaiti
 static int A_nextseqnum;               /* the next sequence number to be used by the sender */
 static int A_acknum;
 static int activePackets;
+static int cumulative;
 
 /* called from layer 5 (application layer), passed the message to be sent to other side */
 void A_output(struct msg message)
@@ -135,6 +136,8 @@ void A_input(struct pkt packet)
         printf("----A: ACK %d is not a duplicate\n",packet.acknum);
       new_ACKs++;
 
+      cumulative = abs(A_acknum - packet.acknum);
+
       A_acknum = packet.acknum;
 
       /* delete the acked packets from window buffer */
@@ -143,7 +146,12 @@ void A_input(struct pkt packet)
       stoptimer(A);
 
       /* REV 719: start timer again if there is an active packet */
-      activePackets--;
+      if (cumulative >= WINDOWSIZE - 1)
+      {
+          cumulative = 1;
+      }
+      activePackets = activePackets - cumulative;
+
       if (activePackets != 0)
       {
           starttimer(A, RTT);
@@ -198,7 +206,7 @@ void A_init(void)
 
 static int expectedseqnum; /* the sequence number expected next by the receiver */
 static int B_nextseqnum;   /* the sequence number for the next packets sent by B */
-static bool firstPacket;
+static int lastAcked;
 
 
 /* called from layer 3, when a packet arrives for layer 4 at B*/
@@ -218,21 +226,22 @@ void B_input(struct pkt packet)
 
     /* send an ACK for the received packet */
     sendpkt.acknum = expectedseqnum;
+    lastAcked = expectedseqnum;
 
     /* update state variables */
     /* REV 718: update for windows size */
-    expectedseqnum = (expectedseqnum + 1) % WINDOWSIZE;
-    firstPacket = false;
+    expectedseqnum = (expectedseqnum + 1) % WINDOWSIZE;;
   }
   else {
     /* packet is corrupted or out of order */
     if (TRACE > 0)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
+      printf("expected: %d | got: %d | last: %d \n", expectedseqnum, packet.seqnum, lastAcked);
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
-    if (firstPacket == false)
+    if (lastAcked >= 0)
     {
-        sendpkt.acknum = (expectedseqnum + 1) % WINDOWSIZE;
+        sendpkt.acknum = lastAcked;
     }
   }
 
@@ -258,7 +267,7 @@ void B_init(void)
 {
   expectedseqnum = 0;
   B_nextseqnum = 1;
-  firstPacket = true;
+  lastAcked = -1;
 }
 
 /******************************************************************************
