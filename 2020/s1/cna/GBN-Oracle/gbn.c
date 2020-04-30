@@ -136,7 +136,12 @@ void A_input(struct pkt packet)
         printf("----A: ACK %d is not a duplicate\n",packet.acknum);
       new_ACKs++;
 
-      cumulative = abs(A_acknum - packet.acknum);
+      /* Find the number of packets being cumulatively acked */
+      cumulative = 0;
+      while ( ((cumulative+A_acknum) % WINDOWSIZE) != packet.acknum )
+      {
+          cumulative++;
+      }
 
       A_acknum = packet.acknum;
 
@@ -146,10 +151,6 @@ void A_input(struct pkt packet)
       stoptimer(A);
 
       /* REV 719: start timer again if there is an active packet */
-      if (cumulative >= WINDOWSIZE - 1)
-      {
-          cumulative = 1;
-      }
       activePackets = activePackets - cumulative;
 
       if (activePackets != 0)
