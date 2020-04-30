@@ -86,7 +86,7 @@ void A_output(struct msg message)
 
     /* put packet in window buffer */
     /* windowlast will always be 0 for alternating bit; but not for GoBackN */
-    windowlast = (windowlast + 1) % WINDOWSIZE+1;
+    windowlast = (windowlast + 1) % WINDOWSIZE;
     buffer[windowlast] = sendpkt;
     for (i=0; i<20; i++)
       buffer[windowlast].payload[i]=sendpkt.payload[i];  /* copy the array */
@@ -105,7 +105,7 @@ void A_output(struct msg message)
 
 
     /* REV 718: changed to account for window SIZE */
-    A_nextseqnum = (A_nextseqnum + 1) % WINDOWSIZE+1;
+    A_nextseqnum = (A_nextseqnum + 1) % WINDOWSIZE;
   }
   /* if blocked,  window is full */
   else {
@@ -188,7 +188,7 @@ void A_init(void)
 		     new packets are placed in winlast + 1
 		     so initially this is set to -1		   */
   windowcount = 0;
-  A_acknum = WINDOWSIZE;
+  A_acknum = WINDOWSIZE-1;
   activePackets = 0;
 }
 
@@ -198,6 +198,7 @@ void A_init(void)
 
 static int expectedseqnum; /* the sequence number expected next by the receiver */
 static int B_nextseqnum;   /* the sequence number for the next packets sent by B */
+static bool firstPacket;
 
 
 /* called from layer 3, when a packet arrives for layer 4 at B*/
@@ -220,7 +221,8 @@ void B_input(struct pkt packet)
 
     /* update state variables */
     /* REV 718: update for windows size */
-    expectedseqnum = (expectedseqnum + 1) % WINDOWSIZE+1;
+    expectedseqnum = (expectedseqnum + 1) % WINDOWSIZE;
+    firstPacket = false;
   }
   else {
     /* packet is corrupted or out of order */
@@ -228,13 +230,16 @@ void B_input(struct pkt packet)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
-    sendpkt.acknum = (B_nextseqnum + 1) % WINDOWSIZE+1;
+    if (firstPacket == false)
+    {
+        sendpkt.acknum = (expectedseqnum + 1) % WINDOWSIZE;
+    }
   }
 
   /* create packet */
   sendpkt.seqnum = B_nextseqnum;
   /* REV 718: update for window size*/
-  B_nextseqnum = (B_nextseqnum + 1) % WINDOWSIZE+1;
+  B_nextseqnum = (B_nextseqnum + 1) % WINDOWSIZE;
 
   /* we don't have any data to send.  fill payload with 0's */
   for ( i=0; i<20 ; i++ )
@@ -253,6 +258,7 @@ void B_init(void)
 {
   expectedseqnum = 0;
   B_nextseqnum = 1;
+  firstPacket = true;
 }
 
 /******************************************************************************
