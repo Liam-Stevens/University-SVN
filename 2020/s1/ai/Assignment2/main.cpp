@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <cstdlib>
+#include "Node.h"
+#include "Graph.h"
 #include "data.h"
 #include "helpers.h"
 
@@ -33,8 +35,19 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
+	Graph myGraph;
+	struct splits mySplit;
 
-	
+	myGraph.chooseSplit(&mySplit, trainingData);
+
+	/*
+	sortAttribute(&trainingData, 4);
+
+	for (int i = 0; i < (signed)trainingData.attributes.size(); i++)
+	{
+		cout << trainingData.attributes[i][4] << endl;
+	}*/
+
 
 
 	return 0;
