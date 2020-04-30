@@ -17,6 +17,10 @@
    Rev 705: Created checksum as integer sum of the payload.
    Rev 706: Initialised A_acknum to 1.
    Rev 707: Added seqnum and acknum to checksum.
+
+   SVN CHANGELOG for GBN Oracle Tests
+   REV 718: Updated all of the variables which change between 0 and 1 to account for the larger window size.
+   REV 719: Changed timers to work with the larger windows size.
 **********************************************************************/
 
 #define RTT  15.0       /* round trip time.  MUST BE SET TO 15.0 when submitting assignment */
@@ -93,7 +97,8 @@ void A_output(struct msg message)
     /**** 1. FILL IN CODE There's something else A needs to do when it sends a packet. *****/
     starttimer(A, RTT);
 
-    A_nextseqnum = (A_nextseqnum + 1) % 2;  /* we only have seqnum 0 and 1 */
+    /* REV 718: changed to account for window SIZE */
+    A_nextseqnum = (A_nextseqnum + 1) % WINDOWSIZE;
   }
   /* if blocked,  window is full */
   else {
@@ -171,7 +176,7 @@ void A_init(void)
 		     new packets are placed in winlast + 1
 		     so initially this is set to -1		   */
   windowcount = 0;
-  A_acknum = 1;
+  A_acknum = WINDOWSIZE-1;
 }
 
 
@@ -201,7 +206,8 @@ void B_input(struct pkt packet)
     sendpkt.acknum = expectedseqnum;
 
     /* update state variables */
-    expectedseqnum = (expectedseqnum + 1) % 2;
+    /* REV 718: update for windows size */
+    expectedseqnum = (expectedseqnum + 1) % WINDOWSIZE;
   }
   else {
     /* packet is corrupted or out of order */
@@ -209,12 +215,14 @@ void B_input(struct pkt packet)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
+    /* TODO: UPDATE FOR WINDOW SIZE */
     sendpkt.acknum = (expectedseqnum + 1) % 2;
   }
 
   /* create packet */
   sendpkt.seqnum = B_nextseqnum;
-  B_nextseqnum = (B_nextseqnum + 1) % 2;
+  /* REV 718: update for window size*/
+  B_nextseqnum = (B_nextseqnum + 1) % WINDOWSIZE;
 
   /* we don't have any data to send.  fill payload with 0's */
   for ( i=0; i<20 ; i++ )
@@ -232,7 +240,7 @@ void B_input(struct pkt packet)
 void B_init(void)
 {
   expectedseqnum = 0;
-  B_nextseqnum = 1;
+  B_nextseqnum = WINDOWSIZE;
 }
 
 /******************************************************************************
