@@ -228,8 +228,7 @@ void B_input(struct pkt packet)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
-    /* TODO: UPDATE FOR WINDOW SIZE */
-    sendpkt.acknum = (expectedseqnum + 1) % 2;
+    sendpkt.acknum = (B_nextseqnum + 1) % WINDOWSIZE;
   }
 
   /* create packet */
