@@ -4,35 +4,24 @@
 #include "emulator.h"
 #include "altbit.h"
 
-/* ******************************************************************
-   Unfinished Alternating bit protocol.  Adapted from
-   ALTERNATING BIT AND GO-BACK-N NETWORK EMULATOR: VERSION 1.1  J.F.Kurose
+/********************************************************************
+   IMPORTANT Note for Intructors: I forgot the write the changes made in
+   the SVN comments, so I am trying to make up for it here.
 
-   Network properties:
-   - one way network delay averages five time units (longer if there
-   are other messages in the channel for GBN), but can be larger
-   - packets can be corrupted (either the header or the data portion)
-   or lost, according to user-defined probabilities
-   - packets will be delivered in the order in which they were sent
-   (although some can be lost).
-
-   Modifications (6/6/2008 - CLP):
-   - removed bidirectional code and other code not used by prac.
-   - fixed C style to adhere to current programming style
-   (7/8/2009 - CLP)
-   - converted to Alt Bit
-
-################################################################
-   Note for Intructors:
    SVN CHANGELOG for Alt Bit Oracle Tests
    Rev 701: B_init's expectedseqnum to 0.
    Rev 702: Added starttimer to A_output and A_timerinterrupt. Added stoptimer to A_input.
-   Rev 703: Added static int A_acknum, which is initialised to -1 in A_init.
+   Rev 703: Added static int A_acknum, which is initialised to -1 in A_init to store num of the last ACKed packet.
             Made A count ACK as duplicate if A_acknum is larger than the ACK. Made B send an ACK with num: expectedseqnum - 1.
    Rev 704: I realised the ACK can only be 0 or 1. Changed B ACK sent to be (expectedseqnum + 1) % 2.
    Rev 705: Created checksum as integer sum of the payload.
    Rev 706: Initialised A_acknum to 1.
    Rev 707: Added seqnum and acknum to checksum.
+
+   SVN CHANGELOG for GBN Oracle Tests
+   REV 718: Updated all of the variables which change between 0 and 1 to account for the larger window size.
+   REV 719:
+   TODO: Change timers to work with the larger windows size.
 **********************************************************************/
 
 #define RTT  15.0       /* round trip time.  MUST BE SET TO 15.0 when submitting assignment */
@@ -47,10 +36,11 @@
 int ComputeChecksum(struct pkt packet)
 {
   int checksum = 0;
+  int i = 0;
 
   /****** 4. FILL IN CODE to calculate the checksum of packet *****/
   checksum = packet.seqnum + packet.acknum;
-  int i = 0;
+
   for (i = 0; i < 20; i++)
   {
       checksum += (int)packet.payload[i];
@@ -74,6 +64,7 @@ static int windowfirst, windowlast;    /* array indexes of the first/last packet
 static int windowcount;                /* the number of packets currently awaiting an ACK */
 static int A_nextseqnum;               /* the next sequence number to be used by the sender */
 static int A_acknum;
+static int activePackets;
 
 /* called from layer 5 (application layer), passed the message to be sent to other side */
 void A_output(struct msg message)
@@ -105,10 +96,16 @@ void A_output(struct msg message)
     if (TRACE > 0)
       printf("Sending packet %d to layer 3\n", sendpkt.seqnum);
     tolayer3 (A, sendpkt);
-    /**** 1. FILL IN CODE There's something else A needs to do when it sends a packet. *****/
-    starttimer(A, RTT);
+    /* REV 719: will not start timer with more packets */
+    if (activePackets == 0)
+    {
+        starttimer(A, RTT);
+    }
+    activePackets++;
 
-    A_nextseqnum = (A_nextseqnum + 1) % 2;  /* we only have seqnum 0 and 1 */
+
+    /* REV 718: changed to account for window SIZE */
+    A_nextseqnum = (A_nextseqnum + 1) % WINDOWSIZE;
   }
   /* if blocked,  window is full */
   else {
@@ -143,9 +140,14 @@ void A_input(struct pkt packet)
       /* delete the acked packets from window buffer */
       windowcount--;
 
-      /***** 1. FILL IN CODE  What else needs to be done when an ACK arrives
-       besides removing the packet from the window?  ****/
       stoptimer(A);
+
+      /* REV 719: start timer again if there is an active packet */
+      activePackets--;
+      if (activePackets != 0)
+      {
+          starttimer(A, RTT);
+      }
     }
     else
       if (TRACE > 0)
@@ -186,7 +188,8 @@ void A_init(void)
 		     new packets are placed in winlast + 1
 		     so initially this is set to -1		   */
   windowcount = 0;
-  A_acknum = 1;
+  A_acknum = WINDOWSIZE-1;
+  activePackets = 0;
 }
 
 
@@ -195,6 +198,7 @@ void A_init(void)
 
 static int expectedseqnum; /* the sequence number expected next by the receiver */
 static int B_nextseqnum;   /* the sequence number for the next packets sent by B */
+static int lastAcked;
 
 
 /* called from layer 3, when a packet arrives for layer 4 at B*/
@@ -214,22 +218,29 @@ void B_input(struct pkt packet)
 
     /* send an ACK for the received packet */
     sendpkt.acknum = expectedseqnum;
+    lastAcked = expectedseqnum;
 
     /* update state variables */
-    expectedseqnum = (expectedseqnum + 1) % 2;
+    /* REV 718: update for windows size */
+    expectedseqnum = (expectedseqnum + 1) % WINDOWSIZE;;
   }
   else {
     /* packet is corrupted or out of order */
     if (TRACE > 0)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
+      printf("expected: %d | got: %d | last: %d \n", expectedseqnum, packet.seqnum, lastAcked);
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
-    sendpkt.acknum = (expectedseqnum + 1) % 2;
+    if (lastAcked >= 0)
+    {
+        sendpkt.acknum = lastAcked;
+    }
   }
 
   /* create packet */
   sendpkt.seqnum = B_nextseqnum;
-  B_nextseqnum = (B_nextseqnum + 1) % 2;
+  /* REV 718: update for window size*/
+  B_nextseqnum = (B_nextseqnum + 1) % WINDOWSIZE;
 
   /* we don't have any data to send.  fill payload with 0's */
   for ( i=0; i<20 ; i++ )
@@ -248,6 +259,7 @@ void B_init(void)
 {
   expectedseqnum = 0;
   B_nextseqnum = 1;
+  lastAcked = -1;
 }
 
 /******************************************************************************
