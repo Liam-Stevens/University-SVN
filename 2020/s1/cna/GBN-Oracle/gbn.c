@@ -187,7 +187,7 @@ void A_timerinterrupt(void)
           starttimer(A, RTT);
       }
 
-      firstPacket == false;
+      firstPacket = false;
       packets_resent++;
     }
 }
@@ -245,7 +245,7 @@ void B_input(struct pkt packet)
     /* packet is corrupted or out of order */
     if (TRACE > 0)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
-      printf("expected: %d | got: %d | last: %d \n", expectedseqnum, packet.seqnum, lastAcked);
+      
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
     if (lastAcked >= 0)
