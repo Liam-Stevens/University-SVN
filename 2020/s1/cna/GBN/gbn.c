@@ -65,6 +65,7 @@ static int windowcount;                /* the number of packets currently awaiti
 static int A_nextseqnum;               /* the next sequence number to be used by the sender */
 static int A_acknum;
 static int activePackets;
+static int cumulative;
 
 /* called from layer 5 (application layer), passed the message to be sent to other side */
 void A_output(struct msg message)
@@ -135,6 +136,13 @@ void A_input(struct pkt packet)
         printf("----A: ACK %d is not a duplicate\n",packet.acknum);
       new_ACKs++;
 
+      /* Find the number of packets being cumulatively acked */
+      cumulative = 0;
+      while ( ((cumulative+A_acknum) % WINDOWSIZE) != packet.acknum )
+      {
+          cumulative++;
+      }
+
       A_acknum = packet.acknum;
 
       /* delete the acked packets from window buffer */
@@ -143,7 +151,8 @@ void A_input(struct pkt packet)
       stoptimer(A);
 
       /* REV 719: start timer again if there is an active packet */
-      activePackets--;
+      activePackets = activePackets - cumulative;
+
       if (activePackets != 0)
       {
           starttimer(A, RTT);
@@ -161,18 +170,26 @@ void A_input(struct pkt packet)
 /* called when A's timer goes off */
 void A_timerinterrupt(void)
 {
+  int i = 0;
+  bool firstPacket = true;
 
   if (TRACE > 0)
     printf("----A: time out,resend packets!\n");
 
-  if (TRACE > 0)
-    printf ("---A: resending packet %d\n", (buffer[windowfirst]).seqnum);
-  tolayer3(A,buffer[windowfirst]);
-  /**** 1. FILL IN CODE What state should the timer be in at this point? *****/
-  starttimer(A, RTT);
+  for (i = 0; i < activePackets; i++)
+  {
+      if (TRACE > 0)
+        printf ("---A: resending packet %d\n", (buffer[windowfirst+i]).seqnum);
+      tolayer3(A,buffer[windowfirst+i]);
 
+      if (firstPacket)
+      {
+          starttimer(A, RTT);
+      }
 
-  packets_resent++;
+      firstPacket = false;
+      packets_resent++;
+    }
 }
 
 
@@ -222,13 +239,13 @@ void B_input(struct pkt packet)
 
     /* update state variables */
     /* REV 718: update for windows size */
-    expectedseqnum = (expectedseqnum + 1) % WINDOWSIZE;;
+    expectedseqnum = (expectedseqnum + 1) % WINDOWSIZE;
   }
   else {
     /* packet is corrupted or out of order */
     if (TRACE > 0)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
-      printf("expected: %d | got: %d | last: %d \n", expectedseqnum, packet.seqnum, lastAcked);
+      
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
     if (lastAcked >= 0)
