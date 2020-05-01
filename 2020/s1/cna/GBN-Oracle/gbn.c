@@ -66,6 +66,7 @@ static int A_nextseqnum;               /* the next sequence number to be used by
 static int A_acknum;
 static int activePackets;
 static int cumulative;
+static int packetsArrived;
 
 /* called from layer 5 (application layer), passed the message to be sent to other side */
 void A_output(struct msg message)
@@ -152,6 +153,7 @@ void A_input(struct pkt packet)
 
       /* REV 719: start timer again if there is an active packet */
       activePackets = activePackets - cumulative;
+      packetsArrived++;
 
       if (activePackets != 0)
       {
@@ -180,7 +182,7 @@ void A_timerinterrupt(void)
   {
       if (TRACE > 0)
         printf ("---A: resending packet %d\n", (buffer[windowfirst+i]).seqnum);
-      tolayer3(A,buffer[windowfirst+i]);
+      tolayer3(A,buffer[windowfirst+i+packetsArrived]);
 
       if (firstPacket)
       {
@@ -205,8 +207,9 @@ void A_init(void)
 		     new packets are placed in winlast + 1
 		     so initially this is set to -1		   */
   windowcount = 0;
-  A_acknum = WINDOWSIZE-1;
+  A_acknum = -1;
   activePackets = 0;
+  packetsArrived = 0;
 }
 
 
@@ -245,7 +248,7 @@ void B_input(struct pkt packet)
     /* packet is corrupted or out of order */
     if (TRACE > 0)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
-      
+
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
     if (lastAcked >= 0)
