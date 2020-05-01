@@ -21,7 +21,13 @@
    SVN CHANGELOG for GBN Oracle Tests
    REV 718: Updated all of the variables which change between 0 and 1 to account for the larger window size.
    REV 719:
-   TODO: Change timers to work with the larger windows size.
+
+
+   ...
+
+   BUNCH OF REVISIONS.
+
+   I have not idea why this runs infinitely sometimes.
 **********************************************************************/
 
 #define RTT  15.0       /* round trip time.  MUST BE SET TO 15.0 when submitting assignment */
@@ -66,7 +72,6 @@ static int A_nextseqnum;               /* the next sequence number to be used by
 static int A_acknum;
 static int activePackets;
 static int cumulative;
-static int stopInfinite;
 
 /* called from layer 5 (application layer), passed the message to be sent to other side */
 void A_output(struct msg message)
@@ -183,7 +188,7 @@ void A_timerinterrupt(void)
         printf ("---A: resending packet %d\n", (buffer[windowfirst+i]).seqnum);
       tolayer3(A,buffer[windowfirst+i]);
 
-      if (firstPacket && stopInfinite < 999)
+      if (firstPacket)
       {
           starttimer(A, RTT);
       }
@@ -191,7 +196,6 @@ void A_timerinterrupt(void)
       firstPacket = false;
       packets_resent++;
     }
-    stopInfinite++;
 }
 
 
@@ -209,7 +213,6 @@ void A_init(void)
   windowcount = 0;
   A_acknum = WINDOWSIZE-1;
   activePackets = 0;
-  stopInfinite = 0;
 }
 
 
