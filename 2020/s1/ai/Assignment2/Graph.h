@@ -1,6 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <vector>
 #include "Node.h"
 #include "data.h"
 
@@ -11,14 +12,14 @@ private:
 
 public:
 	//Constructor
-    Graph();
+    Graph(struct data myData, int minLeaf);
 
 	//TODO: SOMETHING DESCRIPTIVE
-	void createDTL(struct data * myData, int minLeaf);
+	Node * createDTL(struct data myData, int minLeaf);
 
 	void chooseSplit(struct splits * bestSplit, struct data myData);
 
-	std::string predict(struct data * myData);
+	std::string predict(std::vector<float> currentData);
 
 
 	//Destructor

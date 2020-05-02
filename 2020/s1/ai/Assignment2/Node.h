@@ -8,8 +8,8 @@ class Node
 {
 private:
 	int depth;
-	float value;
-	float point;
+	float splitValue;
+	int attribute;
 	Node * left;
     Node * right;
 	std::string label;
@@ -20,17 +20,19 @@ public:
 
 	//Getters
 	int getDepth();
-	float getValue();
-	float getPoint();
+	float getSplitValue();
+	int getAttribute();
 	Node * getLeft();
     Node * getRight();
+	std::string getLabel();
 
 	//Setters
 	void setDepth(int newDepth);
-	void setValue(float newValue);
-	void setPoint(float newPoint);
+	void setSplitValue(float newValue);
+	void setAttribute(int newAttribute);
 	void setLeft(Node * newPtr);
     void setRight(Node * newPtr);
+	void setLabel(std::string newLabel);
 };
 
 

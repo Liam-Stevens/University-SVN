@@ -7,6 +7,8 @@ Node::Node()
 {
 	left = NULL;
 	right = NULL;
+	attribute = -1;
+	label = "";
 }
 
 //Getters
@@ -15,14 +17,14 @@ int Node::getDepth()
 	return depth;
 }
 
-float Node::getValue()
+float Node::getSplitValue()
 {
-	return value;
+	return splitValue;
 }
 
-float Node::getPoint()
+int Node::getAttribute()
 {
-	return point;
+	return attribute;
 }
 
 Node * Node::getLeft()
@@ -35,20 +37,25 @@ Node * Node::getRight()
 	return right;
 }
 
+string Node::getLabel()
+{
+	return label;
+}
+
 //Setters
 void Node::setDepth(int newDepth)
 {
 	depth = newDepth;
 }
 
-void Node::setValue(float newValue)
+void Node::setSplitValue(float newValue)
 {
-	value = newValue;
+	splitValue = newValue;
 }
 
-void Node::setPoint(float newPoint)
+void Node::setAttribute(int newAttribute)
 {
-	point = newPoint;
+	attribute = newAttribute;
 }
 
 void Node::setLeft(Node * newPtr)
@@ -59,4 +66,9 @@ void Node::setLeft(Node * newPtr)
 void Node::setRight(Node * newPtr)
 {
 	right = newPtr;
+}
+
+void Node::setLabel(std::string newLabel)
+{
+	label = newLabel;
 }

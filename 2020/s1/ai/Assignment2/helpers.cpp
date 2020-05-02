@@ -28,7 +28,7 @@ bool verify(int argNum, string trainLocation, string testLocation, int minleaf)
 /*-----------------------------------------
 | Read the file to a vector
 ------------------------------------------*/
-bool readData(string dataLocation, struct data * myData)
+bool readData(string dataLocation, struct data * myData )
 {
 	string line;
 	ifstream dataFile (dataLocation.c_str());
@@ -193,28 +193,139 @@ float calcGain(struct data myData, int attri, float splitValue)
 		}
 	}
 
-	float parentInformationContent = 0;
-	float leftInformationContent = 0;
-	float rightInformationContent = 0;
 	int totalParent = myData.ratings.size();
 	int totalLeft = 0;
 	int totalRight = 0;
 	for (int i = 0; i < 7; i++)
 	{
-		float probability = (samples[i]/totalParent);
-		parentInformationContent = parentInformationContent - (probability*log2(probability));
-
-		probability = (leftSamples[i]/totalParent);
-		leftInformationContent = leftInformationContent - (probability*log2(probability));
-		totalLeft = totalLeft + leftSamples[i];
-
-		probability = (rightSamples[i]/totalParent);
-		rightInformationContent = rightInformationContent - (probability*log2(probability));
-		totalRight = totalRight + rightSamples[i];
+		totalLeft += leftSamples[i];
+		totalRight += rightSamples[i];
 	}
 
-	float gain = parentInformationContent - (leftInformationContent) - (rightInformationContent);
+	float parentInformationContent = 0;
+	float leftInformationContent = 0;
+	float rightInformationContent = 0;
+	for (int i = 0; i < 7; i++)
+	{
+		float probability = ((float)samples[i]/(float)totalParent);
+		if (probability != 0)
+		{
+			parentInformationContent = parentInformationContent - (probability*log2(probability));
+		}
 
-	//cout << splitValue << " | " << totalParent << " | " << totalLeft << " | " << totalRight << endl;
+		probability = ((float)leftSamples[i]/(float)totalLeft);
+		if (probability != 0)
+		{
+			leftInformationContent = leftInformationContent - (probability*log2(probability));
+		}
+
+		probability = ((float)rightSamples[i]/(float)totalRight);
+		if (probability != 0)
+		{
+			rightInformationContent = rightInformationContent - (probability*log2(probability));
+		}
+	}
+
+	float gain = parentInformationContent - (leftInformationContent*totalLeft)/totalParent - (rightInformationContent*totalRight)/totalParent;
+
 	return gain;
+}
+
+int distinctLabel(struct data myData)
+{
+	vector<int> distinction(7,0);
+	for (int i = 0; i < (signed)myData.ratings.size(); i++)
+	{
+		if (myData.ratings[i] == "AAA")
+		{
+			distinction[0]++;
+		} else if (myData.ratings[i] == "AA")
+		{
+			distinction[1]++;
+		} else if (myData.ratings[i] == "A")
+		{
+			distinction[2]++;
+		} else if (myData.ratings[i] == "BBB")
+		{
+			distinction[3]++;
+		} else if (myData.ratings[i] == "BB")
+		{
+			distinction[4]++;
+		} else if (myData.ratings[i] == "B")
+		{
+			distinction[5]++;
+		} else if (myData.ratings[i] == "CCC")
+		{
+			distinction[6]++;
+		}
+	}
+
+
+	int max = 0;
+	int distinct = -1;
+	bool unique = true;
+	for (int i = 0; i < (signed)distinction.size(); i++)
+	{
+		if (distinction[i] > max)
+		{
+			max = distinction[i];
+			distinct = i;
+			unique = true;
+		}
+		else if (distinction[i] == max)
+		{
+			unique = false;
+		}
+	}
+
+	if (unique == false)
+	{
+		distinct = -1;
+	}
+
+	return distinct;
+}
+
+void splitData(int attribute, float splitValue, struct data myData, struct data * leftDataSplit, struct data * rightDataSplit)
+{
+
+	for (int i = 0; i < (signed)myData.attributes.size(); i++)
+	{
+
+		if (myData.attributes[i][attribute] <= splitValue)
+		{
+			leftDataSplit->attributes.push_back(myData.attributes[i]);
+			leftDataSplit->ratings.push_back(myData.ratings[i]);
+		}
+		else
+		{
+			rightDataSplit->attributes.push_back(myData.attributes[i]);
+			rightDataSplit->ratings.push_back(myData.ratings[i]);
+		}
+
+	}
+
+}
+
+//TODO: make it check if nums are the same
+bool checkSame(struct data myData)
+{
+	bool sameLabel = true;
+	bool sameAttribute = true;
+	for (int i = 0; i < (signed)myData.ratings.size(); i++)
+	{
+		if (myData.ratings[0] != myData.ratings[i])
+		{
+			sameLabel = false;
+		}
+
+		if (myData.attributes[0][0] != myData.attributes[i][0] || myData.attributes[0][1] != myData.attributes[i][1] ||
+			myData.attributes[0][2] != myData.attributes[i][2] || myData.attributes[0][3] != myData.attributes[i][3] ||
+			myData.attributes[0][4] != myData.attributes[i][4])
+		{
+			sameAttribute = false;
+		}
+	}
+
+	return (sameLabel || sameAttribute);
 }
