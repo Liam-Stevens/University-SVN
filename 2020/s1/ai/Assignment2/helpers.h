@@ -12,4 +12,10 @@ extern void sortAttribute(struct data *, int);
 
 extern float calcGain(struct data, int, float);
 
+extern int distinctLabel(struct data);
+
+extern void splitData(int, float , struct data, struct data *, struct data *);
+
+extern bool checkSame(struct data);
+
 #endif
