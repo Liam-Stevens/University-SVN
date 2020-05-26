@@ -153,7 +153,8 @@ void A_input(struct pkt packet)
 
       /* REV 719: start timer again if there is an active packet */
       activePackets = activePackets - cumulative;
-      packetsArrived++;
+      packetsArrived = (packetsArrived + cumulative) % WINDOWSIZE;
+      windowfirst = (windowfirst + cumulative-1) % WINDOWSIZE;
 
       if (activePackets != 0)
       {
@@ -172,17 +173,17 @@ void A_input(struct pkt packet)
 /* called when A's timer goes off */
 void A_timerinterrupt(void)
 {
-  int i = 0;
+  int i = windowfirst;
   bool firstPacket = true;
 
   if (TRACE > 0)
     printf("----A: time out,resend packets!\n");
 
-  for (i = 0; i < activePackets; i++)
+  while (true)
   {
       if (TRACE > 0)
         printf ("---A: resending packet %d\n", (buffer[windowfirst+i]).seqnum);
-      tolayer3(A,buffer[windowfirst+i+packetsArrived]);
+      tolayer3(A,buffer[windowfirst+i]);
 
       if (firstPacket)
       {
@@ -191,6 +192,12 @@ void A_timerinterrupt(void)
 
       firstPacket = false;
       packets_resent++;
+
+      if (i == windowlast);
+      {
+          break;
+      }
+      i = (i + 1) % WINDOWSIZE;
     }
 }
 
@@ -248,7 +255,7 @@ void B_input(struct pkt packet)
     /* packet is corrupted or out of order */
     if (TRACE > 0)
       printf("----B: packet corrupted or not expected sequence number, resend ACK!\n");
-
+      printf("packet got: %d, expected %d, last: %d \n", packet.seqnum, expectedseqnum, lastAcked);
     /***** 3. FILL IN CODE  What ACK number should be sent if the packet
 	   was corrupted or out of order? *******/
     if (lastAcked >= 0)
