@@ -6,7 +6,6 @@
 
 struct data {
     std::vector<std::string> keys;
-    std::vector<std::string> links;
     std::vector< std::vector<int> > weights;
 };
 

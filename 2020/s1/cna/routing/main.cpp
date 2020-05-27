@@ -35,10 +35,10 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	for (int i = 0; i < (signed)configData.keys.size(); i++)
-	{
-		cout << configData.keys[i] << endl;
-	}
+
+	printLabels(configData);
+	printLinks(configData);
+	printLinks(changedConfigData);
 
 	return 0;
 }
