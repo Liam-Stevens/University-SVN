@@ -8,4 +8,8 @@ extern bool verifyArgs(int, std::string, std::string);
 
 extern bool readData(std::string, struct data *, bool);
 
+extern void copyKeys(struct data, struct data *);
+
+extern bool translateToWeight(struct data *);
+
 #endif

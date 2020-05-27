@@ -28,6 +28,7 @@ int main(int argc, char **argv)
 	}
 
 	//Read in Changed Config Data
+	copyKeys(configData, &changedConfigData);
 	if ( readData(changedConfigLocation, &changedConfigData, true) )
 	{
 		cout << "Cannot Read Changed Config Data" << endl;
