@@ -63,7 +63,7 @@ bool readData(string dataLocation, struct data * myData, bool changed)
         	{
                 getline (dataFile,line);
 
-                myData->weights.push_back(line);
+                myData->links.push_back(line);
         	}
         }
 
@@ -75,4 +75,23 @@ bool readData(string dataLocation, struct data * myData, bool changed)
 	}
 
 	return 0;
+}
+
+/*-----------------------------------------
+| Copy Keys from one struct to another
+------------------------------------------*/
+void copyKeys(struct data copyFromData, struct data * copyToData)
+{
+    for (int i = 0; i < (signed)copyFromData->keys.size(); i++)
+    {
+        copyToData->keys.push_back( copyFromData->keys[i] );
+    }
+}
+
+/*-----------------------------------------
+| Translate from string to weight vector
+------------------------------------------*/
+bool translateToWeight(string link, struct data * myData)
+{
+    return 0;
 }
