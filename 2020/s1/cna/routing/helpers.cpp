@@ -35,12 +35,11 @@ bool readData(string dataLocation, struct data * myData, bool changed)
 	//Open the file
   	if (dataFile.is_open())
   	{
-        stringstream lineStream;
-
         //Read in node names
         if ( !changed && getline (dataFile,line) )
         {
             int numOfNodes;
+            stringstream lineStream;
             lineStream.str(line);
             lineStream >> numOfNodes;
 
@@ -56,6 +55,7 @@ bool readData(string dataLocation, struct data * myData, bool changed)
         if ( getline (dataFile,line) )
         {
             int numOfConnections;
+            stringstream lineStream;
             lineStream.str(line);
             lineStream >> numOfConnections;
 
@@ -63,7 +63,11 @@ bool readData(string dataLocation, struct data * myData, bool changed)
         	{
                 getline (dataFile,line);
 
-                myData->links.push_back(line);
+                //Fails if file formatted wrong
+                if ( translateToWeight(line, myData) )
+                {
+                    return 1;
+                }
         	}
         }
 
@@ -78,13 +82,28 @@ bool readData(string dataLocation, struct data * myData, bool changed)
 }
 
 /*-----------------------------------------
+| Get the key value from name
+------------------------------------------*/
+int getKey(string name, struct data myData)
+{
+    for (int i = 0; (signed)myData.keys.size(); i++)
+    {
+        if (name == myData.keys[i])
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/*-----------------------------------------
 | Copy Keys from one struct to another
 ------------------------------------------*/
 void copyKeys(struct data copyFromData, struct data * copyToData)
 {
-    for (int i = 0; i < (signed)copyFromData->keys.size(); i++)
+    for (int i = 0; i < (signed)copyFromData.keys.size(); i++)
     {
-        copyToData->keys.push_back( copyFromData->keys[i] );
+        copyToData->keys.push_back( copyFromData.keys[i] );
     }
 }
 
@@ -93,5 +112,58 @@ void copyKeys(struct data copyFromData, struct data * copyToData)
 ------------------------------------------*/
 bool translateToWeight(string link, struct data * myData)
 {
+    stringstream linkStream;
+    string name1, name2;
+    int weight;
+
+    linkStream.str(link);
+    linkStream >> name1;
+    linkStream >> name2;
+    linkStream >> weight;
+
+    vector<int> thisLink;
+
+    int key1 = getKey(name1, *myData);
+    int key2 = getKey(name2, *myData);
+    if (key1 == -1 || key2 == -1 || weight < 0)
+    {
+        return 1;
+    }
+
+    thisLink.push_back(key1);
+    thisLink.push_back(key2);
+    thisLink.push_back(weight);
+
+    myData->weights.push_back(thisLink);
+
     return 0;
+}
+
+
+/*-----------------------------------------
+| Debug
+------------------------------------------*/
+
+//Prints labels
+extern void printLabels(struct data myData)
+{
+    cout << "Read Labels" << endl;
+	for (int i = 0; i < (signed)myData.keys.size(); i++)
+	{
+		cout << myData.keys[i] << endl;
+	}
+}
+
+//Prints a table of links
+extern void printLinks(struct data myData)
+{
+    cout << "Link Table" << endl;
+	for (int i = 0; i < (signed)myData.weights.size(); i++)
+	{
+		for (int j = 0; j < (signed)myData.weights[0].size(); j++)
+		{
+			cout << myData.weights[i][j] << " ";
+		}
+		cout << endl;
+	}
 }
