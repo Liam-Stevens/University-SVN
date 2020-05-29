@@ -3,6 +3,8 @@
 #include <vector>
 #include "helpers.h"
 #include "data.h"
+#include "Graph.h"
+#include "Node.h"
 
 using namespace std;
 
@@ -35,10 +37,8 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-
-	printLabels(configData);
-	printLinks(configData);
-	printLinks(changedConfigData);
+	Graph myGraph(configData, changedConfigData);
+	myGraph.printNodeConnections();
 
 	return 0;
 }

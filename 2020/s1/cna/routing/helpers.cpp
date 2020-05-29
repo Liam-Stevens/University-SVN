@@ -19,8 +19,6 @@ bool verifyArgs(int argNum, string configLocation, string changedConfigLocation)
 		return 1;
 	}
 
-    //TODO: Check location validity (Unsure if needed)
-
 	return 0;
 }
 
