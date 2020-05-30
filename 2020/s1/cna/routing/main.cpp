@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 	}
 
 	Graph myGraph(configData, changedConfigData);
-	myGraph.printNodeConnections();
+	myGraph.runDistanceVector();
 
 	return 0;
 }

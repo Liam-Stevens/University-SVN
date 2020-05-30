@@ -13,7 +13,7 @@ using namespace std;
 ------------------------------------------*/
 bool verifyArgs(int argNum, string configLocation, string changedConfigLocation)
 {
-	//Check minleaf validity
+	//Check correct number of arguments
 	if (argNum != 3)
 	{
 		return 1;

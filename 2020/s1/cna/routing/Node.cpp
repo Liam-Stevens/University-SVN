@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "Node.h"
 
 using namespace std;
@@ -9,7 +10,7 @@ using namespace std;
 
 Node::Node()
 {
-
+    //Nothing
 }
 
 Node::Node(string newKey, int newId)
@@ -58,6 +59,11 @@ vector<int> Node::getLocalWeights()
     return localWeights;
 }
 
+std::vector< std::vector<int> > Node::getTable()
+{
+    return distanceTable;
+}
+
 /*-----------------------------------------
 | Functions
 ------------------------------------------*/
@@ -69,4 +75,45 @@ void Node::addConnection(int connectedEdge, int weight)
 {
     connections.push_back(connectedEdge);
     localWeights.push_back(weight);
+    distanceTable[ connections.back() ][ connections.back() ] = localWeights.back();
+}
+
+/*-----------------------------------------
+|
+------------------------------------------*/
+void Node::initializeTable(int totalNodes)
+{
+    vector<int> tableRow;
+    for (int i = 0; i < totalNodes; i++)
+    {
+        tableRow.push_back(-1);
+    }
+    for (int i = 0; i < totalNodes; i++)
+    {
+        distanceTable.push_back(tableRow);
+    }
+
+}
+
+bool Node::updateTable(std::vector< std::vector<int> >)
+{
+    return 0;
+}
+
+/*-----------------------------------------
+| Debug
+------------------------------------------*/
+
+void Node::printTable()
+{
+    cout << key << " Table" << endl;
+    for (int i = 0; i < (signed)distanceTable.size(); i++)
+    {
+        for (int j = 0; j < (signed)distanceTable.size(); j++)
+        {
+            cout << distanceTable[i][j] << " | ";
+        }
+        cout << endl;
+    }
+
 }

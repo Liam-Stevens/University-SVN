@@ -27,11 +27,19 @@ public:
     int getId();
     std::vector<int> getConnections();
     std::vector<int> getLocalWeights();
+    std::vector< std::vector<int> > getTable();
 
     //Functions
 
     //Adds a neighbour and weight of the connection
     void addConnection(int, int);
+
+    void initializeTable(int);
+
+    bool updateTable(std::vector< std::vector<int> >);
+
+    //Debug
+    void printTable();
 };
 
 
