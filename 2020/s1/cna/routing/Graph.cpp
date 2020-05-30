@@ -51,6 +51,9 @@ bool Graph::updateNodes()
 	{
 		nodeTables.push_back( edges[i]->getTable() );
 	}
+
+	
+
 	return 0;
 }
 
