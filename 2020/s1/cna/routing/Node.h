@@ -38,6 +38,9 @@ public:
 
     bool updateTable(std::vector< std::vector<int> >);
 
+    int getLeastDistance(std::vector<int>);
+    int findMax(std::vector<int>);
+
     //Debug
     void printTable();
 };
