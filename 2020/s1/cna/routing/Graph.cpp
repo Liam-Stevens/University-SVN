@@ -95,7 +95,7 @@ bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int
 }
 
 /*-----------------------------------------
-|
+| Calculate the routing table for each node
 ------------------------------------------*/
 void Graph::generateRoutingTable()
 {
