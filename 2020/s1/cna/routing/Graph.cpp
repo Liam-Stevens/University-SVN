@@ -46,16 +46,18 @@ void Graph::createConnection(int edge1, int edge2, int weight)
 }
 
 /*-----------------------------------------
-|
+| Updates all node's tables
 ------------------------------------------*/
 bool Graph::updateNodes(int timeStep)
 {
+	//Gets the distance tables for the current timestep from all nodes
 	vector< vector< vector< int > > > nodeTables;
 	for (int i = 0; i < (signed)edges.size(); i++)
 	{
 		nodeTables.push_back( edges[i]->getTable() );
 	}
 
+	//Iterates over all nodes and pushes their tables to their neighbours
 	bool updated = false;
 	for (int i = 0; i < (signed)edges.size(); i++)
 	{
@@ -71,7 +73,7 @@ bool Graph::updateNodes(int timeStep)
 }
 
 /*-----------------------------------------
-|
+| Update target node's distance table with another given table
 ------------------------------------------*/
 bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int > > > nodeTables, int timeStep)
 {
@@ -79,6 +81,7 @@ bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int
 
 	bool updated = false;
 
+	//Iterates over the neighbour's sending them the distance tables
 	for (int i = 0; i < (signed)neighbours.size(); i++)
 	{
 		bool thisUpdate = edges[targetNode]->updateTable( neighbours[i], nodeTables[ neighbours[i] ], timeStep );
@@ -92,7 +95,7 @@ bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int
 }
 
 /*-----------------------------------------
-|
+| Starts the distance vector algorithm
 ------------------------------------------*/
 void Graph::runDistanceVector()
 {
@@ -111,9 +114,6 @@ void Graph::runDistanceVector()
 		cout << endl;
 		timeStep++;
 	}
- 	//TODO: Needs to return a bool to check when done
-	//TODO: run an output when update occurs
-	//cout << endl;
 
 	//Initial Routing Table
 	cout << "#INITIAL" << endl << endl;
@@ -129,14 +129,8 @@ void Graph::runDistanceVector()
 }
 
 /*-----------------------------------------
-|
+| Output table changes to console
 ------------------------------------------*/
-bool Graph::nodeDistanceVector()
-{
-	//TODO: Something
-	return 0;
-}
-
 void Graph::outputTableChange(int timeStep, int from, int to, int via, int weight)
 {
 	cout << "t=" << timeStep << " distance from " << edges[from]->getKey() << " to ";
