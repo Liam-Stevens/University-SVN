@@ -36,7 +36,7 @@ public:
     //Adds a neighbour and weight of the connection
     void addConnection(int, int);
 
-    //
+    //Modifies the weight of a connection (or creates new ones if one does not exist)
     void changeConnection(int, int);
 
     //Initializes the whole table to INF
@@ -63,7 +63,7 @@ public:
     //Output table change to console
     void outputTableChange(int, int, int, int, int);
 
-    //
+    //Output routing table line to console
     void outputRoutingLine(int, int, int);
 
     //Bubble sort connection vector

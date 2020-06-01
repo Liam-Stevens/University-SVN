@@ -19,7 +19,7 @@ public:
 	//Creates connections between two nodes
 	void createConnection(int, int, int);
 
-	//
+	//Makes changes to connections
 	void modifyConnection(int, int, int);
 
 	//Updates all node's tables
@@ -36,8 +36,6 @@ public:
 
 	//Output table changes to console
 	void outputTableChange(int, int, int, int, int);
-
-
 
 	//Debug
 	void printNodeKeys();

@@ -10,8 +10,13 @@ using namespace std;
 
 /*-----------------------------------------
 | Verifies the input arguments
+|
+| Expected Input: The number of arguments
+| Expected Output: Bool for success or failure (1 failure, 0 success)
+|
+| Check if there are 3 args (path to 2 files)
 ------------------------------------------*/
-bool verifyArgs(int argNum, string configLocation, string changedConfigLocation)
+bool verifyArgs(int argNum)
 {
 	//Check correct number of arguments
 	if (argNum != 3)
@@ -24,6 +29,14 @@ bool verifyArgs(int argNum, string configLocation, string changedConfigLocation)
 
 /*-----------------------------------------
 | Read the file to a vector
+|
+| Expected Input: String for path to file, pointer to data structure and boolean for type of file
+| Expected Output: Bool for success or failure (1 failure, 0 success)
+|
+| Opens file for reading and pushes each line to a data struct
+| where keys contains the labels for each edge and
+| weights is stream streamed each line to contain numbers representing the IDs
+| of each edge followed by the weight
 ------------------------------------------*/
 bool readData(string dataLocation, struct data * myData, bool changed)
 {
@@ -84,6 +97,11 @@ bool readData(string dataLocation, struct data * myData, bool changed)
 
 /*-----------------------------------------
 | Get the key value from name
+|
+| Expected Input: name of the edge and the data struct containing the keys
+| Expected Output: the ID of the edge with that name
+|
+| Searches the vector for the matching string and returns the index
 ------------------------------------------*/
 int getKey(string name, struct data myData)
 {
@@ -99,6 +117,11 @@ int getKey(string name, struct data myData)
 
 /*-----------------------------------------
 | Copy Keys from one struct to another
+|
+| Expected Input: First data struct to copy from and a pointer to a data struct to copy to
+| Expected Output: Copy of keys in second data struct
+|
+| Creates a vector in the new data struct to create a copy of the keys from the first data struct
 ------------------------------------------*/
 void copyKeys(struct data copyFromData, struct data * copyToData)
 {
@@ -110,6 +133,12 @@ void copyKeys(struct data copyFromData, struct data * copyToData)
 
 /*-----------------------------------------
 | Translate from string to weight vector
+|
+| Expected Input: string containing two edge names and their weight, and a pointer to the data structure to modify
+| Expected Output: Returns bool for success and failure, modifies data struct by expanding weights vector
+|
+| String streams the string to integers and changes the names of edges to their IDs
+| Then stores this in a vector and pushes it to the data struct
 ------------------------------------------*/
 bool translateToWeight(string link, struct data * myData)
 {
@@ -142,6 +171,11 @@ bool translateToWeight(string link, struct data * myData)
 
 /*-----------------------------------------
 | Sort Keys using Bubble Sort
+|
+| Expected Input: Pointer to data struct to modify
+| Expected Output: Sorted key vector
+|
+| Bubble sorts the key vector from lowest to highest
 ------------------------------------------*/
 void sortKeys(struct data * myData)
 {
