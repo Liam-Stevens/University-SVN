@@ -77,7 +77,7 @@ bool Graph::updateNodes(int timeStep)
 ------------------------------------------*/
 bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int > > > nodeTables, int timeStep)
 {
-	vector<int> neighbours = edges[targetNode]->getConnections();
+	vector<int> neighbours = edges[targetNode]->sortConnections();
 
 	bool updated = false;
 
@@ -92,6 +92,18 @@ bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int
 	}
 
 	return updated;
+}
+
+/*-----------------------------------------
+|
+------------------------------------------*/
+void Graph::generateRoutingTable()
+{
+	//Iterates over each node
+	for (int i = 0; i < (signed)edges.size(); i++)
+	{
+		edges[i]->calcRoutingTable();
+	}
 }
 
 /*-----------------------------------------
@@ -117,7 +129,7 @@ void Graph::runDistanceVector()
 
 	//Initial Routing Table
 	cout << "#INITIAL" << endl << endl;
-	//TODO: Create routing table
+	generateRoutingTable();
 
 	//Changed weights updates to distance table
 	cout << "#UPDATE" << endl << endl;
@@ -136,6 +148,8 @@ void Graph::outputTableChange(int timeStep, int from, int to, int via, int weigh
 	cout << "t=" << timeStep << " distance from " << edges[from]->getKey() << " to ";
 	cout << edges[to]->getKey() << " via " << edges[via]->getKey() << " is " << weight << endl;
 }
+
+
 
 /*-----------------------------------------
 | Debug

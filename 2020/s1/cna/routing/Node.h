@@ -42,6 +42,12 @@ public:
     //Update this node table with another node's table
     bool updateTable(int, std::vector< std::vector<int> >, int);
 
+    //
+    void calcRoutingTable();
+
+    //
+    void routeFor(int);
+
     //Finds the minimum number in a vector (excluding -1)
     int getLeastDistance(std::vector<int>);
 
@@ -54,8 +60,11 @@ public:
     //Output table change to console
     void outputTableChange(int, int, int, int, int);
 
+    //
+    void outputRoutingLine(int, int, int);
+
     //Bubble sort connection vector
-    void sortConnections();
+    std::vector<int> sortConnections();
 
 
     //Debug
