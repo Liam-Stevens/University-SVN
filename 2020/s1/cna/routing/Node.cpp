@@ -121,9 +121,10 @@ bool Node::updateTable(int tableID, vector< vector<int> > updateTable, int times
     for (int i = 0; i < (signed)updateTable.size(); i++)
     {
         //Ignores the row and column for this table and the connected table
-        if (i != tableID && i != id)
+        int distance = getLeastDistance(updateTable[i]);
+        if (i != tableID && i != id && distance != -1)
         {
-            tempTable[i][tableID] = distanceTable[tableID][tableID] + getLeastDistance(updateTable[i]);
+            tempTable[i][tableID] = distanceTable[tableID][tableID] + distance;
         }
     }
 
@@ -138,12 +139,13 @@ bool Node::updateTable(int tableID, vector< vector<int> > updateTable, int times
 }
 
 /*-----------------------------------------
-|
+| Calculate the route to each other node
 ------------------------------------------*/
 void Node::calcRoutingTable()
 {
     for (int i = 0; i < (signed)distanceTable.size(); i++)
     {
+        //Only calculates routes to nodes other than itself
         if (i != id)
         {
             routeFor(i);
@@ -152,12 +154,16 @@ void Node::calcRoutingTable()
     cout << endl;
 }
 
+/*-----------------------------------------
+| Calculate route to a specific node
+------------------------------------------*/
 void Node::routeFor(int targetNode)
 {
     //TODO: remove magic numbers
     int min = 9999;
     int viaID = 0;
 
+    //Finds minimum distance, but also saves the ID of the node to get to it
     for (int j = 0; j < (signed)distanceTable[targetNode].size(); j++)
     {
         if (distanceTable[targetNode][j] < min && distanceTable[targetNode][j] != -1)
@@ -167,6 +173,7 @@ void Node::routeFor(int targetNode)
         }
     }
 
+    //Output to console
     outputRoutingLine(targetNode, min, viaID);
 }
 

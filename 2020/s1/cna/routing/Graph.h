@@ -25,7 +25,7 @@ public:
 	//Update target node's distance table with another given table
 	bool iterateConnectionUpdates(int, std::vector< std::vector< std::vector< int > > >, int);
 
-	//
+	//Calculate the routing table for each node
 	void generateRoutingTable();
 
 	//Starts the distance vector algorithm
