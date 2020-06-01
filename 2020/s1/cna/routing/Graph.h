@@ -16,13 +16,19 @@ public:
 	//Constructor
     Graph(struct data, struct data);
 
+	//Creates connections between two nodes
 	void createConnection(int, int, int);
+
+	//Updates all node's tables
 	bool updateNodes(int);
+
+	//Update target node's distance table with another given table
 	bool iterateConnectionUpdates(int, std::vector< std::vector< std::vector< int > > >, int);
 
+	//Starts the distance vector algorithm
 	void runDistanceVector();
-	bool nodeDistanceVector();
 
+	//Output table changes to console
 	void outputTableChange(int, int, int, int, int);
 
 	//Debug

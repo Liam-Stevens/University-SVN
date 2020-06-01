@@ -49,6 +49,9 @@ bool readData(string dataLocation, struct data * myData, bool changed)
         	}
         }
 
+		//Sort the keys for correct format
+		sortKeys(myData);
+
         //Read in node connections
         if ( getline (dataFile,line) )
         {
@@ -135,6 +138,36 @@ bool translateToWeight(string link, struct data * myData)
     myData->weights.push_back(thisLink);
 
     return 0;
+}
+
+/*-----------------------------------------
+| Sort Keys using Bubble Sort
+------------------------------------------*/
+void sortKeys(struct data * myData)
+{
+	if ((signed)myData->keys.size() > 1)
+    {
+        bool sorted;
+        //Runs until vector is sorted
+        do
+        {
+            sorted = true;
+            //Iterates over connection vector
+            for(int i = 0; i < (signed)(myData->keys.size() - 1); i++)
+            {
+                if (myData->keys[i][0] > myData->keys[i+1][0])
+                {
+                    //Swap elements
+                    string tmp = myData->keys[i];
+                    myData->keys[i] = myData->keys[i+1];
+                    myData->keys[i+1] = tmp;
+                    sorted = false;
+                }
+            }
+
+        }
+        while(sorted != true);
+    }
 }
 
 
