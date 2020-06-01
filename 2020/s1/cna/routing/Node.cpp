@@ -142,9 +142,12 @@ bool Node::updateTable(int tableID, vector< vector<int> > updateTable, int times
 ------------------------------------------*/
 void Node::calcRoutingTable()
 {
-    for (int i = 0; i < (signed)connections.size(); i++)
+    for (int i = 0; i < (signed)distanceTable.size(); i++)
     {
-        routeFor(connections[i]);
+        if (i != id)
+        {
+            routeFor(i);
+        }
     }
     cout << endl;
 }
