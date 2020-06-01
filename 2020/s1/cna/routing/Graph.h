@@ -19,6 +19,9 @@ public:
 	//Creates connections between two nodes
 	void createConnection(int, int, int);
 
+	//
+	void modifyConnection(int, int, int);
+
 	//Updates all node's tables
 	bool updateNodes(int);
 

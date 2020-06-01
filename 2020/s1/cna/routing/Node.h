@@ -36,16 +36,19 @@ public:
     //Adds a neighbour and weight of the connection
     void addConnection(int, int);
 
+    //
+    void changeConnection(int, int);
+
     //Initializes the whole table to INF
     void initializeTable(int);
 
     //Update this node table with another node's table
     bool updateTable(int, std::vector< std::vector<int> >, int);
 
-    //
+    //Calculate the route to each other node
     void calcRoutingTable();
 
-    //
+    //Calculate route to a specific node
     void routeFor(int);
 
     //Finds the minimum number in a vector (excluding -1)

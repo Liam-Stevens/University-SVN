@@ -46,6 +46,17 @@ void Graph::createConnection(int edge1, int edge2, int weight)
 }
 
 /*-----------------------------------------
+|
+------------------------------------------*/
+void Graph::modifyConnection(int edge1, int edge2, int weight)
+{
+	edges[edge1]->changeConnection(edge2, weight);
+	outputTableChange(0,edge1,edge2,edge2,weight);
+	edges[edge2]->changeConnection(edge1, weight);
+	outputTableChange(0,edge2,edge1,edge1,weight);
+}
+
+/*-----------------------------------------
 | Updates all node's tables
 ------------------------------------------*/
 bool Graph::updateNodes(int timeStep)
@@ -133,11 +144,23 @@ void Graph::runDistanceVector()
 
 	//Changed weights updates to distance table
 	cout << "#UPDATE" << endl << endl;
-	//TODO: Update distance vector
+
+	for (int i = 0; i < (signed)change.weights.size(); i++)
+	{
+		modifyConnection(change.weights[i][0], change.weights[i][1], change.weights[i][2]);
+	}
+	cout << endl;
+
+	timeStep = 1;
+	while ( updateNodes(timeStep) )
+	{
+		cout << endl;
+		timeStep++;
+	}
 
 	//Post-change Routing Table
 	cout << "#FINAL" << endl << endl;
-	//TODO: Update routing table
+	generateRoutingTable();
 }
 
 /*-----------------------------------------

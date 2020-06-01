@@ -88,6 +88,32 @@ void Node::addConnection(int connectedEdge, int weight)
 }
 
 /*-----------------------------------------
+|
+------------------------------------------*/
+void Node::changeConnection(int connectionID, int weight)
+{
+    int index = -1;
+    for (int i = 0; i < (signed)connections.size(); i++)
+    {
+        if (connections[i] == connectionID)
+        {
+            index = i;
+        }
+    }
+
+    if (index >= 0)
+    {
+        localWeights[index] = weight;
+        distanceTable[ connections[index] ][ connections[index] ] = weight;
+    }
+    else
+    {
+        addConnection(connectionID, weight);
+    }
+
+}
+
+/*-----------------------------------------
 | Initializes the whole table to INF
 ------------------------------------------*/
 void Node::initializeTable(int totalNodes)
