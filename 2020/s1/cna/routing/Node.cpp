@@ -58,8 +58,6 @@ int Node::getId()
 //Returns the ids of the connected nodes
 vector<int> Node::getConnections()
 {
-    //Needs to be sorted for correct checking order
-    sortConnections();
     return connections;
 }
 
@@ -140,6 +138,36 @@ bool Node::updateTable(int tableID, vector< vector<int> > updateTable, int times
 }
 
 /*-----------------------------------------
+|
+------------------------------------------*/
+void Node::calcRoutingTable()
+{
+    for (int i = 0; i < (signed)connections.size(); i++)
+    {
+        routeFor(connections[i]);
+    }
+    cout << endl;
+}
+
+void Node::routeFor(int targetNode)
+{
+    //TODO: remove magic numbers
+    int min = 9999;
+    int viaID = 0;
+
+    for (int j = 0; j < (signed)distanceTable[targetNode].size(); j++)
+    {
+        if (distanceTable[targetNode][j] < min && distanceTable[targetNode][j] != -1)
+        {
+            min = distanceTable[targetNode][j];
+            viaID = j;
+        }
+    }
+
+    outputRoutingLine(targetNode, min, viaID);
+}
+
+/*-----------------------------------------
 | Finds the minimum number in a vector (excluding -1)
 ------------------------------------------*/
 int Node::getLeastDistance(std::vector<int> distances)
@@ -206,27 +234,36 @@ void Node::outputTableChange(int timeStep, int from, int to, int via, int weight
 	cout << keyList[to] << " via " << keyList[via] << " is " << weight << endl;
 }
 
+void Node::outputRoutingLine(int to, int weight, int via)
+{
+    cout << "router " << key << ": " << keyList[to] << " is " << weight << " routing through " << keyList[via] << endl;
+}
+
 /*-----------------------------------------
 | Bubble sort connection vector
 ------------------------------------------*/
-void Node::sortConnections()
+vector<int> Node::sortConnections()
 {
-    if ((signed)connections.size() > 1)
+    vector<int> sorting = connections;
+
+    if ((signed)sorting.size() > 1)
     {
+
+
         bool sorted;
         //Runs until vector is sorted
         do
         {
             sorted = true;
             //Iterates over connection vector
-            for(int i = 0; i < (signed)(connections.size() - 1); i++)
+            for(int i = 0; i < (signed)(sorting.size() - 1); i++)
             {
-                if (connections[i] > connections[i+1])
+                if (sorting[i] > sorting[i+1])
                 {
                     //Swap elements
-                    int tmp = connections[i];
-                    connections[i] = connections[i+1];
-                    connections[i+1] = tmp;
+                    int tmp = sorting[i];
+                    sorting[i] = sorting[i+1];
+                    sorting[i+1] = tmp;
                     sorted = false;
                 }
             }
@@ -235,6 +272,7 @@ void Node::sortConnections()
         while(sorted != true);
     }
 
+    return sorting;
 }
 
 /*-----------------------------------------
