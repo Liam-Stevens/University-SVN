@@ -39,6 +39,7 @@ int main(int argc, char **argv)
 
 	Graph myGraph(configData, changedConfigData);
 	myGraph.runDistanceVector();
+	//myGraph.printAllTables();
 
 	return 0;
 }
