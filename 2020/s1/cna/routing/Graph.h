@@ -17,7 +17,8 @@ public:
     Graph(struct data, struct data);
 
 	void createConnection(int, int, int);
-	bool updateNodes();
+	bool updateNodes(int);
+	bool iterateConnectionUpdates(int, std::vector< std::vector< std::vector< int > > >, int);
 
 	void runDistanceVector();
 	bool nodeDistanceVector();

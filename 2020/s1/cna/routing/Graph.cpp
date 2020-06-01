@@ -29,6 +29,7 @@ Graph::Graph(struct data initial, struct data update)
 	for (int i = 0; i < (signed)edges.size(); i++)
 	{
 		edges[i]->initializeTable( (signed)edges.size() );
+		edges[i]->setKeys(initial.keys);
 	}
 
 }
@@ -44,7 +45,10 @@ void Graph::createConnection(int edge1, int edge2, int weight)
 	outputTableChange(0,edge2,edge1,edge1,weight);
 }
 
-bool Graph::updateNodes()
+/*-----------------------------------------
+|
+------------------------------------------*/
+bool Graph::updateNodes(int timeStep)
 {
 	vector< vector< vector< int > > > nodeTables;
 	for (int i = 0; i < (signed)edges.size(); i++)
@@ -52,9 +56,39 @@ bool Graph::updateNodes()
 		nodeTables.push_back( edges[i]->getTable() );
 	}
 
-	
+	bool updated = false;
+	for (int i = 0; i < (signed)edges.size(); i++)
+	{
+		bool thisUpdate = iterateConnectionUpdates(edges[i]->getId(), nodeTables, timeStep);
+		if (thisUpdate == true)
+		{
+			cout << endl;
+			updated = true;
+		}
+	}
 
-	return 0;
+	return updated;
+}
+
+/*-----------------------------------------
+|
+------------------------------------------*/
+bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int > > > nodeTables, int timeStep)
+{
+	vector<int> neighbours = edges[targetNode]->getConnections();
+
+	bool updated = false;
+
+	for (int i = 0; i < (signed)neighbours.size(); i++)
+	{
+		bool thisUpdate = edges[targetNode]->updateTable( neighbours[i], nodeTables[ neighbours[i] ], timeStep );
+		if (thisUpdate == true)
+		{
+			updated = true;
+		}
+	}
+
+	return updated;
 }
 
 /*-----------------------------------------
@@ -71,9 +105,19 @@ void Graph::runDistanceVector()
 	}
 	cout << endl;
 
+	int timeStep = 1;
+	while ( updateNodes(timeStep) )
+	{
+		cout << endl;
+		timeStep++;
+	}
+ 	//TODO: Needs to return a bool to check when done
+	//TODO: run an output when update occurs
+	//cout << endl;
+
 	//Initial Routing Table
 	cout << "#INITIAL" << endl << endl;
-	//TODO: Starting routing table
+	//TODO: Create routing table
 
 	//Changed weights updates to distance table
 	cout << "#UPDATE" << endl << endl;

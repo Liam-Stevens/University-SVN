@@ -9,18 +9,19 @@ class Node
 private:
     std::string key;
     int id;
+    std::vector<std::string> keyList;
     std::vector<int> connections;
     std::vector<int> localWeights;
     std::vector< std::vector<int> > distanceTable;
 
 public:
 	//Constructor
-    Node();
-    Node(std::string newKey, int newId);
+    Node(std::string, int);
 
     //Setters
-    void setKey(std::string newKey);
-    void setId(int newId);
+    void setKey(std::string);
+    void setId(int);
+    void setKeys(std::vector<std::string>);
 
     //Getters
     std::string getKey();
@@ -36,10 +37,13 @@ public:
 
     void initializeTable(int);
 
-    bool updateTable(std::vector< std::vector<int> >);
+    bool updateTable(int, std::vector< std::vector<int> >, int);
 
     int getLeastDistance(std::vector<int>);
     int findMax(std::vector<int>);
+    bool differentTables(std::vector< std::vector<int> >, std::vector< std::vector<int> >, int);
+
+    void outputTableChange(int, int, int, int, int);
 
     //Debug
     void printTable();

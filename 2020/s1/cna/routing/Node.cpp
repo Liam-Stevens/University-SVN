@@ -8,11 +8,6 @@ using namespace std;
 | Contructors
 ------------------------------------------*/
 
-Node::Node()
-{
-    //Nothing
-}
-
 Node::Node(string newKey, int newId)
 {
     key = newKey;
@@ -32,6 +27,11 @@ void Node::setKey(string newKey)
 void Node::setId(int newId)
 {
     id = newId;
+}
+
+void Node::setKeys(std::vector<std::string> newKeys)
+{
+    keyList = newKeys;
 }
 
 
@@ -95,7 +95,10 @@ void Node::initializeTable(int totalNodes)
 
 }
 
-bool Node::updateTable(int tableID, std::vector< std::vector<int> > updateTable)
+/*-----------------------------------------
+|
+------------------------------------------*/
+bool Node::updateTable(int tableID, vector< vector<int> > updateTable, int timestep)
 {
     //If there is no distance table, return
     if ((signed)distanceTable.size() == 0)
@@ -103,20 +106,30 @@ bool Node::updateTable(int tableID, std::vector< std::vector<int> > updateTable)
         return false;
     }
     bool updated = false;
+    std::vector< std::vector<int> > tempTable = distanceTable;
 
 
     for (int i = 0; i < (signed)updateTable.size(); i++)
     {
         if (i != tableID && i != id)
         {
-            distanceTable[i][tableID] = distanceTable[tableID][tableID] + getLeastDistance(updateTable[i]);
+            tempTable[i][tableID] = distanceTable[tableID][tableID] + getLeastDistance(updateTable[i]);
         }
+    }
+
+    if ( differentTables(distanceTable,tempTable, timestep) )
+    {
+        updated = true;
+        distanceTable = tempTable;
     }
 
 
     return updated;
 }
 
+/*-----------------------------------------
+|
+------------------------------------------*/
 int Node::getLeastDistance(std::vector<int> distances)
 {
     int min = findMax(distances);
@@ -132,6 +145,9 @@ int Node::getLeastDistance(std::vector<int> distances)
     return min;
 }
 
+/*-----------------------------------------
+|
+------------------------------------------*/
 int Node::findMax(std::vector<int> distances)
 {
     int max = distances[0];
@@ -145,6 +161,33 @@ int Node::findMax(std::vector<int> distances)
     }
 
     return max;
+}
+
+/*-----------------------------------------
+|
+------------------------------------------*/
+bool Node::differentTables(std::vector< std::vector<int> > comparison1, std::vector< std::vector<int> > comparison2, int timestep)
+{
+    bool different = false;
+    for (int i = 0; i < (signed)comparison1.size(); i++)
+    {
+        for (int j = 0; j < (signed)comparison1[0].size(); j++)
+        {
+            if (comparison1[i][j] != comparison2[i][j])
+            {
+                outputTableChange(timestep,id,i,j,comparison2[i][j]);
+                different = true;
+            }
+        }
+    }
+
+    return different;
+}
+
+void Node::outputTableChange(int timeStep, int from, int to, int via, int weight)
+{
+	cout << "t=" << timeStep << " distance from " << keyList[from] << " to ";
+	cout << keyList[to] << " via " << keyList[via] << " is " << weight << endl;
 }
 
 /*-----------------------------------------
