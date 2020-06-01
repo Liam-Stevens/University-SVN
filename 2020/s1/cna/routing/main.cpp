@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 	string configLocation = argv[1], changedConfigLocation = argv[2];
 
 	//Check argument validity
-	if ( verifyArgs(argc, configLocation, changedConfigLocation) )
+	if ( verifyArgs(argc) )
 	{
 		cout << "Bad or missing arguments" << endl;
 		return 1;
@@ -39,7 +39,6 @@ int main(int argc, char **argv)
 
 	Graph myGraph(configData, changedConfigData);
 	myGraph.runDistanceVector();
-	//myGraph.printAllTables();
 
 	return 0;
 }

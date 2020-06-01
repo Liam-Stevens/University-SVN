@@ -5,7 +5,7 @@
 #include "data.h"
 
 //Verifies the input arguments
-extern bool verifyArgs(int, std::string, std::string);
+extern bool verifyArgs(int);
 
 //Read the file to a vector
 extern bool readData(std::string, struct data *, bool);

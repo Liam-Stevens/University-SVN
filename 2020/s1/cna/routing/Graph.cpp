@@ -10,6 +10,10 @@ using namespace std;
 
 /*-----------------------------------------
 | Initialises the network (Contructor)
+|
+| Expected input: data structs containing the initial and change information for the network
+|
+| This will create nodes objects for each edge, and initialize each node's table to INF.
 ------------------------------------------*/
 Graph::Graph(struct data initial, struct data update)
 {
@@ -36,6 +40,11 @@ Graph::Graph(struct data initial, struct data update)
 
 /*-----------------------------------------
 | Creates connections between two nodes
+|
+| Expected Input: The ID's of two edge's which will be connected and their weight
+|
+| This will run add connection from each edge, pointing to the other edge
+| and output to the console the change which is made.
 ------------------------------------------*/
 void Graph::createConnection(int edge1, int edge2, int weight)
 {
@@ -46,7 +55,12 @@ void Graph::createConnection(int edge1, int edge2, int weight)
 }
 
 /*-----------------------------------------
+| Makes changes to connections
 |
+| Expected Input: The ID's of two edge's which will be connected and their weight
+|
+| This will update existing connections with a new weight and then
+| output to the console the changes which have been made
 ------------------------------------------*/
 void Graph::modifyConnection(int edge1, int edge2, int weight)
 {
@@ -58,6 +72,12 @@ void Graph::modifyConnection(int edge1, int edge2, int weight)
 
 /*-----------------------------------------
 | Updates all node's tables
+|
+| Expected Input: Current working timestep
+| Expected Output: Bool indicating if any of the nodes were updated
+|
+| This temporarily stores the distance tables of all nodes for the timestep
+| Then it iterates over all nodes and pushes their tables to their neighbours
 ------------------------------------------*/
 bool Graph::updateNodes(int timeStep)
 {
@@ -68,7 +88,7 @@ bool Graph::updateNodes(int timeStep)
 		nodeTables.push_back( edges[i]->getTable() );
 	}
 
-	//Iterates over all nodes and pushes their tables to their neighbours
+	//Iterates over all nodes and recieves tables from their neighbours
 	bool updated = false;
 	for (int i = 0; i < (signed)edges.size(); i++)
 	{
@@ -85,6 +105,11 @@ bool Graph::updateNodes(int timeStep)
 
 /*-----------------------------------------
 | Update target node's distance table with another given table
+|
+| Expected Input: Takes the ID of the target node, the current timestep and a vector containing all tables
+| Expected Output: Bool indicating a change to the table
+|
+| This iterates over the neighbours and updates the current node with their tables
 ------------------------------------------*/
 bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int > > > nodeTables, int timeStep)
 {
@@ -107,6 +132,8 @@ bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int
 
 /*-----------------------------------------
 | Calculate the routing table for each node
+|
+| Runs routing table calculation on each node
 ------------------------------------------*/
 void Graph::generateRoutingTable()
 {
@@ -119,6 +146,11 @@ void Graph::generateRoutingTable()
 
 /*-----------------------------------------
 | Starts the distance vector algorithm
+|
+| First creates the connections between each node
+| Then updates each node's tables until they converge
+| Then updates the weights of the connections which changed
+| Then updates each node's tables until they converge again
 ------------------------------------------*/
 void Graph::runDistanceVector()
 {
@@ -131,6 +163,7 @@ void Graph::runDistanceVector()
 	}
 	cout << endl;
 
+	//Run node updates until convergent
 	int timeStep = 1;
 	while ( updateNodes(timeStep) )
 	{
@@ -145,12 +178,14 @@ void Graph::runDistanceVector()
 	//Changed weights updates to distance table
 	cout << "#UPDATE" << endl << endl;
 
+	//Update the connections for each change
 	for (int i = 0; i < (signed)change.weights.size(); i++)
 	{
 		modifyConnection(change.weights[i][0], change.weights[i][1], change.weights[i][2]);
 	}
 	cout << endl;
 
+	//Run node updates until convergent
 	timeStep = 1;
 	while ( updateNodes(timeStep) )
 	{
@@ -165,13 +200,17 @@ void Graph::runDistanceVector()
 
 /*-----------------------------------------
 | Output table changes to console
+|
+| Expected Input: The current timestep, the ID of the node from, the ID of the node traveling to,
+| the ID of the node to travel via, and the weight of the total distance
+|
+| Output to console in the given format
 ------------------------------------------*/
 void Graph::outputTableChange(int timeStep, int from, int to, int via, int weight)
 {
 	cout << "t=" << timeStep << " distance from " << edges[from]->getKey() << " to ";
 	cout << edges[to]->getKey() << " via " << edges[via]->getKey() << " is " << weight << endl;
 }
-
 
 
 /*-----------------------------------------

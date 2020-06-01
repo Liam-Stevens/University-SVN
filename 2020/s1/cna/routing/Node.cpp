@@ -79,6 +79,11 @@ std::vector< std::vector<int> > Node::getTable()
 
 /*-----------------------------------------
 | Adds a neighbour and weight of the connection
+|
+| Expected Input: ID for connected edge and weight of connection
+|
+| Pushes the connected edge ID to connections and the weight of the
+| connection to localWeights, then adds the weight to the distance table
 ------------------------------------------*/
 void Node::addConnection(int connectedEdge, int weight)
 {
@@ -88,7 +93,12 @@ void Node::addConnection(int connectedEdge, int weight)
 }
 
 /*-----------------------------------------
+| Modifies the weight of a connection (or creates new ones if one does not exist)
 |
+| Expected Input: ID for connected edge and weight of connection
+|
+| Changes the weight of the edge with ID and changes the weight on the distance table
+| If there is no edge with the supplied ID, it will create a connection.
 ------------------------------------------*/
 void Node::changeConnection(int connectionID, int weight)
 {
@@ -115,6 +125,10 @@ void Node::changeConnection(int connectionID, int weight)
 
 /*-----------------------------------------
 | Initializes the whole table to INF
+|
+| Expected Input: the number of edges in the network
+|
+| Creates an NxN table with all values initialized to -1
 ------------------------------------------*/
 void Node::initializeTable(int totalNodes)
 {
@@ -132,6 +146,12 @@ void Node::initializeTable(int totalNodes)
 
 /*-----------------------------------------
 | Update this node table with another node's table
+|
+| Expected Input: ID of the supplied table, a 2D vector of the supplied table, and the current timestep
+| Expected Output: Bool indicating a change to the table
+|
+| Creates a copy of this edge's table, applies the distance vector relationship
+| then sets the current edge's table if there were changes
 ------------------------------------------*/
 bool Node::updateTable(int tableID, vector< vector<int> > updateTable, int timestep)
 {
@@ -166,6 +186,8 @@ bool Node::updateTable(int tableID, vector< vector<int> > updateTable, int times
 
 /*-----------------------------------------
 | Calculate the route to each other node
+|
+| Runs routing calculation to each node (other than itself) from this one
 ------------------------------------------*/
 void Node::calcRoutingTable()
 {
@@ -182,12 +204,29 @@ void Node::calcRoutingTable()
 
 /*-----------------------------------------
 | Calculate route to a specific node
+|
+| Expected Input: the ID of the node to calculate the distance to
+|
+| First calculates the max in the target node's row and then calcs the min from that max
+| (The code from min and max has to be used manually such that I can track the ID of the min and max)
+| Then the target node, min value and id of the node to go via is given to outputRoutingLine
 ------------------------------------------*/
 void Node::routeFor(int targetNode)
 {
-    //TODO: remove magic numbers
-    int min = 9999;
+    int max = distanceTable[targetNode][0];
     int viaID = 0;
+
+    //Find the maximum distance, but also saves the ID of the node to get to it
+    for (int i = 0; i < (signed)distanceTable[targetNode].size(); i++)
+    {
+        if (distanceTable[targetNode][i] > max)
+        {
+            max = distanceTable[targetNode][i];
+            viaID = i;
+        }
+    }
+
+    int min = max;
 
     //Finds minimum distance, but also saves the ID of the node to get to it
     for (int j = 0; j < (signed)distanceTable[targetNode].size(); j++)
@@ -205,6 +244,11 @@ void Node::routeFor(int targetNode)
 
 /*-----------------------------------------
 | Finds the minimum number in a vector (excluding -1)
+|
+| Expected Input: Vector of distances
+| Expected Output: the lowest value in the vector
+|
+| Gets the max value in the vector to then find the min value (excluding -1)
 ------------------------------------------*/
 int Node::getLeastDistance(std::vector<int> distances)
 {
@@ -212,6 +256,7 @@ int Node::getLeastDistance(std::vector<int> distances)
 
     for (int i = 0; i < (signed)distances.size(); i++)
     {
+        //Excludes -1
         if (distances[i] < min && distances[i] != -1)
         {
             min = distances[i];
@@ -223,6 +268,11 @@ int Node::getLeastDistance(std::vector<int> distances)
 
 /*-----------------------------------------
 | Finds the maximum number in a vector
+|
+| Expected Input: Vector of distances
+| Expected Output: the highest value in the vector
+|
+| Simple max calculation
 ------------------------------------------*/
 int Node::findMax(std::vector<int> distances)
 {
@@ -241,6 +291,11 @@ int Node::findMax(std::vector<int> distances)
 
 /*-----------------------------------------
 | Checks if two tables are different
+|
+| Expected Input: takes two 2D vectors of distance tables, and the current timestep
+| Expected Output: Bool indicating a change to the table
+|
+| Compares the two tables and calls outputTableChange on the values which are different
 ------------------------------------------*/
 bool Node::differentTables(std::vector< std::vector<int> > comparison1, std::vector< std::vector<int> > comparison2, int timestep)
 {
@@ -263,6 +318,10 @@ bool Node::differentTables(std::vector< std::vector<int> > comparison1, std::vec
 
 /*-----------------------------------------
 | Output table changes to console
+|
+| Expected Input: the current timestep, the ID of node from, the ID of node to, the ID of node to go via, and the distance
+|
+| Output to console in the given format
 ------------------------------------------*/
 void Node::outputTableChange(int timeStep, int from, int to, int via, int weight)
 {
@@ -270,6 +329,13 @@ void Node::outputTableChange(int timeStep, int from, int to, int via, int weight
 	cout << keyList[to] << " via " << keyList[via] << " is " << weight << endl;
 }
 
+/*-----------------------------------------
+| Output routing table line to console
+|
+| Expected Input: the ID of to node, the ID of node to go via, the distance of the connection
+|
+| Output to console in the given format
+------------------------------------------*/
 void Node::outputRoutingLine(int to, int weight, int via)
 {
     cout << "router " << key << ": " << keyList[to] << " is " << weight << " routing through " << keyList[via] << endl;
@@ -277,14 +343,18 @@ void Node::outputRoutingLine(int to, int weight, int via)
 
 /*-----------------------------------------
 | Bubble sort connection vector
+|
+| Expected Output: sorted vector (from lowest to highest)
+|
+| Sorts the IDs of the connections from this node
 ------------------------------------------*/
 vector<int> Node::sortConnections()
 {
     vector<int> sorting = connections;
 
+    //Don't need to sort if only 1 value
     if ((signed)sorting.size() > 1)
     {
-
 
         bool sorted;
         //Runs until vector is sorted
