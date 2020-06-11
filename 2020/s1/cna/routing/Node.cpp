@@ -153,7 +153,7 @@ void Node::initializeTable(int totalNodes)
 | Creates a copy of this edge's table, applies the distance vector relationship
 | then sets the current edge's table if there were changes
 ------------------------------------------*/
-bool Node::updateTable(int tableID, vector< vector<int> > updateTable, int timestep)
+bool Node::updateTable(int tableID, vector< vector<int> > updateTable, int timestep, bool poisoned)
 {
     //If there is no distance table, return
     if ((signed)distanceTable.size() == 0)
@@ -168,7 +168,22 @@ bool Node::updateTable(int tableID, vector< vector<int> > updateTable, int times
     {
         //Ignores the row and column for this table and the connected table
         int distance = getLeastDistance(updateTable[i]);
-        if (i != tableID && i != id && distance != -1)
+        bool prevented = false;
+
+        //Poison the table
+        if (poisoned == true)
+        {
+            int leastID = getLeastDistID(updateTable[i]);
+            //Poisons if the ID of the smallest distance in the table points to this Node
+            if (i != tableID && i != id && distance != -1 && leastID == id)
+            {
+                tempTable[i][tableID] = -1;
+                prevented = true;
+            }
+        }
+
+        //Change the value in the table (skipped if successfully poisoned)
+        if (i != tableID && i != id && distance != -1 && !prevented)
         {
             tempTable[i][tableID] = distanceTable[tableID][tableID] + distance;
         }
@@ -213,30 +228,9 @@ void Node::calcRoutingTable()
 ------------------------------------------*/
 void Node::routeFor(int targetNode)
 {
-    int max = distanceTable[targetNode][0];
-    int viaID = 0;
-
-    //Find the maximum distance, but also saves the ID of the node to get to it
-    for (int i = 0; i < (signed)distanceTable[targetNode].size(); i++)
-    {
-        if (distanceTable[targetNode][i] > max)
-        {
-            max = distanceTable[targetNode][i];
-            viaID = i;
-        }
-    }
-
-    int min = max;
-
     //Finds minimum distance, but also saves the ID of the node to get to it
-    for (int j = 0; j < (signed)distanceTable[targetNode].size(); j++)
-    {
-        if (distanceTable[targetNode][j] < min && distanceTable[targetNode][j] != -1)
-        {
-            min = distanceTable[targetNode][j];
-            viaID = j;
-        }
-    }
+    int min = getLeastDistance(distanceTable[targetNode]);
+    int viaID = getLeastDistID(distanceTable[targetNode]);
 
     //Output to console
     outputRoutingLine(targetNode, min, viaID);
@@ -267,6 +261,32 @@ int Node::getLeastDistance(std::vector<int> distances)
 }
 
 /*-----------------------------------------
+| Finds the column ID for the minimum distance in the vector
+|
+| Expected Input: Vector of distances
+| Expected Output: the ID for the lowest value in the vector
+|
+| Simple min calculation
+------------------------------------------*/
+int Node::getLeastDistID(std::vector<int> distances)
+{
+    int min = findMax(distances);
+    int ID = findMaxDistID(distances);
+
+    for (int i = 0; i < (signed)distances.size(); i++)
+    {
+        //Excludes -1
+        if (distances[i] < min && distances[i] != -1)
+        {
+            ID = i;
+            min = distances[i];
+        }
+    }
+
+    return ID;
+}
+
+/*-----------------------------------------
 | Finds the maximum number in a vector
 |
 | Expected Input: Vector of distances
@@ -287,6 +307,31 @@ int Node::findMax(std::vector<int> distances)
     }
 
     return max;
+}
+
+/*-----------------------------------------
+| Finds the column ID for the maximum distance in the vector
+|
+| Expected Input: Vector of distances
+| Expected Output: the ID for the highest value in the vector
+|
+| Simple max calculation
+------------------------------------------*/
+int Node::findMaxDistID(std::vector<int> distances)
+{
+    int max = distances[0];
+    int ID = 0;
+
+    for (int i = 0; i < (signed)distances.size(); i++)
+    {
+        if (distances[i] > max)
+        {
+            ID = i;
+            max = distances[i];
+        }
+    }
+
+    return ID;
 }
 
 /*-----------------------------------------
@@ -326,7 +371,16 @@ bool Node::differentTables(std::vector< std::vector<int> > comparison1, std::vec
 void Node::outputTableChange(int timeStep, int from, int to, int via, int weight)
 {
 	cout << "t=" << timeStep << " distance from " << keyList[from] << " to ";
-	cout << keyList[to] << " via " << keyList[via] << " is " << weight << endl;
+	cout << keyList[to] << " via " << keyList[via] << " is ";
+    //Prints INF if weight is -1
+    if (weight >= 0)
+    {
+        cout << weight << endl;
+    }
+    else
+    {
+        cout << "INF" << endl;
+    }
 }
 
 /*-----------------------------------------
@@ -338,7 +392,17 @@ void Node::outputTableChange(int timeStep, int from, int to, int via, int weight
 ------------------------------------------*/
 void Node::outputRoutingLine(int to, int weight, int via)
 {
-    cout << "router " << key << ": " << keyList[to] << " is " << weight << " routing through " << keyList[via] << endl;
+    cout << "router " << key << ": " << keyList[to] << " is ";
+    //Prints INF if weight is -1
+    if (weight >= 0)
+    {
+        cout << weight;
+    }
+    else
+    {
+        cout << "INF";
+    }
+    cout << " routing through " << keyList[via] << endl;
 }
 
 /*-----------------------------------------

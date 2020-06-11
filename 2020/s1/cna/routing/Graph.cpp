@@ -79,7 +79,7 @@ void Graph::modifyConnection(int edge1, int edge2, int weight)
 | This temporarily stores the distance tables of all nodes for the timestep
 | Then it iterates over all nodes and pushes their tables to their neighbours
 ------------------------------------------*/
-bool Graph::updateNodes(int timeStep)
+bool Graph::updateNodes(int timeStep, bool poisoned)
 {
 	//Gets the distance tables for the current timestep from all nodes
 	vector< vector< vector< int > > > nodeTables;
@@ -92,7 +92,7 @@ bool Graph::updateNodes(int timeStep)
 	bool updated = false;
 	for (int i = 0; i < (signed)edges.size(); i++)
 	{
-		bool thisUpdate = iterateConnectionUpdates(edges[i]->getId(), nodeTables, timeStep);
+		bool thisUpdate = iterateConnectionUpdates(edges[i]->getId(), nodeTables, timeStep, poisoned);
 		if (thisUpdate == true)
 		{
 			cout << endl;
@@ -111,7 +111,7 @@ bool Graph::updateNodes(int timeStep)
 |
 | This iterates over the neighbours and updates the current node with their tables
 ------------------------------------------*/
-bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int > > > nodeTables, int timeStep)
+bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int > > > nodeTables, int timeStep, bool poisoned)
 {
 	vector<int> neighbours = edges[targetNode]->sortConnections();
 
@@ -120,7 +120,7 @@ bool Graph::iterateConnectionUpdates(int targetNode, vector< vector< vector< int
 	//Iterates over the neighbour's sending them the distance tables
 	for (int i = 0; i < (signed)neighbours.size(); i++)
 	{
-		bool thisUpdate = edges[targetNode]->updateTable( neighbours[i], nodeTables[ neighbours[i] ], timeStep );
+		bool thisUpdate = edges[targetNode]->updateTable( neighbours[i], nodeTables[ neighbours[i] ], timeStep, poisoned );
 		if (thisUpdate == true)
 		{
 			updated = true;
@@ -152,7 +152,7 @@ void Graph::generateRoutingTable()
 | Then updates the weights of the connections which changed
 | Then updates each node's tables until they converge again
 ------------------------------------------*/
-void Graph::runDistanceVector()
+void Graph::runDistanceVector(bool poisoned)
 {
 	//Starting changes to distance tables
 	cout << "#START" << endl << endl;
@@ -165,7 +165,7 @@ void Graph::runDistanceVector()
 
 	//Run node updates until convergent
 	int timeStep = 1;
-	while ( updateNodes(timeStep) )
+	while ( updateNodes(timeStep, false) )
 	{
 		cout << endl;
 		timeStep++;
@@ -187,11 +187,12 @@ void Graph::runDistanceVector()
 
 	//Run node updates until convergent
 	timeStep = 1;
-	while ( updateNodes(timeStep) )
+	while ( updateNodes(timeStep, poisoned) )
 	{
 		cout << endl;
 		timeStep++;
 	}
+
 
 	//Post-change Routing Table
 	cout << "#FINAL" << endl << endl;
@@ -209,7 +210,16 @@ void Graph::runDistanceVector()
 void Graph::outputTableChange(int timeStep, int from, int to, int via, int weight)
 {
 	cout << "t=" << timeStep << " distance from " << edges[from]->getKey() << " to ";
-	cout << edges[to]->getKey() << " via " << edges[via]->getKey() << " is " << weight << endl;
+	cout << edges[to]->getKey() << " via " << edges[via]->getKey() << " is ";
+	//Prints INF if weight is -1
+	if (weight >= 0)
+	{
+		cout << weight << endl;
+	}
+	else
+	{
+		cout << "INF" << endl;
+	}
 }
 
 
