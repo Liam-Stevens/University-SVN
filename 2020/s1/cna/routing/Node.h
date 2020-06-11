@@ -43,7 +43,7 @@ public:
     void initializeTable(int);
 
     //Update this node table with another node's table
-    bool updateTable(int, std::vector< std::vector<int> >, int);
+    bool updateTable(int, std::vector< std::vector<int> >, int, bool);
 
     //Calculate the route to each other node
     void calcRoutingTable();
@@ -54,8 +54,14 @@ public:
     //Finds the minimum number in a vector (excluding -1)
     int getLeastDistance(std::vector<int>);
 
+    //Finds the column ID for the minimum distance in the vector
+    int getLeastDistID(std::vector<int>);
+
     //Finds the maximum number in a vector
     int findMax(std::vector<int>);
+
+    //Finds the column ID for the maximum distance in the vector
+    int findMaxDistID(std::vector<int>);
 
     //Checks if two tables are different
     bool differentTables(std::vector< std::vector<int> >, std::vector< std::vector<int> >, int);
