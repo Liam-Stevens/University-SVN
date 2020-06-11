@@ -10,8 +10,9 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	//(the only difference in the two mains is this boolean)
+	//the only difference in the two main files is this boolean
 	bool poisoned = true;
+	
 	string configLocation = argv[1], changedConfigLocation = argv[2];
 
 	//Check argument validity

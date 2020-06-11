@@ -10,6 +10,9 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+	//the only difference in the two main files is this boolean
+	bool poisoned = false;
+
 	string configLocation = argv[1], changedConfigLocation = argv[2];
 
 	//Check argument validity
@@ -40,7 +43,7 @@ int main(int argc, char **argv)
 	//Create graph of nodes
 	Graph myGraph(configData, changedConfigData);
 	//Run Distance Vector Algorithm
-	myGraph.runDistanceVector(false);
+	myGraph.runDistanceVector(poisoned);
 
 	return 0;
 }
