@@ -122,25 +122,200 @@ class Arena
 private:
 	vector<Customer *> queue1;
     vector<Customer *> queue2;
+    vector<Customer *> arrivals;
+    vector<Customer *> terminated;
+    int timer;
 
 public:
 	//Constructor
     Arena()
     {
-        //Do Nothing
+        timer = 0;
     }
 
     //TODO: Comment
-    void addToQueue(Customer * myCustomer, int priority)
+    void tick()
     {
-        //TODO: May need more complex sorting
-        if (priority <= 3)
+        timer += 5;
+    }
+
+    //TODO: Comment
+    int getTime()
+    {
+        return timer;
+    }
+
+    //Gets the sum of the value of the characters in a string
+    int nameValue(string name)
+    {
+        int sum = 0;
+        for (int i = 0; i < (signed)name.length(); i++)
         {
-            queue1.push_back(myCustomer);
+            sum = sum + (int)name[i];
+        }
+        return sum;
+    }
+
+    //TODO: Comment
+    bool activeQueues()
+    {
+        if (queue1.size() > 0 || queue2.size() > 0 || arrivals.size() > 0)
+        {
+            return true;
         }
         else
         {
-            queue2.push_back(myCustomer);
+            return false;
+        }
+    }
+
+    //TODO: Comment
+    void swapCustomers(Customer * firstCustomer, Customer * secondCustomer)
+    {
+        Customer * temp;
+        temp = firstCustomer;
+        firstCustomer = secondCustomer;
+        secondCustomer = temp;
+    }
+
+    //TODO: Comment
+    void addToQueue1(Customer * myCustomer)
+    {
+        queue1.push_back(myCustomer);
+        cout << "Queued " << myCustomer->getName() << " into queue 1" << endl;
+    }
+
+    //TODO: Comment
+    void addToQueue2(Customer * myCustomer)
+    {
+        queue2.push_back(myCustomer);
+        cout << "Queued " << myCustomer->getName() << " into queue 2" << endl;
+    }
+
+    //TODO: Comment
+    void addToArrivals(Customer * myCustomer)
+    {
+        if (arrivals.size() != 0)
+        {
+            int rangeBegin = -1;
+            int rangeEnd = -1;
+            //Search for range of same arrivals times
+            for (int i = 0; i < (signed)arrivals.size(); i++)
+            {
+                //End of the same value
+                if ( (arrivals[i]->getArrival() > myCustomer->getArrival() ) && (rangeBegin >= 0))
+                {
+                    rangeEnd = i;
+                    break;
+                }
+
+                //All the same value to the end of the vector
+                if (rangeBegin >= 0 && i == (signed)arrivals.size() - 1)
+                {
+                    rangeEnd = arrivals.size();
+                    break;
+                }
+
+                //Start of the same value
+                if (arrivals[i]->getArrival() == myCustomer->getArrival())
+                {
+                    rangeBegin = i;
+                }
+            }
+
+            //If no times the same
+            if (rangeEnd < 0)
+            {
+                for (int i = 0; i < (signed)arrivals.size(); i++)
+                {
+                    //Insert in order of arrival times
+                    if ( arrivals[i]->getArrival()  > myCustomer->getArrival() )
+    				{
+    					arrivals.insert(arrivals.begin()+i, myCustomer);
+    					break;
+    				}
+    				else if (i == (signed)arrivals.size() - 1)
+    				{
+    					arrivals.push_back( myCustomer );
+    					break;
+    				}
+                }
+            }
+            //If there is a range of times which are the same
+            else
+            {
+                for (int i = rangeBegin; i < rangeEnd; i++)
+    			{
+                    //Insert in order of name, within arrival time range
+                    if ( nameValue(arrivals[i]->getName())  > nameValue(myCustomer->getName()) )
+    				{
+    					arrivals.insert(arrivals.begin()+i, myCustomer);
+    					break;
+    				}
+    				if (i == rangeEnd - 1)
+    				{
+                        arrivals.insert(arrivals.begin()+i+1, myCustomer);
+    					break;
+    				}
+    			}
+            }
+        }
+        else
+        {
+            arrivals.push_back(myCustomer);
+        }
+    }
+
+    //TODO: Comment
+    void enqueueArrivals(int currentTime)
+    {
+        int rangeBegin = -1;
+        int rangeEnd = -1;
+
+        //Queue for the current time
+        for (int i = 0; i < (signed)arrivals.size(); i++)
+        {
+            if ( arrivals[i]->getArrival() == currentTime )
+            {
+                //Record section to delete
+                if (rangeBegin < 0)
+                {
+                    rangeBegin = i;
+                }
+
+                //Put into the appropriate queue
+                if (arrivals[i]->getPriority() <= 3)
+                {
+                    addToQueue1(arrivals[i]);
+                }
+                else
+                {
+                    addToQueue2(arrivals[i]);
+                }
+            }
+
+            //End of section to delete
+            if (arrivals[i]->getArrival() > currentTime )
+            {
+                if (rangeBegin >= 0)
+                {
+                    rangeEnd = i;
+                }
+                break;
+            }
+        }
+
+        //Delete until end of vector if all the same value to the end
+        if (rangeBegin >= 0 && rangeEnd < 0)
+        {
+            rangeEnd = arrivals.size();
+        }
+
+        //cout << "Time: " << currentTime << " | rangeBegin: " << rangeBegin << " | rangeEnd: " << rangeEnd << endl;
+        //Erase vector within the range
+        if (rangeBegin >= 0)
+        {
+            arrivals.erase(arrivals.begin()+rangeBegin, arrivals.begin()+rangeEnd);
         }
     }
 
@@ -161,19 +336,34 @@ public:
             cout << queue2[i]->getPriority() << " | Age: " << queue2[i]->getAge() << " | Tickets: ";
             cout << queue2[i]->getTickets() << endl;
         }
+        cout << "Arrivals: " << endl;
+        for (int i = 0; i < (signed)arrivals.size(); i++)
+        {
+            cout << "Name: " << arrivals[i]->getName() << " | Arrival: " << arrivals[i]->getArrival() << " | Priority: ";
+            cout << arrivals[i]->getPriority() << " | Age: " << arrivals[i]->getAge() << " | Tickets: ";
+            cout << arrivals[i]->getTickets() << endl;
+        }
+        cout << "Terminated: " << endl;
+        for (int i = 0; i < (signed)terminated.size(); i++)
+        {
+            cout << "Name: " << terminated[i]->getName() << " | Arrival: " << terminated[i]->getArrival() << " | Priority: ";
+            cout << terminated[i]->getPriority() << " | Age: " << terminated[i]->getAge() << " | Tickets: ";
+            cout << terminated[i]->getTickets() << endl;
+        }
     }
 
     //Destructor
     ~Arena()
     {
-        for (int i = 0; i < (signed)queue1.size(); i++)
+        //TODO: Need better way of deleting
+        /*for (int i = 0; i < (signed)queue1.size(); i++)
         {
             delete queue1[i];
         }
         for (int i = 0; i < (signed)queue2.size(); i++)
         {
             delete queue2[i];
-        }
+        }*/
     }
 };
 
@@ -212,7 +402,7 @@ bool initialise(vector<string> fileLines, Arena * myArena)
 
         Customer * temp;
         temp = new Customer(custName, custArrive, custPriority, custAge, custTickets);
-        myArena->addToQueue(temp, custPriority);
+        myArena->addToArrivals(temp);
     }
 
     return 0;
@@ -221,6 +411,19 @@ bool initialise(vector<string> fileLines, Arena * myArena)
 //TODO: Comment
 bool process(Arena * myArena)
 {
+    //While a queue has a customer
+    while(myArena->activeQueues())
+    {
+        myArena->enqueueArrivals( myArena->getTime() );
+
+        myArena->tick();
+        //TODO: Remove this
+        if (myArena->getTime() > 200)
+        {
+            break;
+        }
+    }
+
     return 0;
 }
 
@@ -255,6 +458,9 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    //TODO: Remove this
+    melbourne.outputQueues();
+
     if ( process(&melbourne) )
     {
         cout << "FAILED AT PROCESSING" << endl;
@@ -266,6 +472,9 @@ int main(int argc, char **argv)
         cout << "FAILED AT OUTPUT" << endl;
         return 1;
     }
+
+    //TODO: Remove this
+    melbourne.outputQueues();
 
     return 0;
 }
