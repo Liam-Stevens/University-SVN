@@ -340,6 +340,29 @@ public:
     }
 
     //TODO: Comment
+    void promote(Customer * myCustomer)
+    {
+
+    }
+
+    //TODO: Comment
+    void demote(Customer * myCustomer)
+    {
+        int iterator;
+        for (int i = 0; i < (signed)queue1.size(); i++)
+        {
+            if (queue1[i] == myCustomer)
+            {
+                iterator = i;
+                break;
+            }
+        }
+
+        addToQueue2(myCustomer);
+        queue1.erase(queue1.begin() + iterator);
+    }
+
+    //TODO: Comment
     void terminateCustomer(Customer * myCustomer)
     {
         vector<Customer *> * targetVector;
@@ -365,7 +388,7 @@ public:
         }
 
         terminated.push_back(myCustomer);
-        targetVector->erase(targetVector->begin()+iterator);
+        targetVector->erase(targetVector->begin() + iterator);
     }
 
     //TODO: Comment
@@ -444,7 +467,7 @@ public:
             //Demoted to queue2
             else
             {
-                //TODO: Demotion
+                demote(targetCustomer);
             }
         }
 
