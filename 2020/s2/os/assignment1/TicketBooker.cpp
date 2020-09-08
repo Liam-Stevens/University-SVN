@@ -21,6 +21,8 @@ TODO: ID, arrival and termination times, ready time and durations of running and
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <math.h>
+#include <cmath>
 
 using namespace std;
 
@@ -37,6 +39,12 @@ private:
     int priority;
     int age;
     int tickets;
+    //Output storage
+    int endTime;
+    int readyTime;
+    int runningTime;
+    int waitingTime;
+
 
 public:
 	//Constructors
@@ -47,6 +55,10 @@ public:
         priority = 1;
         age = 0;
         tickets = 1;
+        endTime = -1;
+        readyTime = -1;
+        runningTime = 0;
+        waitingTime = 0;
     }
 
     Customer(string newName, int newArrival, int newPriority, int newAge, int newTickets)
@@ -56,6 +68,10 @@ public:
         priority = newPriority;
         age = newAge;
         tickets = newTickets;
+        endTime = -1;
+        readyTime = -1;
+        runningTime = 0;
+        waitingTime = 0;
     }
 
     //Setters
@@ -84,6 +100,28 @@ public:
         tickets = newTickets;
     }
 
+    void setEndTime(int newEndTime)
+    {
+        endTime = newEndTime;
+    }
+
+    void setReadyTime(int newReadyTime)
+    {
+        readyTime = newReadyTime;
+    }
+
+    void tickRun()
+    {
+        runningTime += 5;
+    }
+
+    void tickWait()
+    {
+        waitingTime += 5;
+    }
+
+
+
     //Getters
     string getName()
     {
@@ -108,6 +146,26 @@ public:
     int getTickets()
     {
         return tickets;
+    }
+
+    int getEndTime()
+    {
+        return endTime;
+    }
+
+    int getReadyTime()
+    {
+        return readyTime;
+    }
+
+    int getRunningTime()
+    {
+        return runningTime;
+    }
+
+    int getWaitingTime()
+    {
+        return waitingTime;
     }
 
 };
@@ -139,6 +197,27 @@ public:
         timer += 5;
     }
 
+    void tickAll()
+    {
+        tick();
+
+        for (int i = 0; i < (signed)queue1.size(); i++)
+        {
+            if (queue1[i]->getReadyTime() > 0)
+            {
+                queue1[i]->tickWait();
+            }
+        }
+
+        for (int i = 0; i < (signed)queue2.size(); i++)
+        {
+            if (queue2[i]->getReadyTime() > 0)
+            {
+                queue2[i]->tickWait();
+            }
+        }
+    }
+
     //TODO: Comment
     int getTime()
     {
@@ -157,16 +236,30 @@ public:
     }
 
     //TODO: Comment
-    bool activeQueues()
+    bool activeQueue(int queueNum)
     {
-        if (queue1.size() > 0 || queue2.size() > 0 || arrivals.size() > 0)
+        if (queueNum == 0)
         {
-            return true;
+            if (queue1.size() > 0 || queue2.size() > 0 || arrivals.size() > 0)
+            {
+                return true;
+            }
         }
-        else
+        else if (queueNum == 1)
         {
-            return false;
+            if (queue1.size() > 0)
+            {
+                return true;
+            }
         }
+        else if (queueNum == 2)
+        {
+            if (queue2.size() > 0)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     //TODO: Comment
@@ -179,22 +272,301 @@ public:
     }
 
     //TODO: Comment
+    void terminateCustomer(vector<Customer *> * targetVector, int iterator)
+    {
+        terminated.push_back(targetVector->at(iterator));
+        targetVector->erase(targetVector->begin()+iterator);
+    }
+
+    //TODO: Comment
+    void incrementWaitTime(Customer * myCustomer)
+    {
+        for (int i = 0; i < (signed)queue1.size(); i++)
+        {
+            if (queue1[i]->getReadyTime() > 0 && queue1[i] != myCustomer)
+            {
+                queue1[i]->tickWait();
+            }
+        }
+
+        for (int i = 0; i < (signed)queue2.size(); i++)
+        {
+            if (queue2[i]->getReadyTime() > 0 && queue2[i] != myCustomer)
+            {
+                queue2[i]->tickWait();
+            }
+        }
+    }
+
+    //TODO: Comment
+    void processTicket(int queueNum)
+    {
+        vector<Customer *> * targetVector;
+        int iterator = 0;
+        if (queueNum == 1)
+        {
+            targetVector = &queue1;
+        }
+        else if (queueNum == 2)
+        {
+            targetVector = &queue2;
+        }
+        else
+        {
+            cout << "Error in processing ticket for queue " << queueNum << endl;
+            return;
+        }
+
+        Customer * targetCustomer = targetVector->at(iterator);
+
+        if (targetCustomer->getReadyTime() < 0)
+        {
+            targetCustomer->setReadyTime(timer);
+        }
+
+        targetCustomer->setTickets(targetCustomer->getTickets() - 1);
+        tick();
+        targetCustomer->tickRun();
+        incrementWaitTime(targetCustomer);
+        //TODO: Increment ages and do promotion
+
+
+        //TODO: Move if queue1 and time expired
+
+
+        if (targetCustomer->getTickets() <= 0)
+        {
+            targetCustomer->setEndTime(timer);
+            terminateCustomer(targetVector, iterator);
+        }
+
+    }
+
+    /*
+
+        TODO: Comment
+
+    */
     void addToQueue1(Customer * myCustomer)
     {
-        queue1.push_back(myCustomer);
-        cout << "Queued " << myCustomer->getName() << " into queue 1" << endl;
+        //cout << "Queued " << myCustomer->getName() << " into queue 1" << endl;
+
+        //If the vector contains customers
+        if (queue1.size() != 0)
+        {
+            int rangeBegin = -1;
+            int rangeEnd = -1;
+            //Search for range of same priorities
+            for (int i = 0; i < (signed)queue1.size(); i++)
+            {
+                //End of the same value
+                if ( (queue1[i]->getPriority() > myCustomer->getPriority() ) && (rangeBegin >= 0))
+                {
+                    rangeEnd = i;
+                    break;
+                }
+
+                //All the same value to the end of the vector
+                if (rangeBegin >= 0 && i == (signed)queue1.size() - 1)
+                {
+                    rangeEnd = (signed)queue1.size();
+                    break;
+                }
+
+                //Start of the same value
+                if (queue1[i]->getPriority() == myCustomer->getPriority())
+                {
+                    rangeBegin = i;
+                }
+            }
+
+            //If no priority the same
+            if (rangeEnd < 0)
+            {
+                for (int i = 0; i < (signed)queue1.size(); i++)
+                {
+                    //Insert in order of priority
+                    if ( queue1[i]->getPriority()  > myCustomer->getPriority() )
+                    {
+                        queue1.insert(queue1.begin()+i, myCustomer);
+                        break;
+                    }
+                    else if (i == (signed)queue1.size() - 1)
+                    {
+                        queue1.insert(queue1.begin()+i+1, myCustomer);
+                        break;
+                    }
+                }
+            }
+            //If there is a range of priorities which are the same
+            else
+            {
+
+                for (int i = rangeBegin; i < rangeEnd; i++)
+                {
+                    //Insert in order of arrival time, within the range
+                    if ( queue1[i]->getArrival() > myCustomer->getArrival() )
+                    {
+                        queue1.insert(queue1.begin()+i, myCustomer);
+                        break;
+                    }
+                    if (i == rangeEnd - 1)
+                    {
+                        queue1.insert(queue1.begin()+i+1, myCustomer);
+                        break;
+                    }
+                }
+            }
+        }
+        //If the vector is empty
+        else
+        {
+            queue1.push_back(myCustomer);
+        }
+
     }
 
-    //TODO: Comment
+    /*
+
+        TODO: Comment
+
+    */
     void addToQueue2(Customer * myCustomer)
     {
-        queue2.push_back(myCustomer);
-        cout << "Queued " << myCustomer->getName() << " into queue 2" << endl;
+        //cout << "Queued " << myCustomer->getName() << " into queue 2" << endl;
+
+        //If the vector contains customers
+        if (queue2.size() != 0)
+        {
+            int rangeBegin1 = -1;
+            int rangeEnd1 = -1;
+            //Search for range of same tickets
+            for (int i = 0; i < (signed)queue2.size(); i++)
+            {
+                //End of the same value
+                if ( (queue2[i]->getTickets() > myCustomer->getTickets() ) && (rangeBegin1 >= 0))
+                {
+                    rangeEnd1 = i;
+                    break;
+                }
+
+                //All the same value to the end of the vector
+                if (rangeBegin1 >= 0 && i == (signed)queue2.size() - 1)
+                {
+                    rangeEnd1 = queue2.size();
+                    break;
+                }
+
+                //Start of the same value
+                if (queue2[i]->getTickets() == myCustomer->getTickets())
+                {
+                    rangeBegin1 = i;
+                }
+            }
+
+            //If no tickets the same
+            if (rangeEnd1 < 0)
+            {
+                for (int i = 0; i < (signed)queue2.size(); i++)
+                {
+                    //Insert in order of tickets remaining
+                    if ( queue2[i]->getTickets() > myCustomer->getTickets() )
+    				{
+    					queue2.insert(queue2.begin()+i, myCustomer);
+    					break;
+    				}
+    				else if (i == (signed)queue2.size() - 1)
+    				{
+    					queue2.push_back( myCustomer );
+    					break;
+    				}
+                }
+            }
+            //If there is a range of tickets which are the same
+            else
+            {
+                //cout << "Same Tickets Detected " << rangeBegin1 << " | " << rangeEnd1 << endl;
+                int rangeBegin2 = -1;
+                int rangeEnd2 = -1;
+                //Search for range of same priorities
+                for (int i = rangeBegin1; i < rangeEnd1; i++)
+                {
+                    //End of the same value
+                    if ( (queue2[i]->getPriority() > myCustomer->getPriority() ) && (rangeBegin2 >= 0))
+                    {
+                        rangeEnd2 = i;
+                        break;
+                    }
+
+                    //All the same value to the end of the vector
+                    if (rangeBegin2 >= 0 && i == (signed)queue2.size() - 1)
+                    {
+                        rangeEnd2 = queue2.size();
+                        break;
+                    }
+
+                    //Start of the same value
+                    if (queue2[i]->getPriority() == myCustomer->getPriority())
+                    {
+                        rangeBegin2 = i;
+                    }
+                }
+
+                //If no priority the same
+                if (rangeEnd2 < 0)
+                {
+                    for (int i = rangeBegin1; i < rangeEnd1; i++)
+                    {
+                        //Insert in order of priority
+                        if ( queue2[i]->getPriority()  > myCustomer->getPriority() )
+        				{
+        					queue2.insert(queue2.begin()+i, myCustomer);
+        					break;
+        				}
+        				else if (i == rangeEnd1 - 1)
+        				{
+        					queue2.insert(queue2.begin()+i+1, myCustomer);
+        					break;
+        				}
+                    }
+                }
+                //If there is a range of priorities which are the same
+                else
+                {
+
+                    for (int i = rangeBegin2; i < rangeEnd2; i++)
+        			{
+                        //Insert in order of arrival time, within the range
+                        if ( queue2[i]->getArrival() > myCustomer->getArrival() )
+        				{
+        					queue2.insert(queue2.begin()+i, myCustomer);
+        					break;
+        				}
+        				if (i == rangeEnd2 - 1)
+        				{
+                            queue2.insert(queue2.begin()+i+1, myCustomer);
+        					break;
+        				}
+        			}
+                }
+            }
+        }
+        //If the vector is empty
+        else
+        {
+            queue2.push_back(myCustomer);
+        }
+
     }
 
-    //TODO: Comment
+    /*
+
+        TODO: Comment
+
+    */
     void addToArrivals(Customer * myCustomer)
     {
+        //If the vector contains customers
         if (arrivals.size() != 0)
         {
             int rangeBegin = -1;
@@ -260,13 +632,18 @@ public:
     			}
             }
         }
+        //If the vector is empty
         else
         {
             arrivals.push_back(myCustomer);
         }
     }
 
-    //TODO: Comment
+    /*
+
+        TODO: Comment
+
+    */
     void enqueueArrivals(int currentTime)
     {
         int rangeBegin = -1;
@@ -316,6 +693,48 @@ public:
         if (rangeBegin >= 0)
         {
             arrivals.erase(arrivals.begin()+rangeBegin, arrivals.begin()+rangeEnd);
+        }
+    }
+
+    void padSpaces(int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            cout << ' ';
+        }
+    }
+
+    int countDigitChars(int num)
+    {
+        if (num == 0)
+        {
+            return 1;
+        }
+        else if (num < 0)
+        {
+            return log10( abs(num) ) + 2;
+        }
+        else
+        {
+            return log10(num) + 1;
+        }
+    }
+
+    void outputTerminated()
+    {
+        for (int i = 0; i < (signed)terminated.size(); i++)
+        {
+            cout << terminated[i]->getName();
+            padSpaces(10-countDigitChars(terminated[i]->getArrival()));
+            cout << terminated[i]->getArrival();
+            padSpaces(10-countDigitChars(terminated[i]->getEndTime()));
+            cout << terminated[i]->getEndTime();
+            padSpaces(10-countDigitChars(terminated[i]->getReadyTime()));
+            cout << terminated[i]->getReadyTime();
+            padSpaces(10-countDigitChars(terminated[i]->getRunningTime()));
+            cout << terminated[i]->getRunningTime();
+            padSpaces(10-countDigitChars(terminated[i]->getWaitingTime()));
+            cout << terminated[i]->getWaitingTime() << endl;
         }
     }
 
@@ -412,16 +831,25 @@ bool initialise(vector<string> fileLines, Arena * myArena)
 bool process(Arena * myArena)
 {
     //While a queue has a customer
-    while(myArena->activeQueues())
+    while(myArena->activeQueue(0))
     {
         myArena->enqueueArrivals( myArena->getTime() );
 
-        myArena->tick();
-        //TODO: Remove this
-        if (myArena->getTime() > 200)
+        if (myArena->activeQueue(1))
         {
-            break;
+            myArena->processTicket(1);
         }
+        else if (myArena->activeQueue(2))
+        {
+            myArena->processTicket(2);
+        }
+        else
+        {
+            myArena->tickAll();
+        }
+
+
+
     }
 
     return 0;
@@ -430,12 +858,8 @@ bool process(Arena * myArena)
 //TODO: Comment
 bool output(Arena myArena)
 {
-    /*cout << "name   arrival   end   ready   running   waiting" << endl;
-    for(int i=0; i < 10; i++) // every result
-    {
-
-    }
-    cout << endl;*/
+    cout << "name   arrival   end   ready   running   waiting" << endl;
+    myArena.outputTerminated();
     return 0;
 }
 
@@ -459,7 +883,7 @@ int main(int argc, char **argv)
     }
 
     //TODO: Remove this
-    melbourne.outputQueues();
+    //melbourne.outputQueues();
 
     if ( process(&melbourne) )
     {
@@ -472,7 +896,7 @@ int main(int argc, char **argv)
         cout << "FAILED AT OUTPUT" << endl;
         return 1;
     }
-
+    cout << endl << endl;
     //TODO: Remove this
     melbourne.outputQueues();
 
