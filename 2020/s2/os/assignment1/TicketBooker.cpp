@@ -45,6 +45,8 @@ private:
     int runningTime;
     int waitingTime;
 
+    int queue1Runs;
+    int quantumTime;
 
 public:
 	//Constructors
@@ -59,6 +61,8 @@ public:
         readyTime = -1;
         runningTime = 0;
         waitingTime = 0;
+        queue1Runs = 0;
+        quantumTime = 0;
     }
 
     Customer(string newName, int newArrival, int newPriority, int newAge, int newTickets)
@@ -72,6 +76,8 @@ public:
         readyTime = -1;
         runningTime = 0;
         waitingTime = 0;
+        queue1Runs = 0;
+        quantumTime = 0;
     }
 
     //Setters
@@ -118,6 +124,16 @@ public:
     void tickWait()
     {
         waitingTime += 5;
+    }
+
+    void incQueue1Runs()
+    {
+        queue1Runs++;
+    }
+
+    void setQuantumTime(int newQuantumTime)
+    {
+        quantumTime = newQuantumTime;
     }
 
 
@@ -168,6 +184,16 @@ public:
         return waitingTime;
     }
 
+    int getQueue1Runs()
+    {
+        return queue1Runs;
+    }
+
+    int getQuantumTime()
+    {
+        return quantumTime;
+    }
+
 };
 
 /*
@@ -201,9 +227,11 @@ public:
     {
         tick();
 
+        //TODO: Increment ages and do promotion
+
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
-            if (queue1[i]->getReadyTime() > 0)
+            if (queue1[i]->getReadyTime() >= 0)
             {
                 queue1[i]->tickWait();
             }
@@ -211,7 +239,7 @@ public:
 
         for (int i = 0; i < (signed)queue2.size(); i++)
         {
-            if (queue2[i]->getReadyTime() > 0)
+            if (queue2[i]->getReadyTime() >= 0)
             {
                 queue2[i]->tickWait();
             }
@@ -272,18 +300,82 @@ public:
     }
 
     //TODO: Comment
-    void terminateCustomer(vector<Customer *> * targetVector, int iterator)
+    void backQueue1(Customer * myCustomer)
     {
-        terminated.push_back(targetVector->at(iterator));
+        int iterator;
+        for (int i = 0; i < (signed)queue1.size(); i++)
+        {
+            if (queue1[i] == myCustomer)
+            {
+                iterator = i;
+                break;
+            }
+        }
+
+        queue1.erase(queue1.begin()+iterator);
+
+        //Move to the back of the priority sub queue
+        if (queue1.size() != 0)
+        {
+            for (int i = 0; i < (signed)queue1.size(); i++)
+            {
+                //Insert in order of arrival time, within the range
+                if ( queue1[i]->getPriority() > myCustomer->getPriority() )
+                {
+                    queue1.insert(queue1.begin()+i, myCustomer);
+                    break;
+                }
+                if (i == (signed)queue1.size() - 1)
+                {
+                    queue1.insert(queue1.begin()+i+1, myCustomer);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            queue1.push_back(myCustomer);
+        }
+
+    }
+
+    //TODO: Comment
+    void terminateCustomer(Customer * myCustomer)
+    {
+        vector<Customer *> * targetVector;
+        int iterator;
+        for (int i = 0; i < (signed)queue1.size(); i++)
+        {
+            if (queue1[i] == myCustomer)
+            {
+                targetVector = &queue1;
+                iterator = i;
+                break;
+            }
+        }
+
+        for (int i = 0; i < (signed)queue2.size(); i++)
+        {
+            if (queue2[i] == myCustomer)
+            {
+                targetVector = &queue2;
+                iterator = i;
+                break;
+            }
+        }
+
+        terminated.push_back(myCustomer);
         targetVector->erase(targetVector->begin()+iterator);
     }
 
     //TODO: Comment
     void incrementWaitTime(Customer * myCustomer)
     {
+        //TODO: Increment ages and do promotion
+
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
-            if (queue1[i]->getReadyTime() > 0 && queue1[i] != myCustomer)
+            if (queue1[i]->getReadyTime() >= 0 && queue1[i] != myCustomer)
             {
                 queue1[i]->tickWait();
             }
@@ -291,7 +383,7 @@ public:
 
         for (int i = 0; i < (signed)queue2.size(); i++)
         {
-            if (queue2[i]->getReadyTime() > 0 && queue2[i] != myCustomer)
+            if (queue2[i]->getReadyTime() >= 0 && queue2[i] != myCustomer)
             {
                 queue2[i]->tickWait();
             }
@@ -324,20 +416,47 @@ public:
             targetCustomer->setReadyTime(timer);
         }
 
+        //Current run time increased
+        targetCustomer->setQuantumTime(targetCustomer->getQuantumTime() + 5);
         targetCustomer->setTickets(targetCustomer->getTickets() - 1);
         tick();
         targetCustomer->tickRun();
-        incrementWaitTime(targetCustomer);
-        //TODO: Increment ages and do promotion
 
+        int timeQuantum = (10 - targetCustomer->getPriority())*10;
+        cout << "Name: " << targetCustomer->getName() << " | time: " << timer << " | timeQuantum: " << timeQuantum << " | currentRuntime: "<< targetCustomer->getQuantumTime() << endl;
+        if (targetCustomer->getQuantumTime() == timeQuantum)
+        {
+            targetCustomer->incQueue1Runs();
+            targetCustomer->setQuantumTime(0);
 
-        //TODO: Move if queue1 and time expired
+            if (targetCustomer->getQueue1Runs() % 2 == 0 && targetCustomer->getQueue1Runs() > 0)
+            {
+                targetCustomer->setPriority(targetCustomer->getPriority() + 1);
+                cout << "New Priority: " <<  targetCustomer->getPriority() << endl;
+            }
+            cout << "Priority: " <<  targetCustomer->getPriority() << endl;
+            //Move to the back of the priority sub queue
+            if (targetCustomer->getPriority() <= 3)
+            {
+                backQueue1(targetCustomer);
+                cout << "Moved " << targetCustomer->getName() << endl;
+            }
+            //Demoted to queue2
+            else
+            {
+                //TODO: Demotion
+            }
+        }
 
+        //Increase the waiting period for every other customer
+        incrementWaitTime(targetCustomer); //TODO: Concerned that promotion will fuck the order
 
+        //Finished processing this customer
         if (targetCustomer->getTickets() <= 0)
         {
             targetCustomer->setEndTime(timer);
-            terminateCustomer(targetVector, iterator);
+            terminateCustomer(targetCustomer);
+            return;
         }
 
     }
@@ -846,6 +965,7 @@ bool process(Arena * myArena)
         else
         {
             myArena->tickAll();
+            cout << "TICK ALL" << endl;
         }
 
 
