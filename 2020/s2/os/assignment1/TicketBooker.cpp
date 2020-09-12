@@ -52,7 +52,7 @@ public:
 	//Constructors
     Customer()
     {
-        name = "TEST";
+        name = "UNDEFINED";
         arrival = 0;
         priority = 1;
         age = 0;
@@ -372,6 +372,7 @@ public:
 
         addToQueue1(myCustomer);
 		backQueue1(myCustomer);
+		myCustomer->setQuantumTime(0);
         queue2.erase(queue2.begin() + iterator);
 
 		//TEST OUTPUT
@@ -491,8 +492,8 @@ public:
         }
 
         //Current run time increased
+		targetCustomer->setTickets(targetCustomer->getTickets() - 1);
         targetCustomer->setQuantumTime(targetCustomer->getQuantumTime() + 5);
-        targetCustomer->setTickets(targetCustomer->getTickets() - 1);
         tick();
         targetCustomer->tickRun();
         enqueueArrivals( timer );
@@ -502,7 +503,7 @@ public:
         {
             int timeQuantum = (10 - targetCustomer->getPriority())*10;
             //cout << "Name: " << targetCustomer->getName() << " | time: " << timer << " | timeQuantum: " << timeQuantum << " | currentRuntime: "<< targetCustomer->getQuantumTime() << endl;
-            if (targetCustomer->getQuantumTime() == timeQuantum)
+            if (targetCustomer->getQuantumTime() >= timeQuantum)
             {
                 targetCustomer->setAge( targetCustomer->getAge() + 1 );
                 targetCustomer->setQuantumTime(0);
@@ -944,7 +945,7 @@ public:
         }
     }
 
-    //Test output
+    //Output all queues
     void outputQueues()
     {
         cout << "Queue1: " << endl;
