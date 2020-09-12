@@ -229,7 +229,7 @@ public:
 
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
-			queue1[i]->setLastRun(queue1[i]->getLastRun() + 5); //TODO: Check if needed
+			//queue1[i]->setLastRun(queue1[i]->getLastRun() + 5); //TODO: Check if needed
             if (queue1[i]->getReadyTime() >= 0 && queue1[i]->getArrival() != timer-5)
             {
                 queue1[i]->tickWait();
@@ -373,8 +373,8 @@ public:
         addToQueue1(myCustomer);
         queue2.erase(queue2.begin() + iterator);
 
-        cout << "Promoted " << myCustomer->getName() << " at time " << timer << endl;
-        outputQueues();
+        //cout << "Promoted " << myCustomer->getName() << " at time " << timer << endl;
+        //outputQueues();
     }
 
     //TODO: Comment
@@ -393,8 +393,8 @@ public:
         addToQueue2(myCustomer);
         queue1.erase(queue1.begin() + iterator);
 
-        cout << "Demoted " << myCustomer->getName() << " at time " << timer << endl;
-        outputQueues();
+        //cout << "Demoted " << myCustomer->getName() << " at time " << timer << endl;
+        //outputQueues();
     }
 
     //TODO: Comment
@@ -434,7 +434,7 @@ public:
         {
 			if (queue1[i] != myCustomer)
 			{
-				queue1[i]->setLastRun(queue1[i]->getLastRun() + 5);
+				//queue1[i]->setLastRun(queue1[i]->getLastRun() + 5);
 			}
 
             if (queue1[i]->getReadyTime() >= 0 && queue1[i] != myCustomer && queue1[i]->getArrival() != timer-5)
@@ -501,9 +501,10 @@ public:
                 targetCustomer->setAge( targetCustomer->getAge() + 1 );
                 targetCustomer->setQuantumTime(0);
 
-                if (targetCustomer->getAge() % 2 == 0 && targetCustomer->getAge() > 0)
+                if (targetCustomer->getAge() >= 2)
                 {
                     targetCustomer->setPriority(targetCustomer->getPriority() + 1);
+					targetCustomer->setAge(0);
                     //cout << "New Priority: " <<  targetCustomer->getPriority() << endl;
                 }
                 //cout << "Priority: " <<  targetCustomer->getPriority() << endl;
@@ -533,8 +534,8 @@ public:
         {
             targetCustomer->setEndTime(timer);
             terminateCustomer(targetCustomer);
-			cout << endl << "Time: " << timer << endl;
-			outputQueues();
+			//cout << endl << "Time: " << timer << endl;
+			//outputQueues();
             return;
         }
 
@@ -944,7 +945,7 @@ public:
         {
             cout << "Name: " << queue1[i]->getName() << " | Arrival: " << queue1[i]->getArrival()  << " | Tickets: ";
             cout << queue1[i]->getTickets() << " | Running " << queue1[i]->getRunningTime() << " | Priority: " << queue1[i]->getPriority();
-            cout << " | LastRun: " << queue1[i]->getLastRun() << " | Waiting: " << queue1[i]->getWaitingTime() << endl;
+            cout << " | Runs: " << queue1[i]->getAge() << " | Waiting: " << queue1[i]->getWaitingTime() << endl;
         }
         cout << "Queue2: " << endl;
         for (int i = 0; i < (signed)queue2.size(); i++)
@@ -1030,8 +1031,8 @@ bool initialise(vector<string> fileLines, Arena * myArena)
 bool process(Arena * myArena)
 {
     myArena->enqueueArrivals( myArena->getTime() );
-	cout << "TIME 0" << endl;
-	myArena->outputQueues();
+	//cout << "TIME 0" << endl;
+	//myArena->outputQueues();
     //While a queue has a customer
     while(myArena->activeQueue(0))
     {
@@ -1049,7 +1050,7 @@ bool process(Arena * myArena)
         {
             myArena->tickAll();
             myArena->enqueueArrivals( myArena->getTime() );
-            cout << "TICK ALL" << endl;
+            //cout << "TICK ALL" << endl;
         }
 
 
