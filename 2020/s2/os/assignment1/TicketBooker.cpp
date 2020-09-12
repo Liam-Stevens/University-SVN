@@ -236,18 +236,20 @@ public:
             }
         }
 
-        for (int i = 0; i < (signed)queue2.size(); i++)
+		vector<Customer *> moveQueue = queue2;
+
+        for (int i = 0; i < (signed)moveQueue.size(); i++)
         {
-			if (queue2[i]->getReadyTime() >= 0 && queue2[i]->getArrival() != timer-5)
+            if (moveQueue[i]->getReadyTime() >= 0 && moveQueue[i]->getArrival() != timer-5)
             {
-                queue2[i]->tickWait();
+                moveQueue[i]->tickWait();
 
             }
-			if (queue2[i]->getArrival() != timer-5)
+			if (moveQueue[i]->getArrival() != timer-5)
 			{
-				queue2[i]->setLastRun(queue2[i]->getLastRun() + 5);
+				moveQueue[i]->setLastRun(moveQueue[i]->getLastRun() + 5);
 			}
-			checkAge(queue2[i]);
+			checkAge(moveQueue[i]);
         }
     }
 
@@ -450,18 +452,20 @@ public:
             }
         }
 
-        for (int i = 0; i < (signed)queue2.size(); i++)
+		vector<Customer *> moveQueue = queue2;
+
+        for (int i = 0; i < (signed)moveQueue.size(); i++)
         {
-            if (queue2[i]->getReadyTime() >= 0 && queue2[i] != myCustomer && queue2[i]->getArrival() != timer-5)
+            if (moveQueue[i]->getReadyTime() >= 0 && moveQueue[i] != myCustomer && moveQueue[i]->getArrival() != timer-5)
             {
-                queue2[i]->tickWait();
+                moveQueue[i]->tickWait();
 
             }
-			if (queue2[i] != myCustomer && queue2[i]->getArrival() != timer-5)
+			if (moveQueue[i] != myCustomer && moveQueue[i]->getArrival() != timer-5)
 			{
-				queue2[i]->setLastRun(queue2[i]->getLastRun() + 5);
+				moveQueue[i]->setLastRun(moveQueue[i]->getLastRun() + 5);
 			}
-			checkAge(queue2[i]);
+			checkAge(moveQueue[i]);
         }
     }
 
@@ -533,7 +537,7 @@ public:
 
 
         //Increase the waiting period for every other customer
-        incrementWaitTime(targetCustomer); //TODO: Concerned that promotion will fuck the order
+        incrementWaitTime(targetCustomer);
 		targetCustomer->setLastRun(0);
 
         //Finished processing this customer
