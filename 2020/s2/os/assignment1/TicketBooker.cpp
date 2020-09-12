@@ -373,8 +373,8 @@ public:
         addToQueue1(myCustomer);
         queue2.erase(queue2.begin() + iterator);
 
-        //cout << "Promoted " << myCustomer->getName() << " at time " << timer << endl;
-        //outputQueues();
+        cout << "Promoted " << myCustomer->getName() << " at time " << timer << endl;
+        outputQueues();
     }
 
     //TODO: Comment
@@ -393,8 +393,8 @@ public:
         addToQueue2(myCustomer);
         queue1.erase(queue1.begin() + iterator);
 
-        //cout << "Demoted " << myCustomer->getName() << " at time " << timer << endl;
-        //outputQueues();
+        cout << "Demoted " << myCustomer->getName() << " at time " << timer << endl;
+        outputQueues();
     }
 
     //TODO: Comment
@@ -533,8 +533,8 @@ public:
         {
             targetCustomer->setEndTime(timer);
             terminateCustomer(targetCustomer);
-			//cout << endl << "Time: " << timer << endl;
-			//outputQueues();
+			cout << endl << "Time: " << timer << endl;
+			outputQueues();
             return;
         }
 
@@ -1030,8 +1030,8 @@ bool initialise(vector<string> fileLines, Arena * myArena)
 bool process(Arena * myArena)
 {
     myArena->enqueueArrivals( myArena->getTime() );
-	//cout << "TIME 0" << endl;
-	//myArena->outputQueues();
+	cout << "TIME 0" << endl;
+	myArena->outputQueues();
     //While a queue has a customer
     while(myArena->activeQueue(0))
     {
@@ -1049,7 +1049,7 @@ bool process(Arena * myArena)
         {
             myArena->tickAll();
             myArena->enqueueArrivals( myArena->getTime() );
-            //cout << "TICK ALL" << endl;
+            cout << "TICK ALL" << endl;
         }
 
 
