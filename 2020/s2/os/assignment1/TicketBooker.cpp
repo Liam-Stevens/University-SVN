@@ -396,7 +396,7 @@ public:
         queue1.erase(queue1.begin() + iterator);
 
 		myCustomer->setLastRun(myCustomer->getLastRun() + 5);
-		myCustomer->tickWait();
+		//myCustomer->tickWait();
 
 		//TEST OUTPUT
         //cout << "Demoted " << myCustomer->getName() << " at time " << timer << endl;
