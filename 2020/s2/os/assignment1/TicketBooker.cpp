@@ -371,8 +371,10 @@ public:
         }
 
         addToQueue1(myCustomer);
+		backQueue1(myCustomer);
         queue2.erase(queue2.begin() + iterator);
 
+		//TEST OUTPUT
         //cout << "Promoted " << myCustomer->getName() << " at time " << timer << endl;
         //outputQueues();
     }
@@ -393,6 +395,10 @@ public:
         addToQueue2(myCustomer);
         queue1.erase(queue1.begin() + iterator);
 
+		myCustomer->setLastRun(myCustomer->getLastRun() + 5);
+		myCustomer->tickWait();
+
+		//TEST OUTPUT
         //cout << "Demoted " << myCustomer->getName() << " at time " << timer << endl;
         //outputQueues();
     }
@@ -534,6 +540,7 @@ public:
         {
             targetCustomer->setEndTime(timer);
             terminateCustomer(targetCustomer);
+			//TEST OUTPUT
 			//cout << endl << "Time: " << timer << endl;
 			//outputQueues();
             return;
@@ -1031,6 +1038,7 @@ bool initialise(vector<string> fileLines, Arena * myArena)
 bool process(Arena * myArena)
 {
     myArena->enqueueArrivals( myArena->getTime() );
+	//TEST OUTPUT
 	//cout << "TIME 0" << endl;
 	//myArena->outputQueues();
     //While a queue has a customer
