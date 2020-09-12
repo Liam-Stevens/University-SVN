@@ -1049,7 +1049,7 @@ bool process(Arena * myArena)
         {
             myArena->tickAll();
             myArena->enqueueArrivals( myArena->getTime() );
-            cout << "TICK ALL" << endl;
+            //cout << "TICK ALL" << endl;
         }
 
 
