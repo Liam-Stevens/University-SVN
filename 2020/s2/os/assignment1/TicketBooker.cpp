@@ -932,10 +932,23 @@ public:
         }
     }
 
+	int calcWaitingTime(Customer * myCustomer)
+	{
+		int num = myCustomer->getEndTime();
+		num = num - myCustomer->getReadyTime();
+		num = num - myCustomer->getRunningTime();
+		if (num < 0)
+		{
+			return 0;
+		}
+		return num;
+	}
+
     void outputTerminated()
     {
         for (int i = 0; i < (signed)terminated.size(); i++)
         {
+			int wait = calcWaitingTime(terminated[i]);
             cout << terminated[i]->getName();
             padSpaces(10-countDigitChars(terminated[i]->getArrival()));
             cout << terminated[i]->getArrival();
@@ -945,8 +958,8 @@ public:
             cout << terminated[i]->getReadyTime();
             padSpaces(10-countDigitChars(terminated[i]->getRunningTime()));
             cout << terminated[i]->getRunningTime();
-            padSpaces(10-countDigitChars(terminated[i]->getWaitingTime()));
-            cout << terminated[i]->getWaitingTime() << endl;
+            padSpaces(10-countDigitChars(wait));
+            cout << wait << endl;
         }
     }
 
