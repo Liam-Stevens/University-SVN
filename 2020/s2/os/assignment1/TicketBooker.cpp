@@ -230,7 +230,7 @@ public:
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
 			//queue1[i]->setLastRun(queue1[i]->getLastRun() + 5); //TODO: Check if needed
-            if (queue1[i]->getReadyTime() >= 0 && queue1[i]->getArrival() != timer-5)
+            if (queue1[i]->getReadyTime() >= 0 && (queue1[i]->getArrival() != timer-5 || queue1[i]->getArrival() == 0))
             {
                 queue1[i]->tickWait();
             }
@@ -240,12 +240,12 @@ public:
 
         for (int i = 0; i < (signed)moveQueue.size(); i++)
         {
-            if (moveQueue[i]->getReadyTime() >= 0 && moveQueue[i]->getArrival() != timer-5)
+            if (moveQueue[i]->getReadyTime() >= 0 && (moveQueue[i]->getArrival() != timer-5 || moveQueue[i]->getArrival() == 0))
             {
                 moveQueue[i]->tickWait();
 
             }
-			if (moveQueue[i]->getArrival() != timer-5)
+			if ((moveQueue[i]->getArrival() != timer-5 || moveQueue[i]->getArrival() == 0))
 			{
 				moveQueue[i]->setLastRun(moveQueue[i]->getLastRun() + 5);
 			}
@@ -446,7 +446,7 @@ public:
 				//queue1[i]->setLastRun(queue1[i]->getLastRun() + 5);
 			}
 
-            if (queue1[i]->getReadyTime() >= 0 && queue1[i] != myCustomer && queue1[i]->getArrival() != timer-5)
+            if (queue1[i]->getReadyTime() >= 0 && queue1[i] != myCustomer && (queue1[i]->getArrival() != timer-5 || queue1[i]->getArrival() == 0))
             {
                 queue1[i]->tickWait();
             }
@@ -456,12 +456,11 @@ public:
 
         for (int i = 0; i < (signed)moveQueue.size(); i++)
         {
-            if (moveQueue[i]->getReadyTime() >= 0 && moveQueue[i] != myCustomer && moveQueue[i]->getArrival() != timer-5)
+            if (moveQueue[i]->getReadyTime() >= 0 && moveQueue[i] != myCustomer && (moveQueue[i]->getArrival() != timer-5 || moveQueue[i]->getArrival() == 0))
             {
                 moveQueue[i]->tickWait();
-
             }
-			if (moveQueue[i] != myCustomer && moveQueue[i]->getArrival() != timer-5)
+			if (moveQueue[i] != myCustomer && (moveQueue[i]->getArrival() != timer-5 || moveQueue[i]->getArrival() == 0))
 			{
 				moveQueue[i]->setLastRun(moveQueue[i]->getLastRun() + 5);
 			}
@@ -560,8 +559,6 @@ public:
     */
     void addToQueue1(Customer * myCustomer)
     {
-        //cout << "Queued " << myCustomer->getName() << " into queue 1" << endl;
-
         //If the vector contains customers
         if (queue1.size() != 0)
         {
@@ -644,9 +641,7 @@ public:
     */
     void addToQueue2(Customer * myCustomer)
     {
-        //cout << "Queued " << myCustomer->getName() << " into queue 2" << endl;
-
-        //If the vector contains customers
+		//If the vector contains customers
         if (queue2.size() != 0)
         {
             int rangeBegin1 = -1;
@@ -875,10 +870,16 @@ public:
                 if (arrivals[i]->getPriority() <= 3)
                 {
                     addToQueue1(arrivals[i]);
+					//TEST OUTPUT
+			        //cout << "Queued " << arrivals[i]->getName() << " into queue 1 at time: " << currentTime << endl;
+					//outputQueues();
                 }
                 else
                 {
                     addToQueue2(arrivals[i]);
+					//TEST OUTPUT
+			        //cout << "Queued " << arrivals[i]->getName() << " into queue 2 at time: " << currentTime << endl;
+					//outputQueues();
                 }
             }
 
@@ -1043,9 +1044,6 @@ bool initialise(vector<string> fileLines, Arena * myArena)
 bool process(Arena * myArena)
 {
     myArena->enqueueArrivals( myArena->getTime() );
-	//TEST OUTPUT
-	//cout << "TIME 0" << endl;
-	//myArena->outputQueues();
     //While a queue has a customer
     while(myArena->activeQueue(0))
     {
