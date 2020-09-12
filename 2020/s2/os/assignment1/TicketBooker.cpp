@@ -62,6 +62,7 @@ public:
         runningTime = 0;
         waitingTime = 0;
         quantumTime = 0;
+		lastRun = 0;
     }
 
     Customer(string newName, int newArrival, int newPriority, int newAge, int newTickets)
@@ -76,6 +77,7 @@ public:
         runningTime = 0;
         waitingTime = 0;
         quantumTime = 0;
+		lastRun = 0;
     }
 
     //Setters
@@ -122,7 +124,6 @@ public:
     void tickWait()
     {
         waitingTime += 5;
-        lastRun += 5;
     }
 
     void setQuantumTime(int newQuantumTime)
@@ -226,11 +227,10 @@ public:
     {
         tick();
 
-        //TODO: Increment ages and do promotion
-
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
-            if (queue1[i]->getReadyTime() >= 0)
+			queue1[i]->setLastRun(queue1[i]->getLastRun() + 5); //TODO: Check if needed
+            if (queue1[i]->getReadyTime() >= 0 && queue1[i]->getArrival() != timer-5)
             {
                 queue1[i]->tickWait();
             }
@@ -238,10 +238,16 @@ public:
 
         for (int i = 0; i < (signed)queue2.size(); i++)
         {
-            if (queue2[i]->getReadyTime() >= 0)
+			if (queue2[i]->getReadyTime() >= 0 && queue2[i]->getArrival() != timer-5)
             {
                 queue2[i]->tickWait();
+
             }
+			if (queue2[i]->getArrival() != timer-5)
+			{
+				queue2[i]->setLastRun(queue2[i]->getLastRun() + 5);
+			}
+			checkAge(queue2[i]);
         }
     }
 
@@ -297,6 +303,19 @@ public:
         firstCustomer = secondCustomer;
         secondCustomer = temp;
     }
+
+	void checkAge(Customer * myCustomer)
+	{
+		if (myCustomer->getLastRun() >= 100)
+		{
+			myCustomer->setLastRun(0);
+			myCustomer->setPriority( myCustomer->getPriority() - 1);
+			if (myCustomer->getPriority() <= 3)
+			{
+				promote(myCustomer);
+			}
+		}
+	}
 
     //TODO: Comment
     void backQueue1(Customer * myCustomer)
@@ -410,11 +429,15 @@ public:
     //TODO: Comment
     void incrementWaitTime(Customer * myCustomer)
     {
-        //TODO: Increment ages and do promotion
 
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
-            if (queue1[i]->getReadyTime() >= 0 && queue1[i] != myCustomer)
+			if (queue1[i] != myCustomer)
+			{
+				queue1[i]->setLastRun(queue1[i]->getLastRun() + 5);
+			}
+
+            if (queue1[i]->getReadyTime() >= 0 && queue1[i] != myCustomer && queue1[i]->getArrival() != timer-5)
             {
                 queue1[i]->tickWait();
             }
@@ -422,19 +445,16 @@ public:
 
         for (int i = 0; i < (signed)queue2.size(); i++)
         {
-            if (queue2[i]->getReadyTime() >= 0 && queue2[i] != myCustomer)
+            if (queue2[i]->getReadyTime() >= 0 && queue2[i] != myCustomer && queue2[i]->getArrival() != timer-5)
             {
                 queue2[i]->tickWait();
-                if (queue2[i]->getLastRun() >= 100)
-                {
-                    myCustomer->setLastRun(0);
-                    queue2[i]->setPriority( queue2[i]->getPriority() - 1);
-                    if (queue2[i]->getPriority() <= 3)
-                    {
-                        promote(queue2[i]);
-                    }
-                }
+
             }
+			if (queue2[i] != myCustomer && queue2[i]->getArrival() != timer-5)
+			{
+				queue2[i]->setLastRun(queue2[i]->getLastRun() + 5);
+			}
+			checkAge(queue2[i]);
         }
     }
 
@@ -469,7 +489,6 @@ public:
         targetCustomer->setTickets(targetCustomer->getTickets() - 1);
         tick();
         targetCustomer->tickRun();
-        targetCustomer->setLastRun(0);
         enqueueArrivals( timer );
 
         //Queue1 aging
@@ -507,12 +526,15 @@ public:
 
         //Increase the waiting period for every other customer
         incrementWaitTime(targetCustomer); //TODO: Concerned that promotion will fuck the order
+		targetCustomer->setLastRun(0);
 
         //Finished processing this customer
         if (targetCustomer->getTickets() <= 0)
         {
             targetCustomer->setEndTime(timer);
             terminateCustomer(targetCustomer);
+			//cout << endl << "Time: " << timer << endl;
+			//outputQueues();
             return;
         }
 
@@ -920,31 +942,32 @@ public:
         cout << "Queue1: " << endl;
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
-            cout << "Name: " << queue1[i]->getName() << " | Arrival: " << queue1[i]->getArrival() << " | Priority: ";
-            cout << queue1[i]->getPriority() << " | Age: " << queue1[i]->getAge() << " | Tickets: ";
-            cout << queue1[i]->getTickets() << endl;
+            cout << "Name: " << queue1[i]->getName() << " | Arrival: " << queue1[i]->getArrival()  << " | Tickets: ";
+            cout << queue1[i]->getTickets() << " | Running " << queue1[i]->getRunningTime() << " | Priority: " << queue1[i]->getPriority();
+            cout << " | LastRun: " << queue1[i]->getLastRun() << " | Waiting: " << queue1[i]->getWaitingTime() << endl;
         }
         cout << "Queue2: " << endl;
         for (int i = 0; i < (signed)queue2.size(); i++)
         {
-            cout << "Name: " << queue2[i]->getName() << " | Arrival: " << queue2[i]->getArrival() << " | Priority: ";
-            cout << queue2[i]->getPriority() << " | Age: " << queue2[i]->getAge() << " | Tickets: ";
-            cout << queue2[i]->getTickets() << endl;
+			cout << "Name: " << queue2[i]->getName() << " | Arrival: " << queue2[i]->getArrival()  << " | Tickets: ";
+            cout << queue2[i]->getTickets() << " | Running " << queue2[i]->getRunningTime() << " | Priority: " << queue2[i]->getPriority();
+            cout << " | LastRun: " << queue2[i]->getLastRun() << " | Waiting: " << queue2[i]->getWaitingTime() << endl;
         }
         cout << "Arrivals: " << endl;
         for (int i = 0; i < (signed)arrivals.size(); i++)
         {
-            cout << "Name: " << arrivals[i]->getName() << " | Arrival: " << arrivals[i]->getArrival() << " | Priority: ";
-            cout << arrivals[i]->getPriority() << " | Age: " << arrivals[i]->getAge() << " | Tickets: ";
-            cout << arrivals[i]->getTickets() << endl;
+			cout << "Name: " << arrivals[i]->getName() << " | Arrival: " << arrivals[i]->getArrival()  << " | Tickets: ";
+            cout << arrivals[i]->getTickets() << " | Running " << arrivals[i]->getRunningTime() << " | Priority: " << arrivals[i]->getPriority();
+            cout << " | LastRun: " << arrivals[i]->getLastRun() << " | Waiting: " << arrivals[i]->getWaitingTime() << endl;
         }
         cout << "Terminated: " << endl;
         for (int i = 0; i < (signed)terminated.size(); i++)
         {
-            cout << "Name: " << terminated[i]->getName() << " | Arrival: " << terminated[i]->getArrival() << " | Priority: ";
-            cout << terminated[i]->getPriority() << " | Age: " << terminated[i]->getAge() << " | Tickets: ";
-            cout << terminated[i]->getTickets() << endl;
+			cout << "Name: " << terminated[i]->getName() << " | Arrival: " << terminated[i]->getArrival()  << " | Tickets: ";
+            cout << terminated[i]->getTickets() << " | Running " << terminated[i]->getRunningTime() << " | Priority: " << terminated[i]->getPriority();
+            cout << " | LastRun: " << terminated[i]->getLastRun() << " | Waiting: " << terminated[i]->getWaitingTime() << endl;
         }
+		cout << endl;
     }
 
     //Destructor
@@ -1007,6 +1030,8 @@ bool initialise(vector<string> fileLines, Arena * myArena)
 bool process(Arena * myArena)
 {
     myArena->enqueueArrivals( myArena->getTime() );
+	//cout << "TIME 0" << endl;
+	//myArena->outputQueues();
     //While a queue has a customer
     while(myArena->activeQueue(0))
     {
@@ -1024,7 +1049,7 @@ bool process(Arena * myArena)
         {
             myArena->tickAll();
             myArena->enqueueArrivals( myArena->getTime() );
-            //cout << "TICK ALL" << endl;
+            cout << "TICK ALL" << endl;
         }
 
 
