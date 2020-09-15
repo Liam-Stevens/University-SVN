@@ -298,12 +298,12 @@ public:
     }
 
     //TODO: Comment
-    void swapCustomers(Customer * firstCustomer, Customer * secondCustomer)
+    void swapCustomersQueue1(int swap1, int swap2)
     {
         Customer * temp;
-        temp = firstCustomer;
-        firstCustomer = secondCustomer;
-        secondCustomer = temp;
+        temp = queue1[swap1];
+        queue1[swap1] = queue1[swap2];
+        queue1[swap2] = temp;
     }
 
 	void checkAge(Customer * myCustomer)
@@ -874,6 +874,10 @@ public:
                 if (arrivals[i]->getPriority() <= 3)
                 {
                     addToQueue1(arrivals[i]);
+					if (arrivals[i] == queue1[0] && queue1.size() > 1 && queue1[1]->getQuantumTime() > 0)
+					{
+						swapCustomersQueue1(0, 1);
+					}
 					//TEST OUTPUT
 					debug("Queued "+arrivals[i]->getName()+" into queue 1");
 			        //cout << "Queued " << arrivals[i]->getName() << " into queue 1 at time: " << currentTime << endl;
@@ -971,8 +975,8 @@ public:
 
 	//Debug
 	void debug(string outToTerm)
-	{/*
-		if (2500 <= timer && timer <= 3500)
+	{
+		/*if (0 <= timer && timer <= 1000)
 		{
 			cout << "Time: " << timer << endl;
 			cout << outToTerm << endl;
