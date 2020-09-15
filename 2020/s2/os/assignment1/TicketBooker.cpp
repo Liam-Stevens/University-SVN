@@ -3,17 +3,6 @@ Created By: Liam Stevens
 ID: a1742143
 Time:05.09.2020
 Contact Email: a1742143@student.adelaide.edu.au
-
-TODO: Include int main(int argc,char *argv[])
-Input: argv[1]
-Output: screen
-
-Input Sample:
-TODO: ID arrival_time priority age total_tickets_required
-for example: s1 3 1 0 50
-
-Output Sample:
-TODO: ID, arrival and termination times, ready time and durations of running and waiting
 */
 
 #include <vector>
@@ -28,7 +17,7 @@ using namespace std;
 
 /*
 
-    TODO: Comment
+    The class which stores information on a single instance of a customer
 
 */
 class Customer
@@ -198,7 +187,8 @@ public:
 
 /*
 
-    TODO: Comment
+    The class which will simulate the processing of tickets using two
+	queues including handling for starvation.
 
 */
 class Arena
@@ -217,16 +207,18 @@ public:
         timer = 0;
     }
 
-    //TODO: Comment
+    //Increase the time by a tick
     void tick()
     {
         timer += 5;
     }
 
+	//Tick and then Increase the wait time for all customers
     void tickAll()
     {
         tick();
 
+		//Increase wait for queue1
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
 			//queue1[i]->setLastRun(queue1[i]->getLastRun() + 5); //TODO: Check if needed
@@ -236,8 +228,8 @@ public:
             }
         }
 
+		//Increase wait for queue2
 		vector<Customer *> moveQueue = queue2;
-
         for (int i = 0; i < (signed)moveQueue.size(); i++)
         {
             if (moveQueue[i]->getReadyTime() >= 0 && (moveQueue[i]->getArrival() != timer || moveQueue[i]->getArrival() == 0))
@@ -253,7 +245,7 @@ public:
         }
     }
 
-    //TODO: Comment
+    //Return the current time
     int getTime()
     {
         return timer;
@@ -270,7 +262,7 @@ public:
         return sum;
     }
 
-    //TODO: Comment
+    //Check if there are any active customers in queue1, queue2 and arrival
     bool activeQueue(int queueNum)
     {
         if (queueNum == 0)
@@ -297,7 +289,7 @@ public:
         return false;
     }
 
-    //TODO: Comment
+    //Swap the place of two customers in queue1
     void swapCustomersQueue1(int swap1, int swap2)
     {
         Customer * temp;
@@ -306,6 +298,7 @@ public:
         queue1[swap2] = temp;
     }
 
+	//Check if the customer needs to be promoted
 	void checkAge(Customer * myCustomer)
 	{
 		if (myCustomer->getLastRun() >= 100)
@@ -319,7 +312,7 @@ public:
 		}
 	}
 
-    //TODO: Comment
+    //Move the customer to the back of the priority sub queue
     void backQueue1(Customer * myCustomer)
     {
         int iterator;
@@ -352,6 +345,7 @@ public:
                 }
             }
         }
+		//Add to the end of the queue
         else
         {
             queue1.push_back(myCustomer);
@@ -359,9 +353,10 @@ public:
 
     }
 
-    //TODO: Comment
+    //Move a customer from queue2 to queue1
     void promote(Customer * myCustomer)
     {
+		//Find the customer in the queue
         int iterator;
         for (int i = 0; i < (signed)queue2.size(); i++)
         {
@@ -379,13 +374,12 @@ public:
 
 		//TEST OUTPUT
 		debug("Promoted "+myCustomer->getName());
-        //cout << "Promoted " << myCustomer->getName() << " at time " << timer << endl;
-        //outputQueues();
     }
 
-    //TODO: Comment
+    //Move a customer from queue1 to queue2
     void demote(Customer * myCustomer)
     {
+		//Find the customer in the queue
         int iterator;
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
@@ -400,17 +394,15 @@ public:
         queue1.erase(queue1.begin() + iterator);
 
 		myCustomer->setLastRun(myCustomer->getLastRun() + 5);
-		//myCustomer->tickWait();
 
 		//TEST OUTPUT
 		debug("Demoted "+myCustomer->getName());
-        //cout << "Demoted " << myCustomer->getName() << " at time " << timer << endl;
-        //outputQueues();
     }
 
-    //TODO: Comment
+    //Move a customer to the terminated vector
     void terminateCustomer(Customer * myCustomer)
     {
+		//Check if it is in queue1
         vector<Customer *> * targetVector;
         int iterator;
         for (int i = 0; i < (signed)queue1.size(); i++)
@@ -422,7 +414,7 @@ public:
                 break;
             }
         }
-
+		//Check if it is in queue2
         for (int i = 0; i < (signed)queue2.size(); i++)
         {
             if (queue2[i] == myCustomer)
@@ -437,25 +429,20 @@ public:
         targetVector->erase(targetVector->begin() + iterator);
     }
 
-    //TODO: Comment
+    //Increase the wait time and check for promotion on queue2
     void incrementWaitTime(Customer * myCustomer)
     {
-
+		//Increase the wait time for queue1 excluding the currently running customer
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
-			if (queue1[i] != myCustomer)
-			{
-				//queue1[i]->setLastRun(queue1[i]->getLastRun() + 5);
-			}
-
             if (queue1[i]->getReadyTime() >= 0 && queue1[i] != myCustomer && (queue1[i]->getArrival() != timer || queue1[i]->getArrival() == 0))
             {
                 queue1[i]->tickWait();
             }
         }
 
+		//Increase the wait time for queue2 excluding the currently running customer
 		vector<Customer *> moveQueue = queue2;
-
         for (int i = 0; i < (signed)moveQueue.size(); i++)
         {
             if (moveQueue[i]->getReadyTime() >= 0 && moveQueue[i] != myCustomer && (moveQueue[i]->getArrival() != timer || moveQueue[i]->getArrival() == 0))
@@ -470,9 +457,10 @@ public:
         }
     }
 
-    //TODO: Comment
+    //Run the process for processing a single ticket
     void processTicket(int queueNum)
     {
+		//Proccess the given queue
         vector<Customer *> * targetVector;
         int iterator = 0;
         if (queueNum == 1)
@@ -491,6 +479,7 @@ public:
 
         Customer * targetCustomer = targetVector->at(iterator);
 
+		//Set ready time for first run
         if (targetCustomer->getReadyTime() < 0)
         {
             targetCustomer->setReadyTime(timer);
@@ -507,24 +496,23 @@ public:
         if (targetCustomer->getPriority() <= 3)
         {
             int timeQuantum = (10 - targetCustomer->getPriority())*10;
-            //cout << "Name: " << targetCustomer->getName() << " | time: " << timer << " | timeQuantum: " << timeQuantum << " | currentRuntime: "<< targetCustomer->getQuantumTime() << endl;
+
             if (targetCustomer->getQuantumTime() >= timeQuantum)
             {
                 targetCustomer->setAge( targetCustomer->getAge() + 1 );
                 targetCustomer->setQuantumTime(0);
 
+				//Increase priority for each 2 runs
                 if (targetCustomer->getAge() >= 2)
                 {
                     targetCustomer->setPriority(targetCustomer->getPriority() + 1);
 					targetCustomer->setAge(0);
-                    //cout << "New Priority: " <<  targetCustomer->getPriority() << endl;
                 }
-                //cout << "Priority: " <<  targetCustomer->getPriority() << endl;
+
                 //Move to the back of the priority sub queue
                 if (targetCustomer->getPriority() <= 3)
                 {
                     backQueue1(targetCustomer);
-                    //cout << "Moved " << targetCustomer->getName() << endl;
                 }
                 //Demoted to queue2
                 else
@@ -532,8 +520,6 @@ public:
                     demote(targetCustomer);
 
                 }
-                //cout << endl << "Time: " << timer << endl;
-                //outputQueues();
             }
         }
 
@@ -547,10 +533,9 @@ public:
         {
             targetCustomer->setEndTime(timer);
             terminateCustomer(targetCustomer);
+
 			//TEST OUTPUT
 			debug("Terminated "+targetCustomer->getName());
-			//cout << endl << "Time: " << timer << endl;
-			//outputQueues();
             return;
         }
 
@@ -558,7 +543,8 @@ public:
 
     /*
 
-        TODO: Comment
+		Add Customer to queue2 in order
+		lowest priority -> lowest arrival time
 
     */
     void addToQueue1(Customer * myCustomer)
@@ -640,7 +626,8 @@ public:
 
     /*
 
-        TODO: Comment
+        Add Customer to queue2 in order
+		lowest tickets remaining -> lowest priority -> lowest arrival time
 
     */
     void addToQueue2(Customer * myCustomer)
@@ -695,7 +682,6 @@ public:
             //If there is a range of tickets which are the same
             else
             {
-                //cout << "Same Tickets Detected " << rangeBegin1 << " | " << rangeEnd1 << endl;
                 int rangeBegin2 = -1;
                 int rangeEnd2 = -1;
                 //Search for range of same priorities
@@ -771,7 +757,8 @@ public:
 
     /*
 
-        TODO: Comment
+        Add a customer to the arrivals vector
+		in order arrival_time -> name
 
     */
     void addToArrivals(Customer * myCustomer)
@@ -851,7 +838,8 @@ public:
 
     /*
 
-        TODO: Comment
+        Moves the customers from the arrivals vector
+		to their respective queue for the specified time
 
     */
     void enqueueArrivals(int currentTime)
@@ -878,18 +866,16 @@ public:
 					{
 						swapCustomersQueue1(0, 1);
 					}
+
 					//TEST OUTPUT
 					debug("Queued "+arrivals[i]->getName()+" into queue 1");
-			        //cout << "Queued " << arrivals[i]->getName() << " into queue 1 at time: " << currentTime << endl;
-					//outputQueues();
                 }
                 else
                 {
                     addToQueue2(arrivals[i]);
+
 					//TEST OUTPUT
 					debug("Queued "+arrivals[i]->getName()+" into queue 2");
-			        //cout << "Queued " << arrivals[i]->getName() << " into queue 2 at time: " << currentTime << endl;
-					//outputQueues();
                 }
             }
 
@@ -910,7 +896,6 @@ public:
             rangeEnd = arrivals.size();
         }
 
-        //cout << "Time: " << currentTime << " | rangeBegin: " << rangeBegin << " | rangeEnd: " << rangeEnd << endl;
         //Erase vector within the range
         if (rangeBegin >= 0)
         {
@@ -918,6 +903,7 @@ public:
         }
     }
 
+	//Output to stdout with a number of spaces
     void padSpaces(int num)
     {
         for (int i = 0; i < num; i++)
@@ -926,6 +912,7 @@ public:
         }
     }
 
+	//Count the number of characters in a number
     int countDigitChars(int num)
     {
         if (num == 0)
@@ -942,6 +929,7 @@ public:
         }
     }
 
+	//Calculate the amount of time spent waiting
 	int calcWaitingTime(Customer * myCustomer)
 	{
 		int num = myCustomer->getEndTime();
@@ -954,6 +942,7 @@ public:
 		return num;
 	}
 
+	//Output in the format for the final execution state
     void outputTerminated()
     {
         for (int i = 0; i < (signed)terminated.size(); i++)
@@ -984,7 +973,7 @@ public:
 		}*/
 	}
 
-    //Output all queues
+    //Output the status of all queues
     void outputQueues()
     {
         cout << "Queue1: " << endl;
@@ -1022,18 +1011,19 @@ public:
     ~Arena()
     {
         //TODO: Need better way of deleting
-        /*for (int i = 0; i < (signed)queue1.size(); i++)
+        for (int i = (signed)terminated.size()-1; i >= 0; i--)
         {
-            delete queue1[i];
+            delete terminated[i];
         }
-        for (int i = 0; i < (signed)queue2.size(); i++)
-        {
-            delete queue2[i];
-        }*/
     }
 };
+/*
 
-//TODO: Comment
+	END OF CLASS DEFINITIONS
+
+*/
+
+//Read a text file into a vector
 bool readFile(string fileLocation, vector<string> * fileLines)
 {
     string line;
@@ -1055,7 +1045,7 @@ bool readFile(string fileLocation, vector<string> * fileLines)
     return 0;
 }
 
-//TODO: Comment
+//Fill the arrivals queue from vector of text
 bool initialise(vector<string> fileLines, Arena * myArena)
 {
     for (int i = 0; i < (signed)fileLines.size(); i++)
@@ -1074,7 +1064,7 @@ bool initialise(vector<string> fileLines, Arena * myArena)
     return 0;
 }
 
-//TODO: Comment
+//Run the queue and ticket processing
 bool process(Arena * myArena)
 {
     myArena->enqueueArrivals( myArena->getTime() );
@@ -1082,7 +1072,7 @@ bool process(Arena * myArena)
     while(myArena->activeQueue(0))
     {
 
-
+		//Check for which queue to call
         if (myArena->activeQueue(1))
         {
             myArena->processTicket(1);
@@ -1091,21 +1081,19 @@ bool process(Arena * myArena)
         {
             myArena->processTicket(2);
         }
+		//Queue1 and queue2 are empty but arrivals is not
         else
         {
             myArena->tickAll();
             myArena->enqueueArrivals( myArena->getTime() );
-            //cout << "TICK ALL" << endl;
         }
-
-
 
     }
 
     return 0;
 }
 
-//TODO: Comment
+//Calls the final output
 bool output(Arena myArena)
 {
     cout << "name   arrival   end   ready   running   waiting" << endl;
@@ -1113,7 +1101,7 @@ bool output(Arena myArena)
     return 0;
 }
 
-//TODO: Comment
+//Main function
 int main(int argc, char **argv)
 {
     string fileLocation = argv[1];
@@ -1132,9 +1120,6 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    //TODO: Remove this
-    //melbourne.outputQueues();
-
     if ( process(&melbourne) )
     {
         cout << "FAILED AT PROCESSING" << endl;
@@ -1146,9 +1131,6 @@ int main(int argc, char **argv)
         cout << "FAILED AT OUTPUT" << endl;
         return 1;
     }
-    //cout << endl << endl;
-    //TODO: Remove this
-    //melbourne.outputQueues();
 
     return 0;
 }
