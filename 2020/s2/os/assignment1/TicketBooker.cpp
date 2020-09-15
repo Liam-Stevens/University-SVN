@@ -1011,10 +1011,10 @@ public:
     ~Arena()
     {
         //TODO: Need better way of deleting
-        for (int i = (signed)terminated.size()-1; i >= 0; i--)
+        /*for (int i = (signed)terminated.size()-1; i > 0; i--)
         {
             delete terminated[i];
-        }
+        }*/
     }
 };
 /*
