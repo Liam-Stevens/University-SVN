@@ -230,7 +230,7 @@ public:
         for (int i = 0; i < (signed)queue1.size(); i++)
         {
 			//queue1[i]->setLastRun(queue1[i]->getLastRun() + 5); //TODO: Check if needed
-            if (queue1[i]->getReadyTime() >= 0 && (queue1[i]->getArrival() != timer-5 || queue1[i]->getArrival() == 0))
+            if (queue1[i]->getReadyTime() >= 0 && (queue1[i]->getArrival() != timer || queue1[i]->getArrival() == 0))
             {
                 queue1[i]->tickWait();
             }
@@ -240,12 +240,12 @@ public:
 
         for (int i = 0; i < (signed)moveQueue.size(); i++)
         {
-            if (moveQueue[i]->getReadyTime() >= 0 && (moveQueue[i]->getArrival() != timer-5 || moveQueue[i]->getArrival() == 0))
+            if (moveQueue[i]->getReadyTime() >= 0 && (moveQueue[i]->getArrival() != timer || moveQueue[i]->getArrival() == 0))
             {
                 moveQueue[i]->tickWait();
 
             }
-			if ((moveQueue[i]->getArrival() != timer-5 || moveQueue[i]->getArrival() == 0))
+			if ((moveQueue[i]->getArrival() != timer || moveQueue[i]->getArrival() == 0))
 			{
 				moveQueue[i]->setLastRun(moveQueue[i]->getLastRun() + 5);
 			}
@@ -378,6 +378,7 @@ public:
         queue2.erase(queue2.begin() + iterator);
 
 		//TEST OUTPUT
+		debug("Promoted "+myCustomer->getName());
         //cout << "Promoted " << myCustomer->getName() << " at time " << timer << endl;
         //outputQueues();
     }
@@ -402,6 +403,7 @@ public:
 		//myCustomer->tickWait();
 
 		//TEST OUTPUT
+		debug("Demoted "+myCustomer->getName());
         //cout << "Demoted " << myCustomer->getName() << " at time " << timer << endl;
         //outputQueues();
     }
@@ -446,7 +448,7 @@ public:
 				//queue1[i]->setLastRun(queue1[i]->getLastRun() + 5);
 			}
 
-            if (queue1[i]->getReadyTime() >= 0 && queue1[i] != myCustomer && (queue1[i]->getArrival() != timer-5 || queue1[i]->getArrival() == 0))
+            if (queue1[i]->getReadyTime() >= 0 && queue1[i] != myCustomer && (queue1[i]->getArrival() != timer || queue1[i]->getArrival() == 0))
             {
                 queue1[i]->tickWait();
             }
@@ -456,11 +458,11 @@ public:
 
         for (int i = 0; i < (signed)moveQueue.size(); i++)
         {
-            if (moveQueue[i]->getReadyTime() >= 0 && moveQueue[i] != myCustomer && (moveQueue[i]->getArrival() != timer-5 || moveQueue[i]->getArrival() == 0))
+            if (moveQueue[i]->getReadyTime() >= 0 && moveQueue[i] != myCustomer && (moveQueue[i]->getArrival() != timer || moveQueue[i]->getArrival() == 0))
             {
                 moveQueue[i]->tickWait();
             }
-			if (moveQueue[i] != myCustomer && (moveQueue[i]->getArrival() != timer-5 || moveQueue[i]->getArrival() == 0))
+			if (moveQueue[i] != myCustomer && (moveQueue[i]->getArrival() != timer || moveQueue[i]->getArrival() == 0))
 			{
 				moveQueue[i]->setLastRun(moveQueue[i]->getLastRun() + 5);
 			}
@@ -528,6 +530,7 @@ public:
                 else
                 {
                     demote(targetCustomer);
+
                 }
                 //cout << endl << "Time: " << timer << endl;
                 //outputQueues();
@@ -545,6 +548,7 @@ public:
             targetCustomer->setEndTime(timer);
             terminateCustomer(targetCustomer);
 			//TEST OUTPUT
+			debug("Terminated "+targetCustomer->getName());
 			//cout << endl << "Time: " << timer << endl;
 			//outputQueues();
             return;
@@ -871,6 +875,7 @@ public:
                 {
                     addToQueue1(arrivals[i]);
 					//TEST OUTPUT
+					debug("Queued "+arrivals[i]->getName()+" into queue 1");
 			        //cout << "Queued " << arrivals[i]->getName() << " into queue 1 at time: " << currentTime << endl;
 					//outputQueues();
                 }
@@ -878,6 +883,7 @@ public:
                 {
                     addToQueue2(arrivals[i]);
 					//TEST OUTPUT
+					debug("Queued "+arrivals[i]->getName()+" into queue 2");
 			        //cout << "Queued " << arrivals[i]->getName() << " into queue 2 at time: " << currentTime << endl;
 					//outputQueues();
                 }
@@ -962,6 +968,17 @@ public:
             cout << wait << endl;
         }
     }
+
+	//Debug
+	void debug(string outToTerm)
+	{/*
+		if (2500 <= timer && timer <= 3500)
+		{
+			cout << "Time: " << timer << endl;
+			cout << outToTerm << endl;
+			outputQueues();
+		}*/
+	}
 
     //Output all queues
     void outputQueues()
