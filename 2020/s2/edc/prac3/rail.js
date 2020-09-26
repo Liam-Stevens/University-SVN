@@ -101,11 +101,11 @@ function nextSection(train)
         }
         else if (currentSection === 4)
         {
-            if (checkSection(5))
+            if (checkSection(5) && checkDeadlock())
             {
                 return 5
             }
-            else if (checkSection(10))
+            else if (checkSection(10) && checkDeadlock())
             {
                 return 10
             }
@@ -162,11 +162,11 @@ function nextSection(train)
         }
         else if (currentSection === 7)
         {
-            if (checkSection(6))
+            if (checkSection(6) && checkDeadlock())
             {
                 return 6
             }
-            else if (checkSection(11))
+            else if (checkSection(11) && checkDeadlock())
             {
                 return 11
             }
@@ -206,7 +206,7 @@ function nextSection(train)
         }
         else if (currentSection === 12)
         {
-            if (checkSection(11))
+            if (checkSection(11) && checkDeadlock())
             {
                 return 11
             }
@@ -225,4 +225,32 @@ function nextSection(train)
     }
 
     return 0
+}
+
+function checkDeadlock()
+{
+    var counter = 0
+    for (let [index, train] of yard_trains.entries()) {
+        if (counter >= 3)
+        {
+            return false
+        }
+        if (train.blockSection === 5 && train.direction == "East")
+        {
+            counter++
+        }
+        if (train.blockSection === 10 && train.direction == "East")
+        {
+            counter++
+        }
+        if (train.blockSection === 6 && train.direction == "West")
+        {
+            counter++
+        }
+        if (train.blockSection === 11 && train.direction == "West")
+        {
+            counter++
+        }
+    }
+    return true
 }
