@@ -231,10 +231,6 @@ function checkDeadlock()
 {
     var counter = 0
     for (let [index, train] of yard_trains.entries()) {
-        if (counter >= 3)
-        {
-            return false
-        }
         if (train.blockSection === 5 && train.direction == "East")
         {
             counter++
@@ -251,6 +247,10 @@ function checkDeadlock()
         {
             counter++
         }
+    }
+    if (counter >= 3)
+    {
+        return false
     }
     return true
 }
