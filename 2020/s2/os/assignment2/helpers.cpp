@@ -27,6 +27,7 @@ bool readFile(string fileLocation, vector<string> * fileLines)
     return 0;
 }
 
+//Removes lines containing a '#' at the start of it
 vector<string> filterComments(vector<string> fileLines)
 {
     vector<string> newLines;
@@ -40,6 +41,7 @@ vector<string> filterComments(vector<string> fileLines)
     return newLines;
 }
 
+//Prints all strings in a vector to the terminal
 void printStrings(vector<string> lines)
 {
     cout << "Printed Lines: " << endl;

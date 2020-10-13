@@ -9,6 +9,10 @@ Contact Email: a1742143@student.adelaide.edu.au
 #include <string>
 #include <iostream>
 
+#include "page.h"
+#include "page.cpp"
+#include "memory.h"
+#include "memory.cpp"
 #include "helpers.cpp"
 
 using namespace std;
