@@ -23,7 +23,7 @@ int Memory::getWrites()
 
 int Memory::getFaults()
 {
-    return faults
+    return faults;
 }
 
 //Setters
