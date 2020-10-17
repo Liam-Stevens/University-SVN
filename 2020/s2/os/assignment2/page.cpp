@@ -1,18 +1,20 @@
 #include "page.h"
 
+using namespace std;
+
 Page::Page()
 {
 
 }
 
 //Getters
-std::string getName()
+string Page::getName()
 {
     return name;
 }
 
 //Setters
-void setName(std::string newName)
+void Page::setName(string newName)
 {
     name = newName;
 }
