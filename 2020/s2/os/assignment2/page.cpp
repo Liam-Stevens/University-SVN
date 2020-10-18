@@ -13,6 +13,11 @@ string Page::getName()
     return name;
 }
 
+bool Page::getDirty()
+{
+    return dirty;
+}
+
 int Page::getHistoryAsDecimal()
 {
     //TODO: implement this
@@ -23,4 +28,9 @@ int Page::getHistoryAsDecimal()
 void Page::setName(string newName)
 {
     name = newName;
+}
+
+void Page::setDirty(bool newDirty)
+{
+    dirty = newDirty;
 }
