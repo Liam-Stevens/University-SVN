@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include "pageInfo.h"
 
@@ -64,6 +65,19 @@ void convertToPages(vector<string> lines, vector<struct pageInfo *> * myPages)
         ss >> temp->action;
         ss >> temp->name;
         myPages->push_back(temp);
+    }
+}
+
+void convertPageHex(vector<struct pageInfo *> myPages, int frameSize)
+{
+    for (int i = 0; i < (signed)myPages.size(); i++)
+    {
+        int x;
+        stringstream ss;
+        ss << hex << myPages[i]->name;
+        ss >> x;
+        x = x / frameSize;
+        myPages[i]->name = to_string(x);
     }
 }
 
