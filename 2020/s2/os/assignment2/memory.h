@@ -47,6 +47,7 @@ public:
     //Helpers
     void debug(bool, std::string, std::string, bool);
     void tick();
+    void incEvents();
     void incRead();
     void incWrite();
     void incFaults();
