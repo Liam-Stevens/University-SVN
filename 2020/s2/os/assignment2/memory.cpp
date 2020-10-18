@@ -89,6 +89,41 @@ void Memory::setTimer(int newTimer)
 *   Helpers
 *    
 */
+void Memory::debug(bool hit, string name, string replace, bool dirty)
+{
+    /*
+    cout << "Time " << timer << " ";
+    if (hit)
+    {
+        cout << "HIT: ";
+    } 
+    else
+    {
+        cout << "MISS: ";
+    }
+    cout << " Page: " << name << " ";
+    if (replace != "")
+    {
+        cout << "REPLACE:  Page: " << replace << " ";
+        if(dirty)
+        {
+           cout << "(DIRTY) ";
+        }
+    }
+    cout << " frames: ";
+    for (int i = (signed)active.size(); i < pageFrames; i++)
+    {
+        cout << "-1 ";
+    }
+    
+    for (int i = 0; i < (signed)active.size(); i++)
+    {
+        cout << active[i]->getName() << " ";
+    }
+    cout << endl;
+    */
+}
+
 void Memory::tick()
 {
     timer++;
@@ -158,14 +193,29 @@ bool Memory::checkMemory(string name)
     return false;
 }
 
+void Memory::modMemory(string name, bool dirty)
+{
+    for (int i = 0; i < (signed)active.size(); i++)
+    {
+        if (active[i]->getName() == name)
+        {
+            active[i]->setDirty(dirty);
+        }
+    }
+}
+
 /*
 *   Algorithms
 *    
 */
+
+//First-in-first-out
 void Memory::FIFO(vector<struct pageInfo *> instructions)
 {
+    //Iterate over instruction list
     for (int i = 0; i < (signed)instructions.size(); i++)
     {
+        //Check if already in memory
         if (!checkMemory(instructions[i]->name))
         {
             incFaults();
@@ -174,6 +224,7 @@ void Memory::FIFO(vector<struct pageInfo *> instructions)
             temp = new Page(instructions[i]->name);
 
             incRead();
+            //Check action
             if (instructions[i]->action == 'R')
             {
                 temp->setDirty(false);
@@ -186,11 +237,14 @@ void Memory::FIFO(vector<struct pageInfo *> instructions)
             {
                 cout << "Page " << i << " has an illegal action type" << endl;
             }
-
+            
+            //Add directly to memory
             if ((signed)active.size() < pageFrames)
             {
                 active.push_back(temp);
+                debug(false, temp->getName(),"",false);
             }
+            //Replace page in memory
             else
             {
                 Page *removal;
@@ -200,16 +254,27 @@ void Memory::FIFO(vector<struct pageInfo *> instructions)
                 {
                     incWrite();
                 }
+                debug(false, temp->getName(), removal->getName(), removal->getDirty());
                 delete removal;
             }
-
+            
+            //Move headPTR
             activeHead++;
             if (activeHead >= pageFrames)
             {
                 activeHead = 0;
             }
-            //outputActiveList();
         }
+        //Change chached page
+        else
+        {
+            debug(true, instructions[i]->name, "", false);
+            if (instructions[i]->action == 'W')
+            {
+                modMemory(instructions[i]->name, true);
+            }
+        }
+        tick();
     }
     cleanMemory();
 }

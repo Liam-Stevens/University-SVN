@@ -45,6 +45,7 @@ public:
     void setTimer(int);
     
     //Helpers
+    void debug(bool, std::string, std::string, bool);
     void tick();
     void incRead();
     void incWrite();
@@ -53,6 +54,7 @@ public:
     void outputActiveList();
     void cleanMemory();
     bool checkMemory(std::string);
+    void modMemory(string, bool);
     
     //Algorithms
     void FIFO(std::vector<struct pageInfo *>);

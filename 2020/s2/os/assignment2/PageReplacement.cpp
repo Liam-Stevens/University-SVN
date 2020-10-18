@@ -56,13 +56,14 @@ int main(int argc, char **argv)
     vector<struct pageInfo *> myPages;
     
     convertToPages(fileLines, &myPages);
+    convertPageHex(myPages, frameSize);
     //exportPages(myPages);
-    
+
     /*
     cout << "location: " << fileLocation << " | frameSize: " << frameSize << " | pageFrames: " << pageFrames << " | algorithm: " << algorithm 
     << " | referenceBits: " << referenceBits << " | regularInterval: " << regularInterval << " | windowSize: " << windowSize << endl;
     */
-    
+
     Memory myMemory(frameSize, pageFrames, referenceBits, regularInterval, windowSize);
     if (algorithm == "FIFO")
     {
