@@ -22,7 +22,7 @@ private:
     
     int activeHead;
     int timer;
-    vector<Page> active;
+    std::vector<Page *> active;
 
 public:
 	//Constructor
@@ -46,15 +46,22 @@ public:
     
     //Helpers
     void tick();
+    void incRead();
+    void incWrite();
+    void incFaults();
     void outputStats();
+    void outputActiveList();
     void cleanMemory();
+    bool checkMemory(std::string);
     
     //Algorithms
-    void FIFO(vector<struct pageInfo *>);
-    void LRU(vector<struct pageInfo *>);
-    void ARB(vector<struct pageInfo *>);
-    void WSARB1(vector<struct pageInfo *>);
-    void WSARB2(vector<struct pageInfo *>);
+    void FIFO(std::vector<struct pageInfo *>);
+    void LRU(std::vector<struct pageInfo *>);
+    void ARB(std::vector<struct pageInfo *>);
+    void WSARB1(std::vector<struct pageInfo *>);
+    void WSARB2(std::vector<struct pageInfo *>);
+
+    ~Memory();
 };
 
 #endif

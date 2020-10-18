@@ -18,10 +18,12 @@ public:
 
     //Getters
     std::string getName();
+    bool getDirty();
     int getHistoryAsDecimal();
 
     //Setters
     void setName(std::string);
+    void setDirty(bool);
 
 };
 
