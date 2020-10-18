@@ -91,7 +91,6 @@ void Memory::setTimer(int newTimer)
 */
 void Memory::debug(bool hit, string name, string replace, bool dirty)
 {
-    /*
     cout << "Time " << timer << " ";
     if (hit)
     {
@@ -121,7 +120,6 @@ void Memory::debug(bool hit, string name, string replace, bool dirty)
         cout << active[i]->getName() << " ";
     }
     cout << endl;
-    */
 }
 
 void Memory::tick()
@@ -129,9 +127,13 @@ void Memory::tick()
     timer++;
 }
 
-void Memory::incRead()
+void Memory::incEvents()
 {
     events++;
+}
+
+void Memory::incRead()
+{
     reads++;
 }
 
@@ -215,6 +217,7 @@ void Memory::FIFO(vector<struct pageInfo *> instructions)
     //Iterate over instruction list
     for (int i = 0; i < (signed)instructions.size(); i++)
     {
+        incEvents();
         //Check if already in memory
         if (!checkMemory(instructions[i]->name))
         {
@@ -276,7 +279,6 @@ void Memory::FIFO(vector<struct pageInfo *> instructions)
         }
         tick();
     }
-    cleanMemory();
 }
 
 void Memory::LRU(vector<struct pageInfo *> instructions)
