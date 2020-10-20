@@ -58,7 +58,8 @@ public:
     bool checkMemory(std::string);
     Page * getMemByName(string);
     int getIndexOfLeastTime();
-    Page * historyCheckLRU();
+    int historyCheck();
+    void setAllHistory();
     
     //Algorithms
     void FIFO(std::vector<struct pageInfo *>);

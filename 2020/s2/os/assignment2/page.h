@@ -9,26 +9,30 @@ class Page
 private:
     std::string name;
     bool dirty;
-    std::vector<bool> history;
+    int reference;
+    int refSize;
+    std::string history;
     int lastAccess;
 
 
 public:
 	//Constructor
     Page(std::string);
+    Page(std::string, int);
 
     //Getters
     std::string getName();
     bool getDirty();
-    bool getFirstHistory();
     int getHistoryAsDecimal();
     int getLastAccess();
+    int getReference();
 
     //Setters
     void setName(std::string);
     void setDirty(bool);
     void setHistory(bool);
     void setLastAccess(int);
+    void setReference(int);
 
 };
 

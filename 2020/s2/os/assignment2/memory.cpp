@@ -226,28 +226,31 @@ int Memory::getIndexOfLeastTime()
     return index;
 }
 
-Page * Memory::historyCheckLRU()
+int Memory::historyCheck()
 {
-    for (int i = 0; i < (signed)active.size()*2; i++)
+    int min = active[0]->getHistoryAsDecimal();
+    int index = 0;
+    for (int i = 1; i < (signed)active.size(); i++)
     {
-        int j = i;
-        if (j >= (signed)active.size())
+        if (active[i]->getHistoryAsDecimal() == min)
         {
-            j = i - (signed)active.size();
+            index = -1;
         }
-        
-        //TODO: Might be wrong to check first bit
-        if (active[j]->getFirstHistory() == false)
+        else if (active[i]->getHistoryAsDecimal() < min)
         {
-            activeHead = j;
-            return active[j];
-        }
-        else
-        {
-            active[j]->setHistory(false);
+            min = active[i]->getHistoryAsDecimal();
+            index = i;
         }
     }
-    return active[0];
+    return index;
+}
+
+void Memory::setAllHistory()
+{
+    for (int i = 0; i < (signed)active.size(); i++)
+    {
+        active[i]->setHistory(active[i]->getReference());
+    }
 }
 
 /*
@@ -268,7 +271,7 @@ void Memory::FIFO(vector<struct pageInfo *> instructions)
             incFaults();
             
             Page *temp;
-            temp = new Page(instructions[i]->name);
+            temp = new Page(instructions[i]->name, referenceBits);
 
             incRead();
             //Check action
@@ -394,7 +397,88 @@ void Memory::LRU(vector<struct pageInfo *> instructions)
 
 void Memory::ARB(vector<struct pageInfo *> instructions)
 {
-    
+    //Iterate over instruction list
+    for (int i = 0; i < (signed)instructions.size(); i++)
+    {
+        incEvents();
+        //Check if already in memory
+        if (!checkMemory(instructions[i]->name))
+        {
+            incFaults();
+            
+            Page *temp;
+            temp = new Page(instructions[i]->name);
+
+            incRead();
+            //Check action
+            if (instructions[i]->action == 'R')
+            {
+                temp->setDirty(false);
+            }
+            else if (instructions[i]->action == 'W')
+            {
+                temp->setDirty(true);
+            }
+            else
+            {
+                cout << "Page " << i << " has an illegal action type" << endl;
+            }
+            
+            //Add directly to memory
+            if ((signed)active.size() < pageFrames)
+            {
+                active.push_back(temp);
+                debug(false, temp->getName(),"",false);
+            }
+            //Replace page in memory
+            else
+            {
+                Page *removal;
+                int index = historyCheck();
+                if (index == -1)
+                {
+                    //FIXME: Not sure if this satisfies the FIFO nature (get highest time?)
+                    removal = active[activeHead];
+                    active[activeHead] = temp;
+                }
+                else
+                {
+                    removal = active[index];
+                    active[index] = temp;
+                }
+                
+                if (removal->getDirty() == true)
+                {
+                    incWrite();
+                }
+                debug(false, temp->getName(), removal->getName(), removal->getDirty());
+                delete removal;
+            }
+            
+            //Move headPTR
+            activeHead++;
+            if (activeHead >= pageFrames)
+            {
+                activeHead = 0;
+            }
+        }
+        //Change chached page
+        else
+        {
+            debug(true, instructions[i]->name, "", false);
+            Page * temp = getMemByName(instructions[i]->name);
+            if (instructions[i]->action == 'W')
+            {
+                temp->setDirty(true);
+            }
+        }
+        
+        if (timer % regularInterval == 0)
+        {
+            setAllHistory();
+        }
+        tick();
+    }
 }
 
 void Memory::WSARB1(vector<struct pageInfo *> instructions)

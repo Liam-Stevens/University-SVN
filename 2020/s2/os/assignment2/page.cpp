@@ -1,11 +1,19 @@
 #include "page.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 Page::Page(string newName)
 {
     name = newName;    
+    refSize = 0;
+}
+
+Page::Page(string newName, int newRefSize)
+{
+    name = newName;
+    refSize = newRefSize;
 }
 
 //Getters
@@ -19,25 +27,19 @@ bool Page::getDirty()
     return dirty;
 }
 
-bool Page::getFirstHistory()
-{
-    if ((signed)history.size() > 0)
-    {
-        return history[0];
-    }
-    cout << "NO HISTORY" << endl;
-    return false;
-}
-
 int Page::getHistoryAsDecimal()
 {
-    //TODO: implement this
-    return -1;
+    return stoi(history, 0, 2);
 }
 
 int Page::getLastAccess()
 {
     return lastAccess;
+}
+
+int Page::getReference()
+{
+    return reference;
 }
 
 //Setters
@@ -54,7 +56,7 @@ void Page::setDirty(bool newDirty)
 void Page::setHistory(bool newHistory)
 {
     history.insert(history.begin(), newHistory);
-    if ((signed)history.size() > 8)
+    if ((signed)history.size() > refSize)
     {
         history.pop_back();
     }
@@ -63,4 +65,9 @@ void Page::setHistory(bool newHistory)
 void Page::setLastAccess(int newLastAccess)
 {
     lastAccess = newLastAccess;
+}
+
+void Page::setReference(int newReference)
+{
+    reference = newReference;
 }
