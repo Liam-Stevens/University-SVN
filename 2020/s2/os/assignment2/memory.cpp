@@ -1,6 +1,10 @@
+#include <string>
+#include <iostream>
 #include "memory.h"
 #include "page.h"
 #include "pageInfo.h"
+
+using namespace std;
 
 Memory::Memory(int newFrameSize, int newPageFrames, int newRefernceBits, int newRegularInterval, int newWindowSize)
 {
@@ -195,15 +199,55 @@ bool Memory::checkMemory(string name)
     return false;
 }
 
-void Memory::modMemory(string name, bool dirty)
+Page * Memory::getMemByName(string name)
 {
     for (int i = 0; i < (signed)active.size(); i++)
     {
         if (active[i]->getName() == name)
         {
-            active[i]->setDirty(dirty);
+            return active[i];
         }
     }
+    return nullptr;
+}
+
+int Memory::getIndexOfLeastTime()
+{
+    int min = active[0]->getLastAccess();
+    int index = 0;
+    for (int i = 0; i < (signed)active.size(); i++)
+    {
+        if (active[i]->getLastAccess() < min)
+        {
+            min = active[i]->getLastAccess();
+            index = i;
+        }
+    }
+    return index;
+}
+
+Page * Memory::historyCheckLRU()
+{
+    for (int i = 0; i < (signed)active.size()*2; i++)
+    {
+        int j = i;
+        if (j >= (signed)active.size())
+        {
+            j = i - (signed)active.size();
+        }
+        
+        //TODO: Might be wrong to check first bit
+        if (active[j]->getFirstHistory() == false)
+        {
+            activeHead = j;
+            return active[j];
+        }
+        else
+        {
+            active[j]->setHistory(false);
+        }
+    }
+    return active[0];
 }
 
 /*
@@ -272,9 +316,10 @@ void Memory::FIFO(vector<struct pageInfo *> instructions)
         else
         {
             debug(true, instructions[i]->name, "", false);
+            Page * temp = getMemByName(instructions[i]->name);
             if (instructions[i]->action == 'W')
             {
-                modMemory(instructions[i]->name, true);
+                temp->setDirty(true);
             }
         }
         tick();
@@ -283,7 +328,68 @@ void Memory::FIFO(vector<struct pageInfo *> instructions)
 
 void Memory::LRU(vector<struct pageInfo *> instructions)
 {
-    
+    //Iterate over instruction list
+    for (int i = 0; i < (signed)instructions.size(); i++)
+    {
+        incEvents();
+        //Check if already in memory
+        if (!checkMemory(instructions[i]->name))
+        {
+            incFaults();
+            
+            Page *temp;
+            temp = new Page(instructions[i]->name);
+            temp->setLastAccess(timer);
+
+            incRead();
+            //Check action
+            if (instructions[i]->action == 'R')
+            {
+                temp->setDirty(false);
+            }
+            else if (instructions[i]->action == 'W')
+            {
+                temp->setDirty(true);
+            }
+            else
+            {
+                cout << "Page " << i << " has an illegal action type" << endl;
+            }
+            
+            //Add directly to memory
+            if ((signed)active.size() < pageFrames)
+            {
+                active.push_back(temp);
+                debug(false, temp->getName(),"",false);
+            }
+            //Replace page in memory
+            else
+            {
+                int replace = getIndexOfLeastTime();
+                Page *removal;
+                removal = active[replace];
+                active[replace] = temp;
+                if (removal->getDirty() == true)
+                {
+                    incWrite();
+                }
+                debug(false, temp->getName(), removal->getName(), removal->getDirty());
+                delete removal;
+            }
+        }
+        //Change chached page
+        else
+        {
+            debug(true, instructions[i]->name, "", false);
+            Page * temp = getMemByName(instructions[i]->name);
+            temp->setLastAccess(timer);
+            if (instructions[i]->action == 'W')
+            {
+                temp->setDirty(true);
+            }
+        }
+        tick();
+    }
 }
 
 void Memory::ARB(vector<struct pageInfo *> instructions)

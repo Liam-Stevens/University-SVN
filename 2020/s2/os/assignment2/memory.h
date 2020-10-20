@@ -2,6 +2,7 @@
 #define MEMORY_H
 
 #include <vector>
+#include <string>
 #include "page.h"
 #include "pageInfo.h"
 
@@ -55,7 +56,9 @@ public:
     void outputActiveList();
     void cleanMemory();
     bool checkMemory(std::string);
-    void modMemory(string, bool);
+    Page * getMemByName(string);
+    int getIndexOfLeastTime();
+    Page * historyCheckLRU();
     
     //Algorithms
     void FIFO(std::vector<struct pageInfo *>);
