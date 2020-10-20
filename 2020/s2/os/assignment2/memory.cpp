@@ -95,7 +95,8 @@ void Memory::setTimer(int newTimer)
 */
 void Memory::debug(bool hit, string name, string replace, bool dirty)
 {
-    /*cout << "Time " << timer << " ";
+    /*
+    cout << "Time " << timer << " ";
     if (hit)
     {
         cout << "HIT: ";
@@ -119,11 +120,17 @@ void Memory::debug(bool hit, string name, string replace, bool dirty)
         cout << "-1 ";
     }
     
-    for (int i = 0; i < (signed)active.size(); i++)
+    for (int i = (signed)active.size() - 1; i >= 0; i--)
     {
-        cout << active[i]->getName() << " ";
+        cout << active[i]->getName();
+        if (active[i]->getHistory() != "")
+        {
+            cout << "(" << active[i]->getHistory() << ")";
+        }
+        cout << " ";
     }
-    cout << endl;*/
+    cout << endl;
+    */
 }
 
 void Memory::tick()
@@ -249,8 +256,10 @@ void Memory::setAllHistory()
 {
     for (int i = 0; i < (signed)active.size(); i++)
     {
+        //cout << "Set page " << active[i]->getName() << " to " << active[i]->getReference();
         active[i]->setHistory(active[i]->getReference());
     }
+    //cout << endl;
 }
 
 //TODO: activeHead might need to not be touched
@@ -432,6 +441,10 @@ void Memory::ARB(vector<struct pageInfo *> instructions)
             Page *temp;
             temp = new Page(instructions[i]->name, referenceBits);
             temp->setReference(1);
+            if(timer % regularInterval != 0)
+            {
+                temp->setHistory(1);
+            }
 
             incRead();
             //Check action
@@ -498,6 +511,7 @@ void Memory::ARB(vector<struct pageInfo *> instructions)
             }
         }
         
+        //cout << timer << " | " << regularInterval << " % " << timer % regularInterval << endl;
         if (timer % regularInterval == 0)
         {
             setAllHistory();

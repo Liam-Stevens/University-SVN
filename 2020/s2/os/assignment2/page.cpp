@@ -52,6 +52,11 @@ int Page::getReference()
     return reference;
 }
 
+string Page::getHistory()
+{
+    return history;
+}
+
 //Setters
 void Page::setName(string newName)
 {
