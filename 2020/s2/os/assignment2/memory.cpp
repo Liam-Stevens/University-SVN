@@ -14,7 +14,7 @@ Memory::Memory(int newFrameSize, int newPageFrames, int newRefernceBits, int new
     regularInterval = newRegularInterval;
     windowSize = newWindowSize;
     activeHead = 0;
-    timer = 0;
+    timer = 1;
     events = 0;
     reads = 0;
     writes = 0;
@@ -95,7 +95,6 @@ void Memory::setTimer(int newTimer)
 */
 void Memory::debug(bool hit, string name, string replace, bool dirty)
 {
-    /*
     cout << "Time " << timer << " ";
     if (hit)
     {
@@ -115,22 +114,26 @@ void Memory::debug(bool hit, string name, string replace, bool dirty)
         }
     }
     cout << " frames: ";
-    for (int i = (signed)active.size(); i < pageFrames; i++)
-    {
-        cout << "-1 ";
-    }
     
-    for (int i = (signed)active.size() - 1; i >= 0; i--)
+    for (int i = 0; i < (signed)active.size(); i++)
     {
         cout << active[i]->getName();
+        if (active[i]->getReference() == 0 || active[i]->getReference() == 1)
+        {
+            cout << "[" << active[i]->getReference() << "]";
+        }
         if (active[i]->getHistory() != "")
         {
             cout << "(" << active[i]->getHistory() << ")";
         }
         cout << " ";
     }
+    for (int i = (signed)active.size(); i < pageFrames; i++)
+    {
+        cout << "-1 ";
+    }
+    cout << " HEAD: " << activeHead;
     cout << endl;
-    */
 }
 
 void Memory::tick()
@@ -257,16 +260,16 @@ void Memory::setAllHistory()
     for (int i = 0; i < (signed)active.size(); i++)
     {
         //cout << "Set page " << active[i]->getName() << " to " << active[i]->getReference();
-        active[i]->setHistory(active[i]->getReference());
+        active[i]->shiftHistory();
     }
     //cout << endl;
 }
 
-//TODO: activeHead might need to not be touched
+//FIXME: activeHead is not working currectly for second chance
 int Memory::secondChance()
 {
     for (int i = 0; i < 2*(signed)active.size(); i++)
-    {
+    {       
         if (active[activeHead]->getReference() == 1)
         {
             active[activeHead]->setReference(0);
@@ -441,10 +444,6 @@ void Memory::ARB(vector<struct pageInfo *> instructions)
             Page *temp;
             temp = new Page(instructions[i]->name, referenceBits);
             temp->setReference(1);
-            if(timer % regularInterval != 0)
-            {
-                temp->setHistory(1);
-            }
 
             incRead();
             //Check action
@@ -470,6 +469,7 @@ void Memory::ARB(vector<struct pageInfo *> instructions)
             //Replace page in memory
             else
             {
+                secondChance();
                 Page *removal;
                 int index = historyCheck();
                 if (index == -1)
@@ -502,13 +502,13 @@ void Memory::ARB(vector<struct pageInfo *> instructions)
         //Change chached page
         else
         {
-            debug(true, instructions[i]->name, "", false);
             Page * temp = getMemByName(instructions[i]->name);
             temp->setReference(1);
             if (instructions[i]->action == 'W')
             {
                 temp->setDirty(true);
             }
+            debug(true, instructions[i]->name, "", false);
         }
         
         //cout << timer << " | " << regularInterval << " % " << timer % regularInterval << endl;
