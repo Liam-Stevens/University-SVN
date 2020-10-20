@@ -253,6 +253,29 @@ void Memory::setAllHistory()
     }
 }
 
+//TODO: activeHead might need to not be touched
+int Memory::secondChance()
+{
+    for (int i = 0; i < 2*(signed)active.size(); i++)
+    {
+        if (active[activeHead]->getReference() == 1)
+        {
+            active[activeHead]->setReference(0);
+        }
+        else
+        {
+            return activeHead;
+        }
+        
+        activeHead++;
+        if (activeHead >= pageFrames)
+        {
+            activeHead = 0;
+        }
+    }
+    return activeHead;
+}
+
 /*
 *   Algorithms
 *    
@@ -271,7 +294,7 @@ void Memory::FIFO(vector<struct pageInfo *> instructions)
             incFaults();
             
             Page *temp;
-            temp = new Page(instructions[i]->name, referenceBits);
+            temp = new Page(instructions[i]->name);
 
             incRead();
             //Check action
@@ -407,7 +430,8 @@ void Memory::ARB(vector<struct pageInfo *> instructions)
             incFaults();
             
             Page *temp;
-            temp = new Page(instructions[i]->name);
+            temp = new Page(instructions[i]->name, referenceBits);
+            temp->setReference(1);
 
             incRead();
             //Check action
@@ -467,6 +491,7 @@ void Memory::ARB(vector<struct pageInfo *> instructions)
         {
             debug(true, instructions[i]->name, "", false);
             Page * temp = getMemByName(instructions[i]->name);
+            temp->setReference(1);
             if (instructions[i]->action == 'W')
             {
                 temp->setDirty(true);

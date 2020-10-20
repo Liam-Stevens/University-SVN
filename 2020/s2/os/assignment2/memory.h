@@ -60,6 +60,7 @@ public:
     int getIndexOfLeastTime();
     int historyCheck();
     void setAllHistory();
+    int secondChance();
     
     //Algorithms
     void FIFO(std::vector<struct pageInfo *>);
