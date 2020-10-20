@@ -14,6 +14,11 @@ Page::Page(string newName, int newRefSize)
 {
     name = newName;
     refSize = newRefSize;
+    history = "0";
+    for (int i = 0; i < refSize - 1; i++)
+    {
+        history = history + "0";
+    }
 }
 
 //Getters
@@ -29,7 +34,12 @@ bool Page::getDirty()
 
 int Page::getHistoryAsDecimal()
 {
-    return stoi(history, 0, 2);
+    int temp = 0;
+    if (history.length() > 0)
+    {
+        temp = stoi(history, 0, 2);
+    }
+    return temp;
 }
 
 int Page::getLastAccess()
@@ -55,7 +65,7 @@ void Page::setDirty(bool newDirty)
 
 void Page::setHistory(bool newHistory)
 {
-    history.insert(history.begin(), newHistory);
+    history =  to_string(reference) + history;
     if ((signed)history.size() > refSize)
     {
         history.pop_back();
