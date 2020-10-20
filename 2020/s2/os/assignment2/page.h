@@ -9,7 +9,6 @@ class Page
 private:
     std::string name;
     bool dirty;
-    int reference;
     int refSize;
     std::string history;
     int lastAccess;
@@ -31,10 +30,10 @@ public:
     //Setters
     void setName(std::string);
     void setDirty(bool);
-    void setHistory(bool);
     void setLastAccess(int);
     void setReference(int);
 
+    void shiftHistory();
 };
 
 #endif

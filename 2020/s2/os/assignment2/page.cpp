@@ -49,7 +49,7 @@ int Page::getLastAccess()
 
 int Page::getReference()
 {
-    return reference;
+    return history[0];
 }
 
 string Page::getHistory()
@@ -68,15 +68,6 @@ void Page::setDirty(bool newDirty)
     dirty = newDirty;
 }
 
-void Page::setHistory(bool newHistory)
-{
-    history =  to_string(reference) + history;
-    if ((signed)history.size() > refSize)
-    {
-        history.pop_back();
-    }
-}
-
 void Page::setLastAccess(int newLastAccess)
 {
     lastAccess = newLastAccess;
@@ -84,5 +75,23 @@ void Page::setLastAccess(int newLastAccess)
 
 void Page::setReference(int newReference)
 {
-    reference = newReference;
+    if (newReference == 0)
+    {
+        history[0] = '0';
+    }
+    else
+    {
+        history[0] = '1';
+    }
+    
+    
+}
+
+void Page::shiftHistory()
+{
+    history =  "0" + history;
+    if ((signed)history.size() > refSize)
+    {
+        history.pop_back();
+    }
 }
