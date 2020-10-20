@@ -26,6 +26,7 @@ public:
     int getHistoryAsDecimal();
     int getLastAccess();
     int getReference();
+    std::string getHistory();
 
     //Setters
     void setName(std::string);
