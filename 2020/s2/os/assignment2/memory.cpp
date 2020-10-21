@@ -19,6 +19,11 @@ Memory::Memory(int newFrameSize, int newPageFrames, int newRefernceBits, int new
     reads = 0;
     writes = 0;
     faults = 0;
+    
+    for (int i = 0; i < windowSize; i++)
+    {
+        window.push_back("-1");
+    }
 }
 
 /*
@@ -262,7 +267,6 @@ void Memory::setAllHistory()
     //cout << endl;
 }
 
-//FIXME: activeHead is not working currectly for second chance
 int Memory::secondChance()
 {
     for (int i = 0; i < 2*(signed)active.size(); i++)
@@ -283,6 +287,44 @@ int Memory::secondChance()
         }
     }
     return activeHead;
+}
+
+void Memory::addToWindow(string name)
+{
+    window.push_back(name);
+    window.erase(window.begin());
+}
+
+int Memory::timesInWindow(std::string name)
+{
+    int num = 0;
+    for (int i = 0; i < (signed)window.size(); i++)
+    {
+        if (name == window[i])
+        {
+            num++;
+        }
+    }
+    return num;
+}
+
+int Memory::minWindow()
+{
+    int min = timesInWindow(active[0]->getName());
+    int index = 0;
+    for (int i = 1; i < (signed)active.size(); i++)
+    {
+        if (timesInWindow(active[0]->getName()) == min)
+        {
+            index = -1;
+        }
+        else if (timesInWindow(active[0]->getName()) < min)
+        {
+            min = timesInWindow(active[0]->getName());
+            index = i;
+        }
+    }
+    return index;
 }
 
 /*
@@ -511,7 +553,90 @@ void Memory::ARB(vector<struct pageInfo *> instructions)
 
 void Memory::WSARB1(vector<struct pageInfo *> instructions)
 {
-    
+    //Iterate over instruction list
+    for (int i = 0; i < (signed)instructions.size(); i++)
+    {
+        incEvents();
+        
+        addToWindow(instructions[i]->name);
+        
+        //Check if already in memory
+        if (!checkMemory(instructions[i]->name))
+        {
+            incFaults();
+            
+            Page *temp;
+            temp = new Page(instructions[i]->name, referenceBits);
+            temp->setReference(1);
+
+            incRead();
+            //Check action
+            if (instructions[i]->action == 'R')
+            {
+                temp->setDirty(false);
+            }
+            else if (instructions[i]->action == 'W')
+            {
+                temp->setDirty(true);
+            }
+            else
+            {
+                cout << "Page " << i << " has an illegal action type" << endl;
+            }
+            
+            //Add directly to memory
+            if ((signed)active.size() < pageFrames)
+            {
+                active.push_back(temp);
+                debug(false, temp->getName(),"",false);
+            }
+            //Replace page in memory
+            else
+            {
+                Page *removal;
+                int index = minWindow();
+                if (index == -1)
+                {
+                    index = historyCheck();
+                }
+                removal = active[index];
+                active.erase(active.begin()+index);
+                active.push_back(temp);
+                
+                if (removal->getDirty() == true)
+                {
+                    incWrite();
+                }
+                debug(false, temp->getName(), removal->getName(), removal->getDirty());
+                delete removal;
+            }
+            
+            //Move headPTR
+            activeHead++;
+            if (activeHead >= pageFrames)
+            {
+                activeHead = 0;
+            }
+        }
+        //Change chached page
+        else
+        {
+            Page * temp = getMemByName(instructions[i]->name);
+            temp->setReference(1);
+            if (instructions[i]->action == 'W')
+            {
+                temp->setDirty(true);
+            }
+            debug(true, instructions[i]->name, "", false);
+        }
+        
+        //cout << timer << " | " << regularInterval << " % " << timer % regularInterval << endl;
+        if (timer % regularInterval == 0)
+        {
+            setAllHistory();
+        }
+        tick();
+    }
 }
 
 void Memory::WSARB2(vector<struct pageInfo *> instructions)
