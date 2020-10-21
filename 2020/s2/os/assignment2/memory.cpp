@@ -242,11 +242,7 @@ int Memory::historyCheck()
     int index = 0;
     for (int i = 1; i < (signed)active.size(); i++)
     {
-        if (active[i]->getHistoryAsDecimal() == min)
-        {
-            index = -1;
-        }
-        else if (active[i]->getHistoryAsDecimal() < min)
+        if (active[i]->getHistoryAsDecimal() < min)
         {
             min = active[i]->getHistoryAsDecimal();
             index = i;
@@ -472,17 +468,9 @@ void Memory::ARB(vector<struct pageInfo *> instructions)
                 secondChance();
                 Page *removal;
                 int index = historyCheck();
-                if (index == -1)
-                {
-                    //FIXME: Not sure if this satisfies the FIFO nature (get highest time?)
-                    removal = active[activeHead];
-                    active[activeHead] = temp;
-                }
-                else
-                {
-                    removal = active[index];
-                    active[index] = temp;
-                }
+                removal = active[index];
+                active.erase(active.begin()+index);
+                active.push_back(temp);
                 
                 if (removal->getDirty() == true)
                 {
