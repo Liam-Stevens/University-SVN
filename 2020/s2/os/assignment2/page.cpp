@@ -84,7 +84,6 @@ void Page::setReference(int newReference)
         history[0] = '1';
     }
     
-    
 }
 
 void Page::shiftHistory()

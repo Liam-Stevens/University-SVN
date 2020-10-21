@@ -24,6 +24,7 @@ private:
     int activeHead;
     int timer;
     std::vector<Page *> active;
+    std::vector<std::string> window;
 
 public:
 	//Constructor
@@ -61,6 +62,9 @@ public:
     int historyCheck();
     void setAllHistory();
     int secondChance();
+    void addToWindow(std::string);
+    int timesInWindow(std::string name);
+    int minWindow();
     
     //Algorithms
     void FIFO(std::vector<struct pageInfo *>);
