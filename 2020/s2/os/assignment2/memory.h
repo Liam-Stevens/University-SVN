@@ -60,11 +60,13 @@ public:
     Page * getMemByName(string);
     int getIndexOfLeastTime();
     int historyCheck();
+    int historyCheck2();
     void setAllHistory();
     int secondChance();
     void addToWindow(std::string);
     int timesInWindow(std::string name);
     int minWindow();
+    int minWindow2();
     
     //Algorithms
     void FIFO(std::vector<struct pageInfo *>);

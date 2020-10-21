@@ -257,6 +257,25 @@ int Memory::historyCheck()
     return index;
 }
 
+int Memory::historyCheck2()
+{
+    int min = active[0]->getHistoryAsDecimal();
+    int index = 0;
+    for (int i = 1; i < (signed)active.size(); i++)
+    {
+        if (timesInWindow(active[0]->getName()) == min)
+        {
+            index = -1;
+        }
+        else if (active[i]->getHistoryAsDecimal() < min)
+        {
+            min = active[i]->getHistoryAsDecimal();
+            index = i;
+        }
+    }
+    return index;
+}
+
 void Memory::setAllHistory()
 {
     for (int i = 0; i < (signed)active.size(); i++)
@@ -319,6 +338,21 @@ int Memory::minWindow()
             index = -1;
         }
         else if (timesInWindow(active[0]->getName()) < min)
+        {
+            min = timesInWindow(active[0]->getName());
+            index = i;
+        }
+    }
+    return index;
+}
+
+int Memory::minWindow2()
+{
+    int min = timesInWindow(active[0]->getName());
+    int index = 0;
+    for (int i = 1; i < (signed)active.size(); i++)
+    {
+        if (timesInWindow(active[0]->getName()) < min)
         {
             min = timesInWindow(active[0]->getName());
             index = i;
@@ -641,7 +675,90 @@ void Memory::WSARB1(vector<struct pageInfo *> instructions)
 
 void Memory::WSARB2(vector<struct pageInfo *> instructions)
 {
-    
+        //Iterate over instruction list
+    for (int i = 0; i < (signed)instructions.size(); i++)
+    {
+        incEvents();
+        
+        addToWindow(instructions[i]->name);
+        
+        //Check if already in memory
+        if (!checkMemory(instructions[i]->name))
+        {
+            incFaults();
+            
+            Page *temp;
+            temp = new Page(instructions[i]->name, referenceBits);
+            temp->setReference(1);
+
+            incRead();
+            //Check action
+            if (instructions[i]->action == 'R')
+            {
+                temp->setDirty(false);
+            }
+            else if (instructions[i]->action == 'W')
+            {
+                temp->setDirty(true);
+            }
+            else
+            {
+                cout << "Page " << i << " has an illegal action type" << endl;
+            }
+            
+            //Add directly to memory
+            if ((signed)active.size() < pageFrames)
+            {
+                active.push_back(temp);
+                debug(false, temp->getName(),"",false);
+            }
+            //Replace page in memory
+            else
+            {
+                Page *removal;
+                int index = historyCheck2();
+                if (index == -1)
+                {
+                    index = minWindow2();
+                }
+                removal = active[index];
+                active.erase(active.begin()+index);
+                active.push_back(temp);
+                
+                if (removal->getDirty() == true)
+                {
+                    incWrite();
+                }
+                debug(false, temp->getName(), removal->getName(), removal->getDirty());
+                delete removal;
+            }
+            
+            //Move headPTR
+            activeHead++;
+            if (activeHead >= pageFrames)
+            {
+                activeHead = 0;
+            }
+        }
+        //Change chached page
+        else
+        {
+            Page * temp = getMemByName(instructions[i]->name);
+            temp->setReference(1);
+            if (instructions[i]->action == 'W')
+            {
+                temp->setDirty(true);
+            }
+            debug(true, instructions[i]->name, "", false);
+        }
+        
+        //cout << timer << " | " << regularInterval << " % " << timer % regularInterval << endl;
+        if (timer % regularInterval == 0)
+        {
+            setAllHistory();
+        }
+        tick();
+    }
 }
 
 Memory::~Memory()
