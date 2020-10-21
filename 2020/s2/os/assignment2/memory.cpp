@@ -95,6 +95,7 @@ void Memory::setTimer(int newTimer)
 */
 void Memory::debug(bool hit, string name, string replace, bool dirty)
 {
+    /*
     cout << "Time " << timer << " ";
     if (hit)
     {
@@ -133,7 +134,7 @@ void Memory::debug(bool hit, string name, string replace, bool dirty)
         cout << "-1 ";
     }
     cout << " HEAD: " << activeHead;
-    cout << endl;
+    cout << endl;*/
 }
 
 void Memory::tick()
