@@ -263,7 +263,7 @@ int Memory::historyCheck2()
     int index = 0;
     for (int i = 1; i < (signed)active.size(); i++)
     {
-        if (timesInWindow(active[0]->getName()) == min)
+        if (timesInWindow(active[i]->getName()) == min)
         {
             index = -1;
         }
@@ -333,13 +333,13 @@ int Memory::minWindow()
     int index = 0;
     for (int i = 1; i < (signed)active.size(); i++)
     {
-        if (timesInWindow(active[0]->getName()) == min)
+        if (timesInWindow(active[i]->getName()) == min)
         {
             index = -1;
         }
-        else if (timesInWindow(active[0]->getName()) < min)
+        else if (timesInWindow(active[i]->getName()) < min)
         {
-            min = timesInWindow(active[0]->getName());
+            min = timesInWindow(active[i]->getName());
             index = i;
         }
     }
@@ -352,9 +352,9 @@ int Memory::minWindow2()
     int index = 0;
     for (int i = 1; i < (signed)active.size(); i++)
     {
-        if (timesInWindow(active[0]->getName()) < min)
+        if (timesInWindow(active[i]->getName()) < min)
         {
-            min = timesInWindow(active[0]->getName());
+            min = timesInWindow(active[i]->getName());
             index = i;
         }
     }
