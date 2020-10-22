@@ -45,12 +45,12 @@
             dataStream.filter(function(data) {
                 if (data.load != null)
                 {
-                    return true
+                    return true;
                 }
-                return false
+                return false;
             }).subscribe(function(data) {
-                load.innerText = JSON.stringify(data);
-                
+                load.innerText = "";
+                load.innerText += expandJSON(data.load);
             });
             
             dataStream.filter(function(data) {
@@ -60,7 +60,12 @@
                 }
                 return false
             }).subscribe(function(data) {
-                network.innerText = JSON.stringify(data);
+                network.innerText = "";
+                for (let i = 0; i < data.network.length; i++) {
+                    network.innerText += "\n Network: " + i + "\n"
+                    network.innerText += expandJSON(data.network[i]);
+                } 
+                //network.innerText += expandJSON(data.network);
             });
             
             dataStream.filter(function(data) {
@@ -70,7 +75,8 @@
                 }
                 return false
             }).subscribe(function(data) {
-                disk.innerText = JSON.stringify(data);
+                disk.innerText = "";
+                disk.innerText += expandJSON(data.disk);
             });
             
             dataStream.filter(function(data) {
@@ -80,8 +86,27 @@
                 }
                 return false
             }).subscribe(function(data) {
-                process.innerText = JSON.stringify(data);
+                process.innerText = "";
+                process.innerText += expandJSON(data.procs);
             });
+            
+            function expandJSON(myJSON) {
+                var temp = "";
+                for (var obj in myJSON) {
+                    if( obj != "cpus" && obj != "list") {
+                        temp += obj + ": " + myJSON[obj] + "\n";
+                    } else
+                    {
+                        temp += obj + ": "; 
+                        for (var obj2 in myJSON[obj])
+                        {
+                            temp += "\n";
+                            temp += expandJSON(myJSON[obj][obj2]);
+                        }
+                    }
+                }              
+                return temp;
+            }
             
         </script>
     </body>
