@@ -8,18 +8,81 @@
       <meta charset="utf-8"/>
       <title></title>
     </head>
-    <body>
+    <body class="white">
         <header></header>
-        <main></main>
+        <main class="container" style="color: black">
+            <h2>Load</h2>
+            <div class="load"></div>
+            <br>
+            <h2>Network</h2>
+            <div class="network"></div>
+            <br>
+            <h2>Disk</h2>
+            <div class="disk"></div>
+            <br>
+            <h2>Process</h2>
+            <div class="process"></div>
+            <br>
+        </main>
         <footer></footer>
-        <!--JavaScript at end of body for optimized loading-->
+        <!--Import materialize.js-->
         <script type="text/javascript" src="js/materialize.min.js"></script>
+        <!--Import socket.io-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+        
+        <script src="https://cdn.jsdelivr.net/rxjs/4.1.0/rx.all.js"></script>
+        
+        <!--Start of my Javascript-->
         <script>
+            let load = document.querySelector(".load");
+            let network = document.querySelector(".network");
+            let disk = document.querySelector(".disk");
+            let process = document.querySelector(".process");
+            
             var socket = io('http://edcsystem.hopto.org/');
-            socket.on('data', (data) => {
-                document.querySelector('main').innerText = JSON.stringify(data, 4);
+            var dataStream = Rx.Observable.fromEvent(socket, 'data');
+            
+            dataStream.filter(function(data) {
+                if (data.load != null)
+                {
+                    return true
+                }
+                return false
+            }).subscribe(function(data) {
+                load.innerText = JSON.stringify(data);
+                
             });
+            
+            dataStream.filter(function(data) {
+                if (data.network != null)
+                {
+                    return true
+                }
+                return false
+            }).subscribe(function(data) {
+                network.innerText = JSON.stringify(data);
+            });
+            
+            dataStream.filter(function(data) {
+                if (data.disk != null)
+                {
+                    return true
+                }
+                return false
+            }).subscribe(function(data) {
+                disk.innerText = JSON.stringify(data);
+            });
+            
+            dataStream.filter(function(data) {
+                if (data.procs != null)
+                {
+                    return true
+                }
+                return false
+            }).subscribe(function(data) {
+                process.innerText = JSON.stringify(data);
+            });
+            
         </script>
     </body>
 </html>
